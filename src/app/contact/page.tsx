@@ -3,8 +3,8 @@
 // ContactPage.tsx
 import React, { useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
-import Image from 'next/image';
+// import Link from 'next/link';
+// import Image from 'next/image';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 

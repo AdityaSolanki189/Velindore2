@@ -6,11 +6,11 @@ import Navbar from "./components/navbar";
 import { useSwipeable } from "react-swipeable";
 import ProductGrid from "./components/productGrid";
 import Collection from "./components/collection";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTruckFast, faCalendar, faUser, faComment, faArrowRight, } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faTruckFast, faCalendar, faUser, faComment, faArrowRight, } from "@fortawesome/free-solid-svg-icons";
 import FAQ from "./components/faq";
 import Footer from "./components/footer";
-import Blog from "./components/blog";
+// import Blog from "./components/blog";
 import BlogCarousel from "./components/blogCarousel";
 
 export default function Home() {

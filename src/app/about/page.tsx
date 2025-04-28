@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { NextPage } from 'next';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
@@ -75,7 +75,7 @@ const AboutUs: NextPage = () => {
           </div>
           <h3 className="text-xl font-bold mb-3">Exploration</h3>
           <p className="text-gray-600 mb-4">
-            If something happens to your home - or any attached structures on your property - we'll cover the repairs or the rebuild.
+            If something happens to your home - or any attached structures on your property - well cover the repairs or the rebuild.
           </p>
             <a href='' className="flex items-center text-gray-600 hover:text-black">
               Learn More
@@ -95,7 +95,7 @@ const AboutUs: NextPage = () => {
           </div>
           <h3 className="text-xl font-bold mb-3">Work assignments</h3>
           <p className="text-gray-600 mb-4">
-            If not just stuff, it's your life. And if there's ever a theft, fire, or other unfortunate event, we'll help with the repair or replacement.
+            If not just stuff, its your life. And if theres ever a theft, fire, or other unfortunate event, well help with the repair or replacement.
           </p>
             <a className="flex items-center text-gray-600 hover:text-black">
               Learn More
