@@ -2,16 +2,16 @@ import React from 'react'
 
 import { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
+import Collection from './collection';
 
 const FeaturedCollections = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const collections = [1, 2, 3, 4, 5]; // Representing 5 collections
+  const collections = [1, 2, 3, 4, 5]; 
 
-  // Check if we're on mobile
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768); // 768px is standard md breakpoint
+      setIsMobile(window.innerWidth < 768);
     };
     
     checkIfMobile();
@@ -22,7 +22,6 @@ const FeaturedCollections = () => {
     };
   }, []);
 
-  // Handle swipe gestures
   const handlers = useSwipeable({
     onSwipedLeft: () => {
       if (activeIndex < collections.length - 1) {
@@ -34,7 +33,6 @@ const FeaturedCollections = () => {
         setActiveIndex(activeIndex - 1);
       }
     },
-    preventDefaultTouchmoveEvent: true,
     trackMouse: false
   });
 
@@ -49,14 +47,12 @@ const FeaturedCollections = () => {
         </p>
       </div>
 
-      {/* Desktop view - Normal grid layout */}
       <div className="hidden md:flex container lg:ml-8 rounded-3xl justify-center gap-2 space-x-5">
         {collections.map((_, index) => (
           <Collection key={index} />
         ))}
       </div>
 
-      {/* Mobile view - Swiper */}
       {isMobile && (
         <div className="md:hidden w-full overflow-hidden px-4">
           <div 

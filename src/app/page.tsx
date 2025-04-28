@@ -43,12 +43,12 @@ export default function Home() {
 
     const [isMobile, setIsMobile] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
-    const collections = [1, 2, 3, 4, 5]; // Representing 5 collections
+    const collections = [1, 2, 3, 4, 5]; 
   
-    // Check if we're on mobile
+    
     useEffect(() => {
       const checkIfMobile = () => {
-        setIsMobile(window.innerWidth < 768); // 768px is standard md breakpoint
+        setIsMobile(window.innerWidth < 768); 
       };
       
       checkIfMobile();
@@ -59,7 +59,6 @@ export default function Home() {
       };
     }, []);
   
-    // Handle swipe gestures
     const handlers = useSwipeable({
       onSwipedLeft: () => {
         if (activeIndex < collections.length - 1) {
@@ -71,13 +70,13 @@ export default function Home() {
           setActiveIndex(activeIndex - 1);
         }
       },
-      preventDefaultTouchmoveEvent: true,
+      // preventDefaultTouchmoveEvent: true,
       trackMouse: false
     });
 
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const handleDotClick = (index) => {
+  const handleDotClick = (index: number) => {
     setActiveSlide(index);
   };
 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const ShopNowGrid = () => {
+const Collection = () => {
   return (
     <>
       <div className="overflow-hidden w-full">
@@ -22,4 +22,4 @@ const ShopNowGrid = () => {
   );
 };
 
-export default ShopNowGrid;
+export default Collection;
