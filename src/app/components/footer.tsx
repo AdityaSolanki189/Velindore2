@@ -32,8 +32,8 @@ const Footer = () => {
           </div>
           
           {/* Help Column */}
-          <div className='ml-20'>
-            <h3 className="text-lg font-bold mb-6">HELP</h3>
+          <div className="ml-0 md:ml-4 lg:ml-20">
+            <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">HELP</h3>
             <ul className="space-y-3">
               <li><Link href="/help" className="hover:text-gray-300">Help Center</Link></li>
               <li><Link href="/shipping" className="hover:text-gray-300">Shipping Info</Link></li>
@@ -45,8 +45,8 @@ const Footer = () => {
           </div>
           
           {/* Company Column */}
-          <div className='ml-20'>
-            <h3 className="text-lg font-bold mb-6">COMPANY</h3>
+          <div className="ml-0 md:ml-4 lg:ml-20">
+            <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">COMPANY</h3>
             <ul className="space-y-3">
               <li><Link href="/about" className="hover:text-gray-300">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-gray-300">Our Blog</Link></li>
@@ -58,8 +58,8 @@ const Footer = () => {
           </div>
           
           {/* Our Shop Column */}
-          <div className='ml-20'>
-            <h3 className="text-lg font-bold mb-6">OUR SHOP</h3>
+          <div className="ml-0 md:ml-4 lg:ml-20">
+            <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">OUR SHOP</h3>
             <ul className="space-y-3">
               <li><Link href="/category/accessories" className="hover:text-gray-300">Accessories</Link></li>
               <li><Link href="/category/living-room" className="hover:text-gray-300">Living Room</Link></li>
@@ -72,19 +72,19 @@ const Footer = () => {
         </div>
         
         {/* Copyright Section */}
-        <div className="border-t border-slate-800 mt-12 pt-6">
-          <p className="text-sm">Copyright © 2024 Vinovathemes. All rights reserved.</p>
+        <div className="border-t border-slate-800 mt-12 pt-6 text-center md:text-left">
+          <p className="text-sm">Copyright © 2025 Velindore. All rights reserved.</p>
         </div>
       </div>
       
       {/* Scroll to top button */}
-      <div className="fixed bottom-6 right-6">
+      <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6">
         <button 
           onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}
-          className="bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors"
+          className="bg-green-500 text-white rounded-full p-2 md:p-3 shadow-lg hover:bg-green-600 transition-colors"
           aria-label="Scroll to top"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
         </button>

@@ -26,7 +26,7 @@ const Blog = ({
     <div className="blog-card mb-10">
       <div className="m-5">
         <div className="">
-          <img src={image} alt="Blog image" className="w-[400px] h-[400px] object-cover rounded-2xl" />
+          <img src={image} alt="Blog image" className="w-[400px] h-[400px] object-cover" />
         </div>
 
         <div className="flex items-center gap-6 p-4 w-auto">
