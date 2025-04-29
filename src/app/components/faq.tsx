@@ -67,8 +67,10 @@ const FAQ: React.FC = () => {
                   ? 'max-height 0.5s ease-in-out, opacity 0.4s ease-in-out 0.1s' 
                   : 'max-height 0.5s ease-in-out, opacity 0.2s ease-in-out'
               }}
-              ref={el => contentRefs.current[index] = el}
-            >
+              ref={(el) => {
+                contentRefs.current[index] = el;
+              }}
+              >
               <div className="p-4 bg-white border-t">
                 <p className="text-gray-700">{item.answer}</p>
               </div>
