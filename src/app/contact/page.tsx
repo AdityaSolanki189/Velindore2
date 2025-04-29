@@ -44,7 +44,7 @@ const ContactPage: React.FC = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Get In Touch</h1>
           <p className="text-gray-600 max-w-3xl mx-auto">
-            We'll create high-quality linkable content and build at least 40 high-authority links to each
+            Well create high-quality linkable content and build at least 40 high-authority links to each
             asset, paving the way for you to grow your rankings, improve brand.
           </p>
         </div>
@@ -54,7 +54,7 @@ const ContactPage: React.FC = () => {
           <div className="bg-teal-500 text-white rounded-lg p-8 md:w-1/3">
             <h2 className="text-2xl font-bold mb-4">Contact Information</h2>
             <p className="mb-8">
-              We'll create high-quality linkable content and build at least 40 high-authority.
+              Well create high-quality linkable content and build at least 40 high-authority.
             </p>
             
             <div className="space-y-6">
