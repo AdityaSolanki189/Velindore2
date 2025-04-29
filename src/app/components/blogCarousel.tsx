@@ -3,16 +3,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import Blog from "./blog";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const BlogCarousel = () => {
-  // For hydration issues with Next.js SSR
   const [mounted, setMounted] = useState(false);
 
-  // Navigation button refs
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -20,7 +17,6 @@ const BlogCarousel = () => {
     setMounted(true);
   }, []);
 
-  // Sample blog data (replace with your actual data)
   const blogs = [
     {
       id: 1,
@@ -86,11 +82,9 @@ const BlogCarousel = () => {
           }}
           
           breakpoints={{
-            // When screen width is >= 640px (tablet)
             640: {
               slidesPerView: 2,
             },
-            // When screen width is >= 1024px (desktop)
             1024: {
               slidesPerView: 3,
             },
@@ -109,7 +103,6 @@ const BlogCarousel = () => {
           ))}
         </Swiper>
 
-        {/* Custom navigation buttons with circular styling */}
         <div className="absolute top-1/3 -translate-y-1/2 -left-4 z-10">
           <button
             ref={prevRef}
@@ -155,7 +148,6 @@ const BlogCarousel = () => {
         </div>
       </div>
 
-      {/* Optional: Add custom styles for better visibility */}
       <style jsx>{`
         /* Hide default Swiper navigation */
         :global(.swiper-button-next),
