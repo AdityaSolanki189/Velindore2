@@ -79,12 +79,12 @@ const BlogCarousel = () => {
             nextEl: nextRef.current,
           }}
           onBeforeInit={(swiper) => {
-            // Set refs once swiper instance is created
-            // if (swiper.params.navigation) {
-            //   swiper.params.navigation.prevEl = prevRef.current;
-            //   swiper.params.navigation.nextEl = nextRef.current;
-            // }
+            if (typeof swiper.params.navigation === 'object') {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+            }
           }}
+          
           breakpoints={{
             // When screen width is >= 640px (tablet)
             640: {
