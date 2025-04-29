@@ -80,10 +80,10 @@ const BlogCarousel = () => {
           }}
           onBeforeInit={(swiper) => {
             // Set refs once swiper instance is created
-            if (swiper.params.navigation) {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
-            }
+            // if (swiper.params.navigation) {
+            //   swiper.params.navigation.prevEl = prevRef.current;
+            //   swiper.params.navigation.nextEl = nextRef.current;
+            // }
           }}
           breakpoints={{
             // When screen width is >= 640px (tablet)
