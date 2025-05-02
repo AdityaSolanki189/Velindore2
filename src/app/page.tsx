@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import 'swiper/css';
+import './globals.css';
+// import { Poppins } from 'next/font/google';
 import Navbar from "./components/navbar";
 import { useSwipeable } from "react-swipeable";
 import ProductGrid from "./components/productGrid";
@@ -12,6 +14,10 @@ import FAQ from "./components/faq";
 import Footer from "./components/footer";
 // import Blog from "./components/blog";
 import BlogCarousel from "./components/blogCarousel";
+import HomefixProductSection from "./components/Homeflix";
+import ProductCard from "./components/product";
+import HeroSection from "./components/Herosection";
+import Testimonials from "./components/Testimonials";
 
 export default function Home() {
   const carouselData = [
@@ -40,6 +46,8 @@ export default function Home() {
       buttonText: "DISCOVER MORE",
     },
   ];
+
+  
 
     const [isMobile, setIsMobile] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -81,7 +89,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="bg-[#FEF8EF]">
       <Navbar />
 
       <section className="relative w-full h-[700px]">
@@ -186,7 +194,7 @@ export default function Home() {
       )}
     </section>
 
-    <section className="mt-20 container mx-auto px-4">
+    <section className="mt-20 container mx-auto px-4 mb-20">
   <div className="text-center text-black">
     <p className="text-lg">Welcome to Velinodore</p>
     <h2 className="text-3xl mt-5 font-bold">
@@ -218,11 +226,35 @@ export default function Home() {
   </div>
 </section>
 
+<section>
+  <HomefixProductSection />
+</section>
+
+<section>
+  <HeroSection />
+</section>
+
+<section>
+  <div>
+    <h1 className="text-black text-center font-extrabold text-4xl mt-10 mb-10">Latest collection</h1>
+
+    <div className="flex justify-center mx-auto">
+  <div className="flex flex-wrap justify-center items-center gap-4 max-w-screen-xl p-4">
+    <ProductCard />
+    <ProductCard />
+    <ProductCard />
+    <ProductCard />
+  </div>
+</div>
+
+  </div>
+</section>
+
 <section className="relative w-full overflow-hidden py-8 md:py-16 mt-20 md:mt-36">
   <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-4">
     <div className="w-full md:w-1/3 mb-10 md:mb-0 text-center md:text-left">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-        Scandinavian Interior Design Collection
+        Velindore Interior Design Collection
       </h2>
       <p className="text-gray-600 mb-6 md:mb-10">
         Discover the beauty of Scandinavian interior design
@@ -252,6 +284,8 @@ export default function Home() {
     </div>
   </div>
 </section>
+
+
 
 <section className="mt-20 px-4">
   <div className="text-black text-center">
@@ -303,9 +337,13 @@ export default function Home() {
       </section>
 
 
-      <section className="text-black">
+      {/* <section className="text-black">
         <FAQ />
-      </section>
+      </section> */}
+
+<section className="text-black">
+  <Testimonials />
+</section>
 
       <section className="px-4 py-10">
   <div className="text-black text-center">
@@ -324,6 +362,8 @@ export default function Home() {
     </div>
   </div>
 </section>
+
+
 
         <section className="mt-20">
           <Footer />

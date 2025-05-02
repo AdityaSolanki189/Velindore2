@@ -34,7 +34,7 @@ const ProductCard = ({
 
   return (
     <div 
-      className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 w-64 relative"
+      className="bg-white rounded-lg overflow-hidden transition-all duration-300 w-64 relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -65,11 +65,11 @@ const ProductCard = ({
       
       {/* Product info */}
       <div className="p-4">
-        <span className="text-xs text-gray-500 uppercase">{category}</span>
+        {/* <span className="text-xs text-gray-500 uppercase">{category}</span> */}
         <h3 className="font-medium text-gray-900 mt-1 text-lg truncate">{title}</h3>
         
         {/* Rating */}
-        <div className="flex items-center mt-1">
+        {/* <div className="flex items-center mt-1">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <svg 
@@ -84,7 +84,7 @@ const ProductCard = ({
             ))}
           </div>
           <span className="text-xs text-gray-500 ml-1">({rating})</span>
-        </div>
+        </div> */}
         
         {/* Price */}
         <div className="mt-2 flex items-center">
@@ -99,7 +99,7 @@ const ProductCard = ({
         </div>
         
         {/* Button */}
-        <div className="mt-4 flex justify-between items-center">
+        {/* <div className="mt-4 flex justify-between items-center">
           <Link 
             href={`/products/${id}`}
             className="text-sm text-blue-600 hover:text-blue-800"
@@ -117,7 +117,7 @@ const ProductCard = ({
           >
             {inStock ? 'Add to Cart' : 'Sold Out'}
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

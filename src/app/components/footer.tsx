@@ -4,7 +4,7 @@ import { Phone, Mail, Calendar } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-900 text-white pt-12 pb-4">
+    <footer className="text-black pt-12 pb-4">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Contact Us Column */}

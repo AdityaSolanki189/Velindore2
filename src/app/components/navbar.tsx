@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,6 +15,10 @@ import {
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchFormRef = useRef<HTMLDivElement>(null);
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,54 +38,124 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchFormRef.current &&
+        !searchFormRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    };
+    
+
+    if (isSearchOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSearchOpen]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     document.body.style.overflow = !isMenuOpen ? 'hidden' : 'auto';
   };
 
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const searchTerm = searchInputRef.current?.value || '';
+    console.log('Searching for:', searchTerm);
+  
+    // window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
+    setIsSearchOpen(false);
+  };
+  
+
   return (
     <nav>
-      <div className={`sticky text-white flex flex-wrap bg-[#0b1925] top-0 z-50 ${scrolled ? 'shadow-lg' : ''} transition-all duration-300`}>
+      <div className={`sticky text-black font-bold flex flex-wrap bg-[#FEFFFE] top-0 z-50 ${scrolled ? 'shadow-lg' : ''} transition-all duration-300`}>
         <div className="w-full flex items-center justify-between h-16 md:h-20 px-4 md:px-10">
-          {/* Logo */}
-          <div className="flex justify-center items-center">
-            <Link href="/">
-              <img src="/assets/LOGO-PNG.png" alt="Logo" className="w-10 md:w-14 transition-transform duration-300 hover:scale-110 cursor-pointer" />
-            </Link>
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex text-center justify-center items-center mx-auto">
+          {/* Desktop Navigation Links - Moved to the left */}
+          <div className="hidden md:flex text-center justify-start items-center">
             <ul className="list-none flex space-x-4 lg:space-x-7">
               {['/', '/accessories', '/contact', '/about', '/bedroom', '/kitchen'].map((path, index) => {
                 const label = ['Home', 'Accessories', 'Contact', 'About', 'Bedroom', 'Kitchen'][index];
                 return (
                   <li key={path} className="relative group">
-                    <Link href={path} className="hover:text-blue-300 transition-colors duration-300">
+                    <Link href={path} className=" transition-colors duration-300">
                       {label}
                     </Link>
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-300 group-hover:w-full"></span>
                   </li>
                 );
               })}
             </ul>
           </div>
 
-          {/* Icons */}
-          <div className="flex space-x-4 md:space-x-6 lg:space-x-9 text-lg items-center justify-center">
+          {/* Logo - Moved to center */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center">
+            <Link href="/">
+              <img src="/assets/LOGO-PNG.png" alt="Logo" className="w-10 md:w-14 transition-transform duration-300 hover:scale-110 cursor-pointer" />
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button + Icons */}
+          <div className="flex space-x-4 md:space-x-6 lg:space-x-9 text-lg items-center justify-end">
             <button
               onClick={toggleMenu}
-              className="md:hidden text-white p-2 focus:outline-none transition-all duration-300 hover:text-blue-300"
+              className="md:hidden text-black p-2 focus:outline-none transition-all duration-300 hover:text-blue-300"
               aria-label="Toggle menu"
             >
               <FontAwesomeIcon icon={faBars} className="text-xl" />
             </button>
 
             <div className="hidden md:flex space-x-4 md:space-x-6 items-center">
-              <Link href="/search" className="relative group transition-transform duration-300 hover:text-blue-300">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="text-base md:text-lg" />
+              {/* Search Icon/Form */}
+              <div className="relative group" ref={searchFormRef}>
+                <button 
+                  onClick={toggleSearch}
+                  className="transition-transform duration-300 hover:text-blue-300 focus:outline-none"
+                  aria-label="Search"
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="text-base md:text-lg" />
+                </button>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
+
+                {/* Search Input that shows when search is open */}
+                <form 
+                  onSubmit={handleSearchSubmit}
+                  className={`absolute right-0 top-10 bg-white shadow-lg rounded-lg transition-all duration-300 ${
+                    isSearchOpen ? 'opacity-100 scale-100 z-50' : 'opacity-0 scale-95 -z-10'
+                  }`}
+                >
+                  <div className="flex items-center p-2 border border-gray-200 rounded-lg">
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder="Search products..."
+                      className="w-64 py-2 px-3 text-sm font-normal focus:outline-none"
+                    />
+                    <button 
+                      type="submit"
+                      className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-300"
+                    >
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <Link href="/account" className="relative group transition-transform duration-300 hover:text-blue-300">
                 <FontAwesomeIcon icon={faUser} className="text-base md:text-lg" />
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
@@ -133,6 +207,23 @@ export default function Navbar() {
               </button>
             </div>
 
+            {/* Mobile Search Bar */}
+            <div className="px-6 py-4 border-b border-gray-200">
+              <form onSubmit={handleSearchSubmit} className="flex items-center">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full py-2 px-3 border border-gray-300 rounded-l-lg text-sm font-normal focus:outline-none focus:ring-2 focus:ring-blue-300"
+                />
+                <button 
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-r-lg transition-colors duration-300"
+                >
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </button>
+              </form>
+            </div>
+
             <div className="px-6 py-4">
               <ul className="space-y-4">
                 {['/', '/accessories', '/contact', '/about', '/bedroom', '/kitchen'].map((path, index) => {
@@ -155,7 +246,6 @@ export default function Navbar() {
             <div className="px-6 py-4 mt-4 bg-gray-50 rounded-lg mx-4">
               <div className="flex flex-col space-y-4">
                 {[
-                  { href: '/search', icon: faMagnifyingGlass, label: 'Search' },
                   { href: '/account', icon: faUser, label: 'My Account' },
                   { href: '/cart', icon: faCartShopping, label: 'Cart', badge: '3' },
                   { href: '/wishlist', icon: faHeart, label: 'Wishlist', badge: '5' }
