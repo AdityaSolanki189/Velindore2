@@ -1,6 +1,6 @@
 // ProductCard.jsx
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useState } from 'react';
 
 const ProductCard = ({ 
@@ -18,13 +18,13 @@ const ProductCard = ({
   const [isHovered, setIsHovered] = useState(false);
   
   const {
-    id,
+    // id,
     title,
     price,
     discountPrice,
-    rating,
+    // rating,
     image,
-    category,
+    // category,
     inStock
   } = product;
   

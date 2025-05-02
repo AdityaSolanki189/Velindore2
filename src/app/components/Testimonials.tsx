@@ -84,7 +84,7 @@ const Testimonials = ({
               
               <div className="text-center max-w-3xl mx-auto mb-6">
                 <p className="text-lg italic">
-                  "{currentTestimonial.text}"
+                &quot; {currentTestimonial.text} &quot;
                 </p>
               </div>
               

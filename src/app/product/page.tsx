@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Heart, ShoppingCart, Check } from 'lucide-react';
+import { Heart, Check } from 'lucide-react';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 
