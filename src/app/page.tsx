@@ -1,20 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import 'swiper/css';
 import './globals.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 // import { Poppins } from 'next/font/google';
 import Navbar from "./components/navbar";
 import { useSwipeable } from "react-swipeable";
-import ProductGrid from "./components/productGrid";
+// import ProductGrid from "./components/productGrid";
 import Collection from "./components/collection";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faTruckFast, faCalendar, faUser, faComment, faArrowRight, } from "@fortawesome/free-solid-svg-icons";
 // import FAQ from "./components/faq";
 import Footer from "./components/footer";
 // import Blog from "./components/blog";
-import BlogCarousel from "./components/blogCarousel";
+// import BlogCarousel from "./components/blogCarousel";
 import HomefixProductSection from "./components/Homeflix";
 import ShopByCategory from "./components/shopcategory";
 import ProductCard from "./components/product";
@@ -89,9 +89,9 @@ export default function Home() {
 
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const handleDotClick = (index: number) => {
-    setActiveSlide(index);
-  };
+  // const handleDotClick = (index: number) => {
+  //   setActiveSlide(index);
+  // };
 
   const nextSlide = () => {
     setActiveSlide((prev) => (prev === carouselData.length - 1 ? 0 : prev + 1));
