@@ -6,7 +6,7 @@ const Collection = () => {
       <div className="overflow-hidden w-full">
         <div className=" overflow-hidden">
           <img
-            src="/assets/butterfly.jpg"
+            src="/assets/photo-3.jpg"
             alt="Lamp Decor"
             className="w-full rounded-2xl h-52 object-cover"
           />

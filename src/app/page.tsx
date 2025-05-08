@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import 'swiper/css';
 import './globals.css';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 // import { Poppins } from 'next/font/google';
 import Navbar from "./components/navbar";
 import { useSwipeable } from "react-swipeable";
@@ -15,6 +16,7 @@ import Footer from "./components/footer";
 // import Blog from "./components/blog";
 import BlogCarousel from "./components/blogCarousel";
 import HomefixProductSection from "./components/Homeflix";
+import ShopByCategory from "./components/shopcategory";
 import ProductCard from "./components/product";
 import HeroSection from "./components/Herosection";
 import Testimonials from "./components/Testimonials";
@@ -23,27 +25,30 @@ export default function Home() {
   const carouselData = [
     {
       id: 1,
-      title: "LIVING ROOM",
-      subtitle: "NEW COLLECTIONS",
-      image: "/assets/bed.jpg",
-      backgroundColor: "bg-green-700",
-      buttonText: "SHOP NOW",
+      title: "Sleep Sanctuary",
+      subtitle: "Furnishing",
+      image: "/assets/photo-1.jpg",
+      backgroundColor: "",
+      buttonText: "VIEW COLLECTION",
+      promoText: "EXTRA 10% OFF WITH CODE: DEAL2024"
     },
     {
       id: 2,
       title: "BEDROOM",
       subtitle: "COMFORT DESIGNS",
-      image: "/assets/bed room.jpg",
-      backgroundColor: "bg-blue-700",
+      image: "/assets/photo-2.jpg",
+      backgroundColor: "",
       buttonText: "VIEW COLLECTION",
+      promoText: "EXTRA 10% OFF WITH CODE: DEAL2024"
     },
     {
       id: 3,
       title: "KITCHEN",
       subtitle: "MODERN STYLES",
-      image: "/assets/downloa.jpg",
-      backgroundColor: "bg-amber-700",
+      image: "/assets/photo-3.jpg",
+      backgroundColor: "",
       buttonText: "DISCOVER MORE",
+      promoText: "EXTRA 10% OFF WITH CODE: DEAL2024"
     },
   ];
 
@@ -88,29 +93,35 @@ export default function Home() {
     setActiveSlide(index);
   };
 
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev === carouselData.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setActiveSlide((prev) => (prev === 0 ? carouselData.length - 1 : prev - 1));
+  };
+
   return (
     <div className="bg-[#FEF8EF]">
       <Navbar />
 
-      <section className="relative w-full h-[700px]">
+      <section className="relative w-full h-screen max-h-[700px] overflow-hidden">
         <div
-          className={`absolute inset-0 transition-opacity duration-500 ${carouselData[activeSlide].backgroundColor}`}
+          className={`absolute inset-0 transition-opacity duration-700 ${carouselData[activeSlide].backgroundColor}`}
         >
           <div className="relative w-full h-full">
             {carouselData.map((slide, index) => (
               <div
                 key={slide.id}
-                className={`absolute inset-0 transition-opacity duration-500 ${
+                className={`absolute inset-0 transition-opacity duration-700 ${
                   index === activeSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
                 <div className="w-full h-full relative">
-                  <Image
+                  <img
                     src={slide.image}
                     alt={slide.title}
-                    layout="fill"
-                    objectFit="cover"
-                    priority={index === activeSlide}
+                    className="w-full h-full object-cover"
                   />
                 </div>
               </div>
@@ -118,54 +129,103 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute inset-0 flex flex-col items-start justify-center text-white px-32">
-          <p className="text-xl font-medium mb-2">
-            {carouselData[activeSlide].subtitle}
-          </p>
-          <h1 className="text-6xl font-bold mb-8">
-            {carouselData[activeSlide].title}
-          </h1>
-          <button className="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition">
-            {carouselData[activeSlide].buttonText}
-          </button>
+        {/* Content Overlay */}
+        <div className="absolute inset-0">
+          <div className="flex flex-col h-full justify-center px-8 md:px-16 lg:px-32">
+            <div className="text-white max-w-2xl">
+              <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold mb-0">
+                {activeSlide === 0 ? (
+                  <div>
+                    <div className="font-bold text-white">Sleep</div> 
+                    <div className="relative mb-4">
+                      <div className="font-light italic text-white">Sanctuary</div>
+                      <div className="absolute top-0 left-0 w-full">
+                        <svg viewBox="0 0 600 120" className="w-full h-20 overflow-visible">
+                          <path 
+                            d="M10,60 Q150,20 300,60 Q450,100 590,60" 
+                            fill="none" 
+                            stroke="white" 
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="text-4xl md:text-6xl lg:text-8xl font-bold mb-8">
+                      {carouselData[activeSlide].subtitle}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-xl font-medium mb-2">
+                      {carouselData[activeSlide].subtitle}
+                    </p>
+                    <div className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
+                      {carouselData[activeSlide].title}
+                    </div>
+                  </>
+                )}
+              </h1>
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <button className="bg-white text-[#321900] px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition">
+                  {carouselData[activeSlide].buttonText}
+                </button>
+                <span className="text-white text-sm md:text-base">
+                  {carouselData[activeSlide].promoText}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col space-y-4">
-          {carouselData.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => handleDotClick(index)}
-              className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
-                index === activeSlide
-                  ? "bg-teal-400 w-4 h-4"
-                  : "bg-white opacity-70 hover:opacity-100"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+        {/* Arrow Controls */}
+        <div className="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-4 md:px-8">
+          <button 
+            onClick={prevSlide}
+            className="bg-white/20 cursor-pointer backdrop-blur-sm hover:bg-white/30 p-2 rounded-full text-white transition"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button 
+            onClick={nextSlide}
+            className="bg-white/20 cursor-pointer backdrop-blur-sm hover:bg-white/30 p-2 rounded-full text-white transition"
+            aria-label="Next slide"
+          >
+            <ChevronRight size={24} />
+          </button>
         </div>
       </section>
 
-      <ProductGrid />
+
+      {/* <ProductGrid /> */}
+
+      <section className="container mt-10">
+        <div className="text-[#321900] flex justify-center text-3xl font-extrabold">
+        <h2 className="text-center text-[#321900] lg:text-left mt-6">Shop by category</h2>
+        </div>
+
+        <div className="flex flex-wrap justify-center items-center gap-4 p-4">
+        <ShopByCategory />
+        </div>
+      </section>
 
       <section className="container">
       <div className="text-center">
-        <h2 className="text-black mt-20 text-3xl font-bold">
+        <h2 className="text-[#321900] mt-20 text-3xl font-bold">
           Featured Collections
         </h2>
+
         <p className="mb-10 text-gray-500 mt-2">
           Shop our best selling collections for a range of styles loved by you
         </p>
       </div>
 
-      {/* Desktop view - Normal grid layout */}
       <div className="hidden md:flex container lg:ml-8 rounded-3xl justify-center gap-2 space-x-5">
         {collections.map((_, index) => (
           <Collection key={index} />
         ))}
       </div>
 
-      {/* Mobile view - Swiper */}
       {isMobile && (
         <div className="md:hidden w-full overflow-hidden px-4">
           <div 
@@ -194,8 +254,8 @@ export default function Home() {
       )}
     </section>
 
-    <section className="mt-20 container mx-auto px-4 mb-20">
-  <div className="text-center text-black">
+    {/* <section className="mt-20 container mx-auto px-4 mb-20">
+  <div className="text-center text-[#321900]">
     <p className="text-lg">Welcome to Velinodore</p>
     <h2 className="text-3xl mt-5 font-bold">
       Timeless Furniture, Endless Comfort
@@ -224,9 +284,9 @@ export default function Home() {
       </div>
     </div>
   </div>
-</section>
+</section> */}
 
-<section>
+<section className="mt-24">
   <HomefixProductSection />
 </section>
 
@@ -236,7 +296,7 @@ export default function Home() {
 
 <section>
   <div>
-    <h1 className="text-black text-center font-extrabold text-4xl mt-10 mb-10">Latest collection</h1>
+    <h1 className="text-[#321900] text-center font-extrabold text-4xl mt-10 mb-10">Latest collection</h1>
 
     <div className="flex justify-center mx-auto">
   <div className="flex flex-wrap justify-center items-center gap-4 max-w-screen-xl p-4">
@@ -288,12 +348,11 @@ export default function Home() {
 
 
 <section className="mt-20 px-4">
-  <div className="text-black text-center">
+  <div className="text-[#321900] text-center">
     <h2 className="text-3xl font-extrabold">Shop The Look</h2>
     <p className="text-gray-700 mt-3">Getting the look you want has never been easier</p>
   </div>
   
-  {/* Desktop view - visible only on md screens and above */}
   <div className="hidden md:flex mt-10 justify-center gap-2">
     <div>
       <img src="/assets/living room.jpg" alt="Living room design" className="w-80 lg:w-96 h-64 lg:h-96 object-cover" />
@@ -306,7 +365,6 @@ export default function Home() {
     </div>
   </div>
   
-  {/* Mobile Swiper - visible only on smaller screens */}
   <div className="mt-8 md:hidden">
     <div className="relative">
       <div className="overflow-x-auto pb-8 flex snap-x snap-mandatory">
@@ -332,21 +390,21 @@ export default function Home() {
 </section>
 
 
-      <section className="mt-20">
+      {/* <section className="mt-20">
         <BlogCarousel />
-      </section>
+      </section> */}
 
 
-      {/* <section className="text-black">
+      {/* <section className="text-[#321900]">
         <FAQ />
       </section> */}
 
-<section className="text-black">
+<section className="text-[#321900]">
   <Testimonials />
 </section>
 
       <section className="px-4 py-10">
-  <div className="text-black text-center">
+  <div className="text-[#321900] text-center">
     <h2 className="text-3xl font-extrabold">Subscribe & Get 10% Discount</h2>
     <p className="text-sm mt-2 max-w-lg mx-auto">Get 15% off your first purchase! Plus, be the first to know about sales, new product launches and exclusive offers!</p>
     

@@ -90,7 +90,7 @@ export default function Navbar() {
           <div className="hidden md:flex text-center justify-start items-center">
             <ul className="list-none flex space-x-4 lg:space-x-7">
               {['/', '/accessories', '/contact', '/about', '/bedroom', '/kitchen'].map((path, index) => {
-                const label = ['Home', 'Accessories', 'Contact', 'About', 'Bedroom', 'Kitchen'][index];
+                const label = ['Home', 'Accessories', 'Contact', 'About'][index];
                 return (
                   <li key={path} className="relative group">
                     <Link href={path} className=" transition-colors duration-300">

@@ -38,21 +38,18 @@ const ProductCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Badge for discount */}
       {discount > 0 && (
         <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1 z-10">
           {discount}% OFF
         </div>
       )}
       
-      {/* Out of stock overlay */}
       {!inStock && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
           <span className="text-white text-lg font-bold">Out of Stock</span>
         </div>
       )}
       
-      {/* Product image */}
       <div className="relative h-48 overflow-hidden">
         <Image 
           src={image}
@@ -63,7 +60,6 @@ const ProductCard = ({
         />
       </div>
       
-      {/* Product info */}
       <div className="p-4">
         {/* <span className="text-xs text-gray-500 uppercase">{category}</span> */}
         <h3 className="font-medium text-gray-900 mt-1 text-lg truncate">{title}</h3>
