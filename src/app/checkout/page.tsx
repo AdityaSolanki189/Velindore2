@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 interface Product {
   id: string;
@@ -32,7 +32,7 @@ interface PaymentInfo {
 }
 
 const CheckoutPage: React.FC = () => {
-//   const router = useRouter();
+  const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
