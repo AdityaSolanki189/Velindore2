@@ -201,7 +201,7 @@ export default function Home() {
 
       <section className="container mt-10">
         <div className="text-[#321900] flex justify-center text-3xl font-extrabold">
-        <h2 className="text-center text-[#321900] lg:text-left mt-6">Shop by category</h2>
+        <h2 className="text-center md:ml-20 text-[#321900] lg:text-left mt-6">Shop by category</h2>
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-4 p-4">
@@ -209,7 +209,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container">
+      <section className="">
       <div className="text-center">
         <h2 className="text-[#321900] mt-20 text-3xl font-bold">
           Featured Collections
@@ -220,7 +220,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="hidden md:flex container lg:ml-8 rounded-3xl justify-center gap-2 space-x-5">
+      <div className="hidden md:flex m-10 rounded-3xl justify-center gap-2 space-x-5">
         {collections.map((_, index) => (
           <Collection key={index} />
         ))}
@@ -294,12 +294,16 @@ export default function Home() {
   <HeroSection />
 </section>
 
-<section>
+<section className="mt-[-370px] md:mt-[-130px]">
   <div>
-    <h1 className="text-[#321900] text-center font-extrabold text-4xl mt-10 mb-10">Latest collection</h1>
+    <h1 className="text-[#321900] text-center font-extrabold text-4xl mt-4 mb-10">Latest collection</h1>
 
     <div className="flex justify-center mx-auto">
   <div className="flex flex-wrap justify-center items-center gap-4 max-w-screen-xl p-4">
+    <ProductCard />
+    <ProductCard />
+    <ProductCard />
+    <ProductCard />
     <ProductCard />
     <ProductCard />
     <ProductCard />

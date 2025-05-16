@@ -10,7 +10,7 @@ const ProductCard = ({
     price: 99.99,
     discountPrice: 79.99,
     rating: 4.5,
-    image: '/assets/flower.jpg',
+    image: '/assets/image-1.png',
     category: 'Category',
     inStock: true,
   }

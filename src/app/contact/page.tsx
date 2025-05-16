@@ -50,8 +50,7 @@ const ContactPage: React.FC = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 mt-12">
-          {/* Contact Information */}
-          <div className="bg-teal-500 text-white rounded-lg p-8 md:w-1/3">
+          <div className="bg-[#000814] text-white rounded-lg p-8 md:w-1/3">
             <h2 className="text-2xl font-bold mb-4">Contact Information</h2>
             <p className="mb-8">
               Well create high-quality linkable content and build at least 40 high-authority.
@@ -90,13 +89,11 @@ const ContactPage: React.FC = () => {
               </div>
             </div>
             
-            {/* Background decoration */}
             <div className="relative">
               <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-teal-400 opacity-20"></div>
             </div>
           </div>
 
-          {/* Contact Form */}
           <div className="bg-white rounded-lg p-8 shadow-sm md:w-2/3">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -165,7 +162,7 @@ const ContactPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="bg-teal-500 cursor-pointer text-white px-6 py-3 rounded-md hover:bg-teal-600 transition-colors"
+                className="bg-[#000814] cursor-pointer text-white px-6 py-3 rounded-md hover:bg-teal-600 transition-colors"
               >
                 Send Message
               </button>

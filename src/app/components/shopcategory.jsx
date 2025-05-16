@@ -12,13 +12,11 @@ const ShopByCategory = ({
   const [touchEnd, setTouchEnd] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   
-  // Items to show based on screen size
   const getItemsToShow = () => {
     if (isMobile) return 1;
     return 4;
   };
   
-  // Check if we're on mobile on component mount
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -43,7 +41,6 @@ const ShopByCategory = ({
     setCurrentIndex(prev => Math.max(prev - 1, 0));
   };
   
-  // Touch events for mobile swiping
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -54,12 +51,10 @@ const ShopByCategory = ({
   
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 50) {
-      // Swipe left
       handleNext();
     }
     
     if (touchStart - touchEnd < -50) {
-      // Swipe right
       handlePrev();
     }
   };
@@ -68,10 +63,9 @@ const ShopByCategory = ({
 
   return (
     <div className={`w-full py-8 px-4 ${backgroundColor}`}>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto md:ml-20">
         
         <div className="relative">
-          {/* Navigation buttons */}
           <button 
             onClick={handlePrev}
             disabled={currentIndex === 0}
@@ -90,7 +84,6 @@ const ShopByCategory = ({
             <ChevronRight size={24} className="text-black" />
           </button>
           
-          {/* Swiper container */}
           <div 
             className="overflow-hidden"
             onTouchStart={handleTouchStart}

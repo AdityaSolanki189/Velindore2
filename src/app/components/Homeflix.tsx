@@ -21,6 +21,7 @@ export default function HomefixProductSection() {
       oldPrice: 40.00,
       discount: 13,
       image: '/assets/photo-1.jpg',
+      hot: true
     },
     {
       id: 2,
@@ -83,23 +84,51 @@ export default function HomefixProductSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <div key={product.id} className="group relative">
-                <div className="relative overflow-hidden ">
+                <div className="relative overflow-hidden">
                   {product.discount && (
-                    <div className="absolute top-2 left-2 bg-red-600 text-black text-xs font-medium px-2 py-1 rounded z-10">
+                    <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-medium px-2 py-1 rounded z-10">
                       -{product.discount}%
+                    </div>
+                  )}
+                  {product.hot && (
+                    <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-medium px-4 py-1 rounded z-10">
+                      Hot
                     </div>
                   )}
                   <img 
                     src={product.image} 
                     alt={product.name}
-                    className="w-full lg:w-72 h-84 object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center opacity-0 transition-all w-[294px] duration-500 origin-top group-hover:opacity-100 transform translate-y-full group-hover:translate-y-0">
-                    <Link href='/product' className="bg-white text-black px-4 py-2  font-medium transform translate-y-4 group-hover:translate-y-0 rounded-xl transition-transform duration-300">
-                      Quick View
-                    </Link>
+                  
+                  <div className="absolute inset-0 backdrop-blur-sm backdrop-filter opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
+                  
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 z-10">
+                    <button className="bg-white bg-opacity-90 text-black px-8 py-3 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-black hover:text-white backdrop-filter backdrop-blur-sm">
+                      ADD TO CART
+                    </button>
+                    
+                    <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      <button className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                      {/* <button className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                      <button className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        </svg>
+                      </button> */}
+                    </div>
                   </div>
                 </div>
+                
                 <div className="mt-3 space-y-1">
                   <h3 className="font-medium text-gray-900">{product.name}</h3>
                   <div className="flex items-center">
