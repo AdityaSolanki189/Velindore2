@@ -68,9 +68,9 @@ export default function Navbar() {
     document.body.style.overflow = !isMenuOpen ? 'hidden' : 'auto';
   };
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
+  // const toggleSearch = () => {
+  //   setIsSearchOpen(!isSearchOpen);
+  // };
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

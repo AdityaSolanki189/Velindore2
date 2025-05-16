@@ -5,7 +5,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 // import { useRouter } from 'next/router';
 
-// Types
 interface Product {
   id: string;
   name: string;
@@ -38,7 +37,6 @@ const CheckoutPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
   
-  // Cart state
   const [cartItems, setCartItems] = useState<Product[]>([
     {
       id: '1',
@@ -56,7 +54,6 @@ const CheckoutPage: React.FC = () => {
     }
   ]);
   
-  // Form states
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     firstName: '',
     lastName: '',
@@ -75,13 +72,11 @@ const CheckoutPage: React.FC = () => {
     cvv: ''
   });
 
-  // Calculate cart totals
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.08; // 8% tax
   const shipping = 9.99;
   const total = subtotal + tax + shipping;
 
-  // Handle quantity changes
   const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     
@@ -92,12 +87,10 @@ const CheckoutPage: React.FC = () => {
     );
   };
 
-  // Remove item from cart
   const removeItem = (id: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
-  // Handle form input changes
   const handleShippingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setShippingInfo(prev => ({ ...prev, [name]: value }));
@@ -108,7 +101,6 @@ const CheckoutPage: React.FC = () => {
     setPaymentInfo(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle form navigation
   const nextStep = () => {
     setStep(prev => prev + 1);
     window.scrollTo(0, 0);
@@ -119,9 +111,7 @@ const CheckoutPage: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  // Form validation
   const validateShippingInfo = (): boolean => {
-    // Basic validation rules - would be more comprehensive in production
     return !!(
       shippingInfo.firstName &&
       shippingInfo.lastName &&
@@ -134,7 +124,6 @@ const CheckoutPage: React.FC = () => {
   };
 
   const validatePaymentInfo = (): boolean => {
-    // Basic validation rules - would be more comprehensive in production
     return !!(
       paymentInfo.cardNumber &&
       paymentInfo.nameOnCard &&
@@ -143,11 +132,9 @@ const CheckoutPage: React.FC = () => {
     );
   };
 
-  // Handle checkout submission
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate forms
     if (!validateShippingInfo() || !validatePaymentInfo()) {
       alert("Please fill out all required fields");
       return;
@@ -155,17 +142,14 @@ const CheckoutPage: React.FC = () => {
     
     setLoading(true);
     
-    // Simulate API call
     setTimeout(() => {
       setLoading(false);
       setOrderComplete(true);
       
-      // Clear cart (in real app, would be handled by a cart context/redux)
       setCartItems([]);
     }, 2000);
   };
 
-  // If cart is empty (and not just completed an order), redirect to products
   useEffect(() => {
     if (cartItems.length === 0 && !orderComplete) {
       // In a real app, redirect to products page
@@ -189,7 +173,7 @@ const CheckoutPage: React.FC = () => {
             </div>
             <h2 className="text-3xl font-semibold text-gray-800 mb-4">Thank You For Your Order!</h2>
             <p className="text-gray-600 mb-6">
-              Your order has been placed successfully. We've sent a confirmation email to {shippingInfo.email}.
+              Your order has been placed successfully. We&apos;ve sent a confirmation email to {shippingInfo.email}.
             </p>
             <p className="text-gray-600 mb-8">
               Order #: <span className="font-medium">ORD-{Math.floor(Math.random() * 10000)}</span>

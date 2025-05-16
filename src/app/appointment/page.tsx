@@ -190,7 +190,7 @@ const BookAppointment: React.FC = () => {
                 {isSuccess ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700">
                     <h3 className="font-medium text-lg">Thank you for booking!</h3>
-                    <p>Your appointment request has been received. We'll contact you shortly to confirm your consultation.</p>
+                    <p>Your appointment request has been received. We&apos;ll contact you shortly to confirm your consultation.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">

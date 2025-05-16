@@ -33,28 +33,30 @@ export default function ProductPage() {
     '/assets/image-3.png',
   ];
 
-  const openLightbox = (index) => {
+  const openLightbox = (index: number) => {
     setSelectedImage(index);
     setLightboxOpen(true);
     document.body.style.overflow = 'hidden';
   };
+  
 
   const closeLightbox = () => {
     setLightboxOpen(false);
     document.body.style.overflow = 'auto';
   };
 
-  const navigateImage = (direction) => {
+  const navigateImage = (direction: 'next' | 'prev') => {
     if (direction === 'next') {
       setSelectedImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     } else {
       setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     }
   };
+  
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (!lightboxOpen) return;
-    
+  
     if (e.key === 'Escape') {
       closeLightbox();
     } else if (e.key === 'ArrowRight') {
@@ -63,6 +65,7 @@ export default function ProductPage() {
       navigateImage('prev');
     }
   };
+  
 
   // Add keyboard event listener
   useEffect(() => {

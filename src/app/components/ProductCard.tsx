@@ -8,11 +8,10 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { id, name, minPrice, maxPrice, images, discount, isNew } = product;
+  const { name, minPrice, maxPrice, images, discount, isNew } = product;
 
   return (
     <div className="group relative">
-      {/* Product Image */}
       <div className="relative w-full h-64 overflow-hidden mb-3">
         <Link href={`/product`}>
           <div className="w-full h-full relative">
@@ -24,7 +23,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               className="transition-transform duration-300 group-hover:scale-110"
             />
             
-            {/* Discount Label */}
             {discount && (
               <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-sm">
                 -{discount}%
@@ -39,7 +37,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </Link>
         
-        {/* Wishlist Icon */}
         <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors duration-200">
           <svg
             className="w-5 h-5 text-gray-700"
@@ -78,7 +75,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           )}
         </div>
         
-        {/* Rating Stars */}
         <div className="flex items-center justify-center mt-1">
           {[...Array(5)].map((_, index) => (
             <svg

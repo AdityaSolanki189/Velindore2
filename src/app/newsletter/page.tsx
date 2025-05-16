@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { CheckCircle, ArrowRight, Mail, ChevronDown } from 'lucide-react';
+import { CheckCircle, ArrowRight, Mail } from 'lucide-react';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
@@ -10,19 +10,19 @@ export default function NewsletterPage() {
   const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+  
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setError('Please enter a valid email address');
       return;
     }
-    
+  
     console.log('Subscribing email:', email);
     setSubscribed(true);
     setError('');
   };
-
+  
   return (
     <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">
       <Navbar />
@@ -50,7 +50,7 @@ export default function NewsletterPage() {
                 </div>
                 <h3 className="text-xl font-medium mb-2">Thank you for subscribing!</h3>
                 <p className="text-stone-600">
-                  You'll now receive our latest updates and offers directly to your inbox.
+                  You&apos;ll now receive our latest updates and offers directly to your inbox.
                 </p>
               </div>
             ) : (
@@ -177,7 +177,7 @@ export default function NewsletterPage() {
             
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-medium mb-2">Can I unsubscribe at any time?</h3>
-              <p className="text-stone-600">Absolutely! You can unsubscribe with a single click from any email we send. There's an unsubscribe link at the bottom of every newsletter.</p>
+              <p className="text-stone-600">Absolutely! You can unsubscribe with a single click from any email we send. There&apos;s an unsubscribe link at the bottom of every newsletter.</p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -207,7 +207,7 @@ export default function NewsletterPage() {
                 </div>
               </div>
               <p className="text-stone-600">
-                "I love receiving design inspiration in my inbox every two weeks. The exclusive discounts have helped me furnish my entire living room for less!"
+                &apos;I love receiving design inspiration in my inbox every two weeks. The exclusive discounts have helped me furnish my entire living room for less!&apos;
               </p>
             </div>
             
@@ -220,7 +220,7 @@ export default function NewsletterPage() {
                 </div>
               </div>
               <p className="text-stone-600">
-                "The style guides and seasonal updates keep me informed about the latest trends. I've completely transformed my home office thanks to their recommendations."
+                &apos;The style guides and seasonal updates keep me informed about the latest trends. I&apos;ve completely transformed my home office thanks to their recommendations.&apos;
               </p>
             </div>
             
@@ -233,7 +233,7 @@ export default function NewsletterPage() {
                 </div>
               </div>
               <p className="text-stone-600">
-                "Being a subscriber has saved me money and time. I get early access to sales and can plan my purchases around upcoming collections and promotions."
+                &apos;Being a subscriber has saved me money and time. I get early access to sales and can plan my purchases around upcoming collections and promotions.&apos;
               </p>
             </div>
           </div>
