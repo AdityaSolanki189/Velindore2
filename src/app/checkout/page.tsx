@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 
 interface Product {
   id: string;
@@ -32,7 +32,7 @@ interface PaymentInfo {
 }
 
 const CheckoutPage: React.FC = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
@@ -179,7 +179,6 @@ const CheckoutPage: React.FC = () => {
               Order #: <span className="font-medium">ORD-{Math.floor(Math.random() * 10000)}</span>
             </p>
             <button 
-              onClick={() => router.push('/')}
               className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
             >
               Continue Shopping
@@ -241,7 +240,6 @@ const CheckoutPage: React.FC = () => {
                   <div className="text-center py-12">
                     <p className="text-gray-500 mb-4">Your cart is empty</p>
                     <button
-                      onClick={() => router.push('/')}
                       className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
                     >
                       Continue Shopping
