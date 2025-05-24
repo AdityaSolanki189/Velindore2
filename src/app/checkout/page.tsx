@@ -231,7 +231,6 @@ const CheckoutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Step 1: Cart Review */}
             {step === 1 && (
               <div className="bg-white rounded-lg shadow-md p-6 mb-8">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Review Your Cart</h2>

@@ -1,5 +1,6 @@
 // import Link from 'next/link';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function HomefixProductSection() {
   const [activeCategory, setActiveCategory] = useState('All Products');
@@ -104,9 +105,11 @@ export default function HomefixProductSection() {
                   <div className="absolute inset-0 backdrop-blur-sm backdrop-filter opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
                   
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 z-10">
-                    <button className="bg-white bg-opacity-90 text-black px-8 py-3 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-black hover:text-white backdrop-filter backdrop-blur-sm">
-                      ADD TO CART
-                    </button>
+                  <Link href="/cart" passHref>
+  <button className="bg-white bg-opacity-90 text-black px-8 py-3 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-black hover:text-white backdrop-filter backdrop-blur-sm cursor-pointer">
+    ADD TO CART
+  </button>
+</Link>
                     
                     <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                       <button className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm">

@@ -63,7 +63,7 @@ const ShopByCategory = ({
 
   return (
     <div className={`w-full py-8 px-4 ${backgroundColor}`}>
-      <div className="max-w-6xl mx-auto md:ml-20">
+      <div className="mx-auto md:ml-20">
         
         <div className="relative">
           <button 
@@ -101,7 +101,7 @@ const ShopByCategory = ({
                   style={{ flex: `0 0 ${100 / itemsToShow}%` }}
                 >
                   <Link 
-                    href='/product'
+                    href='/accessories'
                     className="block text-black"
                   >
                     <div className="overflow-hidden rounded-lg mb-3">
@@ -112,7 +112,6 @@ const ShopByCategory = ({
                           fill
                           className="object-cover"
                         />
-                        {/* Overlay with VIEW COLLECTION button on hover */}
                         <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center opacity-0 transition-all duration-500 origin-top group-hover:opacity-100 transform translate-y-full group-hover:translate-y-0">
                         <div className="bg-white px-6 py-2 rounded-full transform scale-0 opacity-0 transition-all duration-300 delay-300 group-hover:scale-100 group-hover:opacity-100">
                             <span className="font-medium text-sm text-black">VIEW COLLECTION</span>

@@ -10,7 +10,7 @@ const ProductCard = ({
     price: 99.99,
     discountPrice: 79.99,
     rating: 4.5,
-    image: '/assets/image-1.png',
+    image: '/assets/purple.jpg',
     category: 'Category',
     inStock: true,
   }
@@ -34,7 +34,7 @@ const ProductCard = ({
 
   return (
     <div 
-      className="bg-white rounded-lg overflow-hidden transition-all duration-300 w-64 relative"
+      className="bg-white overflow-hidden transition-all duration-300 w-64 relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

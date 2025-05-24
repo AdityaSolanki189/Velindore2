@@ -10,7 +10,6 @@ const CartPage = () => {
   const [couponOpen, setCouponOpen] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   
-  // Sample cart data
   const [cartItems, setCartItems] = useState([
     {
       id: 1,

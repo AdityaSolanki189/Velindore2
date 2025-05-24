@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { z } from 'zod';
 import ProductCard from '../components/ProductCard';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
-const SortingSchema = z.enum(['default', 'price-low', 'price-high', 'newest', 'popularity']);
-type SortingType = z.infer<typeof SortingSchema>;
+// Using type assertion for enum since we can't use zod
+const sortingOptions = ['default', 'price-low', 'price-high', 'newest', 'popularity'] as const;
+type SortingType = typeof sortingOptions[number];
 
 export type ProductType = {
   id: number;
@@ -25,6 +25,7 @@ export type ProductType = {
 
 const Accessories: NextPage = () => {
   const [sorting, setSorting] = useState<SortingType>('default');
+  const [filterOpen, setFilterOpen] = useState(false);
   
   const products: ProductType[] = [
     {
@@ -114,12 +115,16 @@ const Accessories: NextPage = () => {
   ];
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    try {
-      const value = SortingSchema.parse(e.target.value);
+    const value = e.target.value as SortingType;
+    if (sortingOptions.includes(value)) {
       setSorting(value);
-    } catch (error) {
-      console.error("Invalid sorting value:", error);
+    } else {
+      console.error("Invalid sorting value:", value);
     }
+  };
+
+  const toggleFilters = () => {
+    setFilterOpen(!filterOpen);
   };
 
   return (
@@ -132,33 +137,56 @@ const Accessories: NextPage = () => {
       <Navbar />
 
       <div className="container mx-auto px-4 text-black">
-        <div className="py-8">
-          <h1 className="text-2xl font-bold mb-4">Product categories</h1>
+        <div className="py-4 md:py-8">
+          <h1 className="text-xl md:text-2xl font-bold mb-4">Product categories</h1>
           
-          <div className="flex gap-8">
-            {/* Product Categories Sidebar */}
-            <div className="w-1/4">
-              <ul>
-                {categories.map((category, index) => (
-                  <li key={index} className="mb-4 flex items-center">
-                    <span className="mr-2">○</span>
-                    <Link href="#" className="hover:text-gray-600">
-                      {category.name}
-                    </Link>
-                    <span className="ml-auto">({category.count})</span>
-                  </li>
-                ))}
-              </ul>
+          {/* Mobile Filter Toggle Button - Only visible on small screens */}
+          <div className="md:hidden mb-4">
+            <button 
+              onClick={toggleFilters}
+              className="w-full py-2 bg-gray-100 border border-gray-300 rounded flex justify-between items-center px-4"
+            >
+              <span className="font-medium">Filters</span>
+              <svg 
+                width="12" 
+                height="12" 
+                viewBox="0 0 12 12" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+                className={`transform transition-transform ${filterOpen ? 'rotate-180' : ''}`}
+              >
+                <path d="M6 9L0 3H12L6 9Z" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
 
-              <div className="mt-12">
-                <h2 className="text-2xl font-bold mb-6">Filter by price</h2>
-                <div className="flex items-center">
-                  <div className="w-full">
-                    <div className="w-full h-1 bg-gray-300 rounded-full relative">
-                      <div className="absolute w-3/4 h-1 bg-black rounded-full"></div>
-                      <div className="absolute w-full flex justify-between">
-                        <span className="w-4 h-4 bg-black rounded-full relative -top-1.5 cursor-pointer"></span>
-                        <span className="w-4 h-4 bg-black rounded-full relative -top-1.5 cursor-pointer"></span>
+          <div className="flex flex-col md:flex-row md:gap-8">
+            {/* Product Categories Sidebar */}
+            <div className={`w-full md:w-1/4 ${filterOpen ? 'block' : 'hidden'} md:block`}>
+              <div className="bg-white md:bg-transparent p-4 md:p-0 rounded-lg shadow-md md:shadow-none">
+                <h3 className="text-lg font-bold mb-2 md:hidden">Categories</h3>
+                <ul>
+                  {categories.map((category, index) => (
+                    <li key={index} className="mb-3 flex items-center">
+                      <span className="mr-2">○</span>
+                      <Link href="#" className="hover:text-gray-600 text-sm md:text-base">
+                        {category.name}
+                      </Link>
+                      <span className="ml-auto text-sm">({category.count})</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-8 mb-4 md:mt-12">
+                  <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Filter by price</h2>
+                  <div className="flex items-center">
+                    <div className="w-full">
+                      <div className="w-full h-1 bg-gray-300 rounded-full relative">
+                        <div className="absolute w-3/4 h-1 bg-black rounded-full"></div>
+                        <div className="absolute w-full flex justify-between">
+                          <span className="w-4 h-4 bg-black rounded-full relative -top-1.5 cursor-pointer"></span>
+                          <span className="w-4 h-4 bg-black rounded-full relative -top-1.5 cursor-pointer"></span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -167,24 +195,11 @@ const Accessories: NextPage = () => {
             </div>
 
             {/* Products Grid Section */}
-            <div className="w-3/4">
-              <div className="flex justify-between items-center mb-6">
-                <div className="flex space-x-2">
-                  <button className="p-2 border border-gray-300">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path fillRule="evenodd" d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
-                    </svg>
-                  </button>
-                  <button className="p-2 border border-gray-300">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="flex items-center">
+            <div className="w-full md:w-3/4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                <div className="flex items-center w-full sm:w-auto mb-4 sm:mb-0">
                   <select 
-                    className="border border-gray-300 rounded px-4 py-2"
+                    className="border border-gray-300 rounded px-2 py-1 md:px-4 md:py-2 text-sm w-full sm:w-auto"
                     value={sorting}
                     onChange={handleSortChange}
                   >
@@ -194,11 +209,12 @@ const Accessories: NextPage = () => {
                     <option value="newest">Newest</option>
                     <option value="popularity">Popularity</option>
                   </select>
-                  <span className="ml-4">Showing 1–9 of 12 results</span>
+                  <span className="hidden sm:inline ml-4 text-sm">Showing 1–9 of 12 results</span>
                 </div>
+                <span className="sm:hidden text-sm">Showing 1–9 of 12 results</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {products.slice(0, 9).map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
