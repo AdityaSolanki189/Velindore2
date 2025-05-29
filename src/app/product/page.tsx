@@ -5,14 +5,28 @@ import { Heart, Check, X } from 'lucide-react';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  rating: number;
+  reviews: number;
+  stock: number;
+  categories: string[];
+  tag: string;
+}
+
+type NavigationDirection = 'next' | 'prev';
+
 export default function ProductPage() {
-  const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
 
   // Mock product data
-  const product = {
+  const product: Product = {
     id: 'IN0021',
     name: 'Purecomfort pillows & cushions',
     price: 20.00,
@@ -24,7 +38,7 @@ export default function ProductPage() {
     tag: 'Carpets'
   };
 
-  const images = [
+  const images: string[] = [
     '/assets/bed room.jpg', 
     '/assets/image-2.png',
     '/assets/image-2.png',
@@ -33,19 +47,18 @@ export default function ProductPage() {
     '/assets/image-3.png',
   ];
 
-  const openLightbox = (index: number) => {
+  const openLightbox = (index: number): void => {
     setSelectedImage(index);
     setLightboxOpen(true);
     document.body.style.overflow = 'hidden';
   };
   
-
-  const closeLightbox = () => {
+  const closeLightbox = (): void => {
     setLightboxOpen(false);
     document.body.style.overflow = 'auto';
   };
 
-  const navigateImage = (direction: 'next' | 'prev') => {
+  const navigateImage = (direction: NavigationDirection): void => {
     if (direction === 'next') {
       setSelectedImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     } else {
@@ -53,8 +66,7 @@ export default function ProductPage() {
     }
   };
   
-
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent): void => {
     if (!lightboxOpen) return;
   
     if (e.key === 'Escape') {
@@ -66,14 +78,13 @@ export default function ProductPage() {
     }
   };
   
-
-  // Add keyboard event listener
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
     
     window.addEventListener('keydown', handleKey);
     return () => {
       window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = 'auto';
     };
   }, [lightboxOpen]);
 
@@ -85,41 +96,41 @@ export default function ProductPage() {
           {product.tag}
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <div 
-              className="border border-gray-200 mb-4 overflow-hidden cursor-pointer"
+              className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm"
               onClick={() => openLightbox(selectedImage)}
             >
               <img 
                 src={images[selectedImage]} 
                 alt={product.name}
-                className="w-full h-auto object-cover transition-transform hover:scale-105 duration-300"
+                className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
               />
             </div>
             
-            <div className="grid grid-cols-3 gap-2">
-              {images.map((image, index) => (
+            <div className="grid grid-cols-6 gap-2">
+              {images.map((image: string, index: number) => (
                 <div 
                   key={index}
-                  className={`border ${selectedImage === index ? 'border-black border-2' : 'border-gray-200'} cursor-pointer overflow-hidden`}
+                  className={`aspect-square border ${selectedImage === index ? 'border-black border-2' : 'border-gray-200'} cursor-pointer overflow-hidden bg-white rounded`}
                   onClick={() => setSelectedImage(index)}
                 >
                   <img 
                     src={image} 
                     alt={`${product.name} thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
                   />
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
             <div className="flex items-center mb-3">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(5)].map((_, i: number) => (
                 <span key={i} className={`text-xl ${i < product.rating ? 'text-yellow-500' : 'text-gray-300'}`}>★</span>
               ))}
               <span className="ml-2 text-sm text-gray-600">({product.reviews} customer review)</span>
@@ -144,7 +155,7 @@ export default function ProductPage() {
                   type="number"
                   min="1"
                   value={quantity}
-                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value) || 1)}
                   className="w-full h-12 px-2 text-center border text-black border-gray-300 rounded"
                 />
               </div>
@@ -167,7 +178,7 @@ export default function ProductPage() {
             
             <div className="mb-4 text-sm text-gray-600">
               <span>Categories: </span>
-              {product.categories.map((category, index) => (
+              {product.categories.map((category: string, index: number) => (
                 <span key={index} className="text-black">
                   {category}{index < product.categories.length - 1 ? ', ' : ''}
                 </span>
@@ -204,44 +215,41 @@ export default function ProductPage() {
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightboxOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center p-4">
-            {/* Close button */}
             <button 
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
-              <X className="w-8 h-8" />
+              <X className="w-6 h-6" />
             </button>
             
-            {/* Navigation buttons */}
             <button 
               onClick={() => navigateImage('prev')}
-              className="absolute left-4 text-white hover:text-gray-300 z-10"
+              className="absolute left-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
-              <span className="text-4xl">&lsaquo;</span>
+              <span className="text-2xl px-1">&lsaquo;</span>
             </button>
             
             <button 
               onClick={() => navigateImage('next')}
-              className="absolute right-4 text-white hover:text-gray-300 z-10"
+              className="absolute right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
-              <span className="text-4xl">&rsaquo;</span>
+              <span className="text-2xl px-1">&rsaquo;</span>
             </button>
             
-            {/* Image container */}
-            <div className="w-full h-full flex items-center justify-center">
-              <img 
-                src={images[selectedImage]} 
-                alt={product.name}
-                className="max-h-full max-w-full object-contain"
-              />
+            <div className="w-full h-full max-w-4xl max-h-4xl flex items-center justify-center">
+              <div className="relative w-full h-full max-w-3xl max-h-3xl">
+                <img 
+                  src={images[selectedImage]} 
+                  alt={product.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
             
-            {/* Image counter */}
-            <div className="absolute bottom-4 left-0 right-0 text-center text-white">
+            <div className="absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2 mx-4 rounded">
               {selectedImage + 1} / {images.length}
             </div>
           </div>

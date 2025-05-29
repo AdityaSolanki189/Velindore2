@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import 'animate.css';
 // import Image from "next/image";
 import 'swiper/css';
 import './globals.css';
@@ -129,7 +130,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Content Overlay */}
         <div className="absolute inset-0">
           <div className="flex flex-col h-full justify-center px-8 md:px-16 lg:px-32">
             <div className="text-white max-w-2xl">
@@ -177,7 +177,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Arrow Controls */}
         <div className="absolute inset-x-0 top-1/2 transform -translate-y-1/2 flex justify-between px-4 md:px-8">
           <button 
             onClick={prevSlide}
@@ -197,9 +196,8 @@ export default function Home() {
       </section>
 
 
-      {/* <ProductGrid /> */}
 
-      <section className="container mt-10">
+      <section className="container mt-10 animate__animated animate__fadeInUp">
         <div className="text-[#321900] flex justify-center text-3xl font-extrabold">
         <h2 className="text-center md:ml-20 text-[#321900] lg:text-left mt-6">Shop by category</h2>
         </div>
@@ -240,7 +238,6 @@ export default function Home() {
             ))}
           </div>
           
-          {/* Pagination dots */}
           <div className="flex justify-center mt-4 space-x-2">
             {collections.map((_, index) => (
               <button

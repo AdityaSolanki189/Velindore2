@@ -7,7 +7,6 @@ import { CalendarIcon, ClockIcon, UserIcon, PhoneIcon, MailIcon, MessageCircleIc
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 
-// Define types for our form
 interface AppointmentFormData {
   name: string;
   email: string;
@@ -18,21 +17,18 @@ interface AppointmentFormData {
   message: string;
 }
 
-// Available time slots
 const TIME_SLOTS = [
   '09:00 AM', '10:00 AM', '11:00 AM', 
   '12:00 PM', '01:00 PM', '02:00 PM', 
   '03:00 PM', '04:00 PM', '05:00 PM'
 ];
 
-// Furniture types
 const FURNITURE_TYPES = [
   'Living Room', 'Dining Room', 'Bedroom', 
   'Office', 'Outdoor', 'Custom Design', 'Other'
 ];
 
 const BookAppointment: React.FC = () => {
-  // Form state
   const [formData, setFormData] = useState<AppointmentFormData>({
     name: '',
     email: '',
@@ -43,7 +39,6 @@ const BookAppointment: React.FC = () => {
     message: '',
   });
 
-  // Form handling
   const [errors, setErrors] = useState<Partial<AppointmentFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -55,7 +50,6 @@ const BookAppointment: React.FC = () => {
       [name]: value,
     });
     
-    // Clear error when field is updated
     if (errors[name as keyof AppointmentFormData]) {
       setErrors({
         ...errors,
@@ -92,10 +86,8 @@ const BookAppointment: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // If successful
       setIsSuccess(true);
       setFormData({
         name: '',
@@ -107,7 +99,6 @@ const BookAppointment: React.FC = () => {
         message: '',
       });
       
-      // Reset success message after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       console.error('Error booking appointment:', error);
@@ -116,7 +107,6 @@ const BookAppointment: React.FC = () => {
     }
   };
 
-  // Get today's date in YYYY-MM-DD format for min date attribute
   const today = new Date().toISOString().split('T')[0];
 
   return (
@@ -129,8 +119,7 @@ const BookAppointment: React.FC = () => {
       </Head>
 
       <main className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Hero Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" data-aos="fade-up">
           <section className="mb-12 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">
               Book Your Personal Consultation
@@ -142,7 +131,6 @@ const BookAppointment: React.FC = () => {
 
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex flex-col lg:flex-row">
-              {/* Left side - Appointment info */}
               <div className="bg-neutral-800 text-white p-8 lg:p-12 flex flex-col justify-between lg:w-2/5">
                 <div>
                   <h2 className="text-2xl font-semibold mb-6">What to expect</h2>
@@ -183,7 +171,6 @@ const BookAppointment: React.FC = () => {
                 </div>
               </div>
               
-              {/* Right side - Appointment form */}
               <div className="p-8 lg:p-12 lg:w-3/5">
                 <h2 className="text-2xl font-semibold text-neutral-800 mb-6">Book your appointment</h2>
                 
@@ -194,7 +181,6 @@ const BookAppointment: React.FC = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Personal Info */}
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1">
@@ -260,7 +246,6 @@ const BookAppointment: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Appointment Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="date" className="block text-sm font-medium text-neutral-700 mb-1">
@@ -310,7 +295,6 @@ const BookAppointment: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Furniture Type */}
                     <div>
                       <label htmlFor="furnitureType" className="block text-sm font-medium text-neutral-700 mb-1">
                         What type of furniture are you interested in? *
@@ -332,7 +316,6 @@ const BookAppointment: React.FC = () => {
                       {errors.furnitureType && <p className="mt-1 text-sm text-red-600">{errors.furnitureType}</p>}
                     </div>
                     
-                    {/* Additional message */}
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-1">
                         Additional Information (Optional)

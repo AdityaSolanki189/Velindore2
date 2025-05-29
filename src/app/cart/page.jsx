@@ -41,13 +41,13 @@ const CartPage = () => {
   };
   
   const subtotal = calculateSubtotal();
-  const total = subtotal; // In a real app, you might add shipping, taxes, etc.
+  const total = subtotal;
   
   return (
     <div className="bg-gray-50 min-h-screen text-black">
 
         <Navbar />
-      {/* Cart Banner with Text Overlay */}
+        
       <div className="relative w-full h-48 mb-8">
         <Image 
           src="/assets/living room.jpg" 
@@ -63,7 +63,6 @@ const CartPage = () => {
       
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Cart Items */}
           <div className="lg:w-2/3">
             <div className="bg-white rounded-lg shadow-md mb-6">
               <div className="p-6 border-b border-gray-200">
@@ -139,7 +138,6 @@ const CartPage = () => {
             </div>
           </div>
           
-          {/* Order Summary */}
           <div className="lg:w-1/3">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
               <h2 className="text-xl font-semibold mb-6">CART TOTALS</h2>

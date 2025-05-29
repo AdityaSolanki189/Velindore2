@@ -62,7 +62,7 @@ const ProductCard = ({
       
       <div className="p-4">
         {/* <span className="text-xs text-gray-500 uppercase">{category}</span> */}
-        <h3 className="font-medium text-gray-900 mt-1 text-lg truncate">{title}</h3>
+        <h3 className="font-medium text-left text-gray-900 mt-1 text-lg truncate">{title}</h3>
         
         {/* Rating */}
         {/* <div className="flex items-center mt-1">
@@ -94,7 +94,6 @@ const ProductCard = ({
           )}
         </div>
         
-        {/* Button */}
         {/* <div className="mt-4 flex justify-between items-center">
           <Link 
             href={`/products/${id}`}
