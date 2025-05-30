@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Heart, Check, X } from 'lucide-react';
+import { Heart, Check, X, Box } from 'lucide-react';
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
 
@@ -88,6 +88,10 @@ export default function ProductPage() {
     };
   }, [lightboxOpen]);
 
+  const handle3DView = () => {
+    alert('3D Model viewer would open here!');
+  };
+
   return (
     <>
       <Navbar />
@@ -99,7 +103,7 @@ export default function ProductPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <div 
-              className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm"
+              className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm relative group"
               onClick={() => openLightbox(selectedImage)}
             >
               <img 
@@ -107,6 +111,18 @@ export default function ProductPage() {
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
               />
+              
+              {/* 3D Model Icon */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handle3DView();
+                }}
+                className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80"
+                title="View 3D Model"
+              >
+                <Box className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
+              </button>
             </div>
             
             <div className="grid grid-cols-6 gap-2">
