@@ -336,7 +336,7 @@ export default function Home() {
         className={`mt-[-370px] md:mt-[-130px] font-sans transition-all duration-1000 ${getAnimationClass('latestCollection', 'animate__fadeIn')}`}
       >
         <div>
-          <h1 className="text-[#321900] text-center font-extrabold text-4xl mt-20 md:mt-4 mb-10">
+          <h1 className="text-[#321900] text-center font-extrabold text-4xl mt-36 md:mt-4 mb-10">
             Latest collection
           </h1>
 
