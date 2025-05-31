@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Navbar from '../components/navbar';
 // import { useRouter } from 'next/router';
 
 interface Product {
@@ -194,12 +195,12 @@ const CheckoutPage: React.FC = () => {
       <Head>
         <title>Checkout | Your Store</title>
       </Head>
+
+      <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 font-sans">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Checkout Flow */}
           <div className="lg:w-2/3">
-            {/* Checkout Steps Navigation */}
             <div className="mb-8">
               <div className="flex items-center">
                 <div className={`flex items-center relative ${step >= 1 ? 'text-indigo-600' : 'text-gray-400'}`}>
@@ -616,7 +617,6 @@ const CheckoutPage: React.FC = () => {
             )}
           </div>
 
-          {/* Order Summary Sidebar */}
           <div className="lg:w-1/3">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-6">Order Summary</h2>

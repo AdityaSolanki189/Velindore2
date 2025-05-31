@@ -61,7 +61,7 @@ const CartPage = () => {
         </div>
       </div>
       
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 font-sans">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
             <div className="bg-white rounded-lg shadow-md mb-6">

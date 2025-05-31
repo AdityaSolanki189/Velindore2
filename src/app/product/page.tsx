@@ -181,15 +181,16 @@ export default function ProductPage() {
               </button>
               
               <button 
-                className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
-                onClick={() => setIsFavorite(!isFavorite)}
-              >
-                <Heart 
-                  className={`w-6 h-6 cursor-pointer ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} 
-                  stroke="black" 
-                  strokeWidth={1.5}
-                />
-              </button>
+  className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
+  onClick={() => setIsFavorite(!isFavorite)}
+>
+  <Heart 
+    className={`w-6 h-6 cursor-pointer transition-colors duration-200 ${isFavorite ? 'fill-red-500 text-red-500' : 'stroke-gray-500'}`} 
+    stroke={isFavorite ? 'none' : 'gray'} 
+    strokeWidth={1.5}
+  />
+</button>
+
             </div>
             
             <div className="mb-4 text-sm text-gray-600">

@@ -11,7 +11,7 @@ const AboutUs: NextPage = () => {
     <>
 
     <Navbar />
-    <div className="max-w-6xl mx-auto px-4 py-8 text-black">
+    <div className="max-w-6xl mx-auto px-4 py-8 text-black font-sans">
       {/* About us heading section */}
       <div className="text-center mb-8">
         <h2 className="text-gray-600 text-lg mb-2">About us</h2>

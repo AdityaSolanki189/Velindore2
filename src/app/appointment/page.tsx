@@ -118,7 +118,7 @@ const BookAppointment: React.FC = () => {
         <meta name="description" content="Schedule a consultation with our furniture experts" />
       </Head>
 
-      <main className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100">
+      <main className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100 font-sans">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" data-aos="fade-up">
           <section className="mb-12 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">

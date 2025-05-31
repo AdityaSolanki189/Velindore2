@@ -40,7 +40,7 @@ const ContactPage: React.FC = () => {
         <Navbar />
 
       {/* Main Content */}
-      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8 py-12">
+      <main className="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8 py-12 font-sans">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Get In Touch</h1>
           <p className="text-gray-600 max-w-3xl mx-auto">

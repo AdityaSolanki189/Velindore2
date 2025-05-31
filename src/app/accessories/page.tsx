@@ -8,7 +8,6 @@ import ProductCard from '../components/ProductCard';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
-// Using type assertion for enum since we can't use zod
 const sortingOptions = ['default', 'price-low', 'price-high', 'newest', 'popularity'] as const;
 type SortingType = typeof sortingOptions[number];
 
@@ -136,7 +135,7 @@ const Accessories: NextPage = () => {
 
       <Navbar />
 
-      <div className="container mx-auto px-4 text-black">
+      <div className="container mx-auto px-4 text-black font-sans">
         <div className="py-4 md:py-8">
           <h1 className="text-xl md:text-2xl font-bold mb-4">Product categories</h1>
           
