@@ -109,7 +109,7 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`id`),
   KEY `categories_parent_id_foreign` (`parent_id`),
   CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (2,'Guy Daniel',NULL,'2025-06-06 22:43:48','2025-06-06 22:43:48');
+INSERT INTO `categories` VALUES (2,'Guy Daniel',NULL,'2025-06-06 22:43:48','2025-06-06 22:43:48'),(3,'Wex Cat',NULL,'2025-06-25 11:50:05','2025-06-26 11:50:05');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,7 +314,7 @@ CREATE TABLE `product_images` (
   PRIMARY KEY (`id`),
   KEY `product_images_product_id_foreign` (`product_id`),
   CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,7 +323,7 @@ CREATE TABLE `product_images` (
 
 LOCK TABLES `product_images` WRITE;
 /*!40000 ALTER TABLE `product_images` DISABLE KEYS */;
-INSERT INTO `product_images` VALUES (4,'80613dc1-6156-4892-9df0-4eea7134633f','http://127.0.0.1:8000/uploads/images/0bc17f8a-b404-490e-8967-1e94934db9d2-5e2ef01c4decddf5e0fdbd7935882ad2.jpg','2025-06-06 22:43:59','2025-06-06 22:43:59'),(5,'80613dc1-6156-4892-9df0-4eea7134633f','http://127.0.0.1:8000/uploads/images/522f33f6-be16-4734-a67f-95055b0dcfb7-bitcoin-img-1.jpg','2025-06-06 22:43:59','2025-06-06 22:43:59'),(6,'4960f498-118d-4a3a-bdf0-aaa2d61ed164','http://127.0.0.1:8000/uploads/images/ccafca11-c6c1-4444-beaa-fd8a7875f290-48a251b0f2ab6de7d0ba948bdc880e99.jpg','2025-06-06 23:39:49','2025-06-06 23:39:49');
+INSERT INTO `product_images` VALUES (4,'80613dc1-6156-4892-9df0-4eea7134633f','http://127.0.0.1:8000/uploads/images/0bc17f8a-b404-490e-8967-1e94934db9d2-5e2ef01c4decddf5e0fdbd7935882ad2.jpg','2025-06-06 22:43:59','2025-06-06 22:43:59'),(5,'80613dc1-6156-4892-9df0-4eea7134633f','http://127.0.0.1:8000/uploads/images/522f33f6-be16-4734-a67f-95055b0dcfb7-bitcoin-img-1.jpg','2025-06-06 22:43:59','2025-06-06 22:43:59'),(6,'4960f498-118d-4a3a-bdf0-aaa2d61ed164','http://127.0.0.1:8000/uploads/images/ccafca11-c6c1-4444-beaa-fd8a7875f290-48a251b0f2ab6de7d0ba948bdc880e99.jpg','2025-06-06 23:39:49','2025-06-06 23:39:49'),(7,'59b0a68b-317a-4c8d-8e5e-75790663bd88','http://127.0.0.1:8000/uploads/images/45ee96a2-993c-477e-8765-cbfd8bafff22-download.jpg','2025-06-07 10:50:18','2025-06-07 10:50:18');
 /*!40000 ALTER TABLE `product_images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,7 +357,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES ('4960f498-118d-4a3a-bdf0-aaa2d61ed164','Allen Baxter','Proident et minim r',622.00,734,NULL,'active',2,'2025-06-06 23:39:49','2025-06-06 23:39:49'),('80613dc1-6156-4892-9df0-4eea7134633f','Ivana Browning','Voluptatem Ut nulla',956.00,705,NULL,'active',2,'2025-06-06 22:43:59','2025-06-06 22:43:59');
+INSERT INTO `products` VALUES ('4960f498-118d-4a3a-bdf0-aaa2d61ed164','Allen Baxter','Proident et minim r',622.00,734,NULL,'active',2,'2025-06-06 23:39:49','2025-06-06 23:39:49'),('59b0a68b-317a-4c8d-8e5e-75790663bd88','Kuame Rush','Consectetur ipsam d',510.00,132,'http://127.0.0.1:8000/uploads/three_d_files/dcffc194-0dd8-4ec4-b3fa-7aa278b6dd75-94132137.gif','active',3,'2025-06-07 10:50:18','2025-06-07 10:50:18'),('80613dc1-6156-4892-9df0-4eea7134633f','Ivana Browning','Voluptatem Ut nulla',956.00,705,NULL,'active',2,'2025-05-31 22:43:59','2025-05-31 22:43:59');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -417,6 +417,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('48d5b199-43bd-11f0-943e-40c2baaa6940','sayan','sayan@gmail.com',NULL,'dsads',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -459,4 +460,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-07 21:08:26
+-- Dump completed on 2025-06-07 22:15:22
