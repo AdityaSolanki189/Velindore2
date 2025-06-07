@@ -1,15 +1,13 @@
 // tailwind.config.js
-module.exports = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['var(--font-poppins)', 'sans-serif'],
-      },
+export const content = [
+  './app/**/*.{js,ts,jsx,tsx}',
+  './components/**/*.{js,ts,jsx,tsx}',
+];
+export const theme = {
+  extend: {
+    fontFamily: {
+      sans: ['var(--font-poppins)', 'sans-serif'],
     },
   },
-  plugins: [],
-}
+};
+export const plugins = [];
