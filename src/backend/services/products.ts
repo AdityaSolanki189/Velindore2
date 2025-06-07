@@ -18,8 +18,7 @@ export async function getAllProducts() {
         })
         .from(Product)
         .leftJoin(ProductImage, eq(Product.id, ProductImage.productId))
-        .leftJoin(Category, eq(Product.categoryId, Category.id))
-        .limit(1); // ← join with Category
+        .leftJoin(Category, eq(Product.categoryId, Category.id)); // ← join with Category
 
 
     return groupByArrayField(results, "id", "imageUrl");
