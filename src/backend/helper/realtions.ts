@@ -2,7 +2,7 @@ export function groupByArrayField<T>(
   data: T[],
   idKey: keyof T,
   arrayKey: keyof T
-): Record<string, any>[] {
+): Record<keyof T, any>[] {
   const map = new Map<any, Record<string, any>>();
 
   for (const row of data) {
@@ -28,5 +28,5 @@ export function groupByArrayField<T>(
     }
   }
 
-  return Array.from(map.values());
+  return Array.from(map.values()) as Record<keyof T, any>[];
 }

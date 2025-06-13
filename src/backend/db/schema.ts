@@ -1,6 +1,5 @@
 
 
-// lib/schema.ts
 import {
   mysqlTable,
   varchar,
@@ -11,36 +10,26 @@ import {
   mysqlEnum,
 } from 'drizzle-orm/mysql-core';
 
-export const User = mysqlTable('users', {
-  id: varchar('id', { length: 36 }).primaryKey(), // UUID
-  name: varchar('name', { length: 255 }),
-  email: varchar('email', { length: 255 }).unique().notNull(),
-  emailVerifiedAt: timestamp('email_verified_at', { mode: 'date' }),
-  password: varchar('password', { length: 255 }).notNull(),
-  rememberToken: varchar('remember_token', { length: 100 }),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
-});
+
 
 export const Category = mysqlTable('categories', {
-  id: int('id').autoincrement().primaryKey(),
-  name: varchar('name', { length: 255 }),
+  id: int('id').autoincrement().primaryKey().notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
 });
 
 export const Product = mysqlTable('products', {
-  id: varchar('id', { length: 36 }).primaryKey(), // UUID
-  name: varchar('name', { length: 255 }),
-  description: text('description'),
-  price: decimal('price', { precision: 10, scale: 2 }).default('0.00'),
-  quantity: int('quantity').default(0),
+  id: varchar('id', { length: 36 }).primaryKey().notNull(), // UUID
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  price: decimal('price', { precision: 10, scale: 2 }).default('0.00').notNull(),
+  quantity: int('quantity').default(0).notNull(),
   threeDImage: text('three_d_image'),
-  status: mysqlEnum('status', ['active', 'inactive']).default('active'),
-  categoryId: int('category_id'),
-
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
+  status: mysqlEnum('status', ['active', 'inactive']).default('active').notNull(),
+  categoryId: int('category_id').notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow().notNull(),
 });
 
 export const ProductImage = mysqlTable('product_images', {
@@ -51,31 +40,33 @@ export const ProductImage = mysqlTable('product_images', {
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
 });
 
-export const Order = mysqlTable('orders', {
+export const Order = mysqlTable("orders", {
   id: varchar('id', { length: 36 }).primaryKey(), // UUID
-
   productId: varchar('product_id', { length: 36 }),
-  userId: varchar('user_id', { length: 36 }),
 
-  shippingAddress: varchar('shipping_address', { length: 255 }),
+  // Customer information
+  userEmail: varchar("user_email", { length: 255 }).notNull(),
+  userName: varchar("user_name", { length: 255 }).notNull(),
+  userPhone: varchar("user_phone", { length: 255 }).notNull(),
 
-  quantity: int('quantity'),
-  totalPrice: decimal('total_price', { precision: 10, scale: 2 }),
+  // Shipping info
+  shippingStreetAddress: varchar("shipping_street_address", { length: 255 }).notNull(),
+  shippingCity: varchar("shipping_city", { length: 255 }).notNull(),
+  shippingStateProvince: varchar("shipping_state_province", { length: 255 }),
+  shippingPostalCode: varchar("shipping_postal_code", { length: 255 }).notNull(),
+  shippingCountry: varchar("shipping_country", { length: 2 }).notNull(),
 
-  status: mysqlEnum('status', [
-    'pending',
-    'processing',
-    'shipped',
-    'delivered',
-    'cancelled',
-  ]).default('pending'),
+  // Order details
+  quantity: int("quantity").notNull(),
+  totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
+  status: mysqlEnum("status", ["pending", "processing", "shipped", "delivered", "cancelled"]).default("pending").notNull(),
 
-  orderedAt: timestamp('ordered_at', { mode: 'date' }).defaultNow(),
-  shippedAt: timestamp('shipped_at', { mode: 'date' }),
-  deliveredAt: timestamp('delivered_at', { mode: 'date' }),
-  cancelledAt: timestamp('cancelled_at', { mode: 'date' }),
+  orderedAt: timestamp("ordered_at"),
+  shippedAt: timestamp("shipped_at"),
+  deliveredAt: timestamp("delivered_at"),
+  cancelledAt: timestamp("cancelled_at"),
 
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
-}) 
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
 

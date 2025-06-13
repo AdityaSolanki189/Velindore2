@@ -1,12 +1,8 @@
-import { dump } from "@/backend/helper/debug";
-import { getAllProducts } from "@/backend/services/products";
-
 
 export default async function TestPage() {
 
-  const data = await getAllProducts()
 
-  dump(data)
+
 
   return (
     <>
