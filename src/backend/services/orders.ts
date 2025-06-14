@@ -20,16 +20,6 @@ import { eq } from "drizzle-orm"; // or your query helper
   //   totalPrice: "999.99",
   // }
 
-// export async function createOrder(order : OrderInsert ) : Promise<{ success: boolean; message: string }> {
-//   try {
-//     const result = await db.insert(Order).values(order);
-//     return { success: true, message : "Order created" };
-//   } catch (error) {
-//     console.error("Failed to create order:", error);
-//     return { success: false, message: "Failed to create order" };
-//   }
-// }
-
 
 export async function createOrder(order: OrderInsert): Promise<{ success: boolean; message: string }> {
   try {
@@ -54,7 +44,7 @@ export async function createOrder(order: OrderInsert): Promise<{ success: boolea
     }
 
     // 4. Proceed to create order
-    const result = await db.insert(Order).values(order);
+    await db.insert(Order).values(order);
 
     // Optionally: reduce the product quantity
     await db
