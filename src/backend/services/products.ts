@@ -12,6 +12,7 @@ export async function fetchAllProducts() {
       description: Product.description,
       price: Product.price,
       status: Product.status,
+      quantity: Product.quantity,
       categoryId: Product.categoryId,
       labelId: Product.labelId,
       categoryName: Category.name,
@@ -38,6 +39,7 @@ export async function fetchSingleProduct(productId: string): Promise<{
   description: string;
   price: number;
   status: string;
+  quantity: number;
   categoryId: string;
   labelId: string | null;
   categoryName: string;
@@ -53,9 +55,9 @@ export async function fetchSingleProduct(productId: string): Promise<{
       description: Product.description,
       price: Product.price,
       status: Product.status,
+      quantity: Product.quantity,
       categoryId: Product.categoryId,
       labelId: Product.labelId,
-
       categoryName: Category.name,
       createdAt: Product.createdAt,
       updatedAt: Product.updatedAt,
@@ -85,6 +87,7 @@ export async function fetchProductsByCategory(categoryName: string) {
       description: Product.description,
       price: Product.price,
       status: Product.status,
+      quantity: Product.quantity,
       categoryId: Product.categoryId,
       labelId: Product.labelId,
       categoryName: Category.name,
@@ -115,6 +118,8 @@ export async function fetchProductsByLabel(labelName: string) {
       description: Product.description,
       price: Product.price,
       status: Product.status,
+      quantity: Product.quantity,
+
       categoryId: Product.categoryId,
       categoryName: Category.name, // added
       labelId: Product.labelId,
