@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "../db/db.config";
 import { Category, Label, Product, ProductImage } from "../db/schema";
 import { groupByArrayField } from "../helper/realtions";
@@ -22,7 +22,9 @@ export async function fetchAllProducts() {
     .from(Product)
     .leftJoin(ProductImage, eq(Product.id, ProductImage.productId))
     .leftJoin(Category, eq(Product.categoryId, Category.id))
-    .where(eq(Product.status, 'active'));
+    .where(eq(Product.status, 'active'))
+    .orderBy(desc(Product.createdAt))
+    ;
 
   return groupByArrayField(results, "id", "imageUrl");
 
@@ -37,7 +39,7 @@ export async function fetchSingleProduct(productId: string): Promise<{
   price: number;
   status: string;
   categoryId: string;
-  labelId: string | null ;
+  labelId: string | null;
   categoryName: string;
   createdAt: Date;
   updatedAt: Date;
@@ -93,12 +95,14 @@ export async function fetchProductsByCategory(categoryName: string) {
     .from(Product)
     .leftJoin(ProductImage, eq(Product.id, ProductImage.productId))
     .leftJoin(Category, eq(Product.categoryId, Category.id))
-  .where(
+    .where(
       and(
         eq(Product.status, 'active'),
         eq(Category.name, categoryName)
       )
-    );
+    )
+    .orderBy(desc(Product.createdAt))
+    ;
   return groupByArrayField(results, "id", "imageUrl");
 }
 
@@ -128,7 +132,9 @@ export async function fetchProductsByLabel(labelName: string) {
         eq(Product.status, 'active'),
         eq(Label.name, labelName)
       )
-    );
+    )
+    .orderBy(desc(Product.createdAt))
+    ;
 
   return groupByArrayField(results, "id", "imageUrl");
 }

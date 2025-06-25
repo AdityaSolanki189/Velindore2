@@ -1,6 +1,10 @@
+import { dump } from "@/backend/helper/debug";
+import { fetchAllProducts } from "@/backend/services/products";
 
 
 export default async function TestPage() {
+
+  dump( await fetchAllProducts() , "prodcuts")
 
   return (
     <>
