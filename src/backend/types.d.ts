@@ -13,6 +13,7 @@ type OrderInsert = {
   shippingCountry: string;
 
   quantity: number;
+  price: string;
   totalPrice: string ;
 
 };

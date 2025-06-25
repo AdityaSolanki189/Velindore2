@@ -19,6 +19,13 @@ export const Category = mysqlTable('categories', {
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
 });
 
+export const Label = mysqlTable('labels', {
+  id: int('id').autoincrement().primaryKey().notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
+});
+
 export const Product = mysqlTable('products', {
   id: varchar('id', { length: 36 }).primaryKey().notNull(), // UUID
   name: varchar('name', { length: 255 }).notNull(),
@@ -28,6 +35,7 @@ export const Product = mysqlTable('products', {
   threeDImage: text('three_d_image'),
   status: mysqlEnum('status', ['active', 'inactive']).default('active').notNull(),
   categoryId: int('category_id').notNull(),
+  labelId: int('label_id'),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow().notNull(),
 });
@@ -58,13 +66,11 @@ export const Order = mysqlTable("orders", {
 
   // Order details
   quantity: int("quantity").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
   status: mysqlEnum("status", ["pending", "processing", "shipped", "delivered", "cancelled"]).default("pending").notNull(),
-
+  paymentStatus: mysqlEnum("payment_status", ["unpaid", "paid"]).default("unpaid").notNull(),
   orderedAt: timestamp("ordered_at"),
-  shippedAt: timestamp("shipped_at"),
-  deliveredAt: timestamp("delivered_at"),
-  cancelledAt: timestamp("cancelled_at"),
 
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
