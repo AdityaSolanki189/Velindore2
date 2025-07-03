@@ -15,6 +15,7 @@ import {
 export const Category = mysqlTable('categories', {
   id: int('id').autoincrement().primaryKey().notNull(),
   name: varchar('name', { length: 255 }).notNull(),
+  image: varchar('image', { length: 255 }).notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().onUpdateNow(),
 });
@@ -67,7 +68,9 @@ export const Order = mysqlTable("orders", {
   // Order details
   quantity: int("quantity").notNull(),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  tax: decimal("tax", { precision: 10, scale: 2 }).notNull(),
   totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
+
   status: mysqlEnum("status", ["pending", "processing", "shipped", "delivered", "cancelled"]).default("pending").notNull(),
   paymentStatus: mysqlEnum("payment_status", ["unpaid", "paid"]).default("unpaid").notNull(),
   orderedAt: timestamp("ordered_at"),
@@ -76,3 +79,20 @@ export const Order = mysqlTable("orders", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const Setting = mysqlTable('settings', {
+  id: int('id').autoincrement().primaryKey().notNull(),
+
+  paymentApiKey: varchar('payment_api_key', { length: 255 }),
+  paymentTax: varchar('payment_tax', { length: 255 }).default('0'), // You can use decimal() if needed
+
+  homeTitle: text('home_title'),
+  contactEmail: text('contact_email'),
+  contactNumber: text('contact_number'),
+
+  facebookLink: text('facebook_link'),
+  instagramLink: text('instagram_link'),
+  linkedinLink: text('linkedin_link'),
+
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});

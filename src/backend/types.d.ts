@@ -14,6 +14,8 @@ type OrderInsert = {
 
   quantity: number;
   price: string;
+  tax: string;
+
   totalPrice: string ;
 
 };

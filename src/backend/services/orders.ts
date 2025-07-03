@@ -18,6 +18,7 @@ import { eq } from "drizzle-orm"; // or your query helper
 
   //   quantity: 2,
   //  price: "499.99",  
+  //   tax: "50.00",
   //   totalPrice: "999.99",
   // }
 
