@@ -4,14 +4,31 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '../components/navbar';
-// import { useRouter } from 'next/router';
 
 interface Product {
   id: string;
   name: string;
   price: number;
+  description?: string;
+  rating?: number;
+  reviews?: number;
+  quantity?: number;
+  stock?: number;
+  categories?: string[];
+  tag?: string;
+  imageUrl?: string[];
+  categoryName?: string;
+  discount?: number;
+  hot?: boolean;
+}
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
   image: string;
   quantity: number;
+  description?: string;
 }
 
 interface ShippingInfo {
@@ -33,27 +50,11 @@ interface PaymentInfo {
 }
 
 const CheckoutPage: React.FC = () => {
-  // const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
   
-  const [cartItems, setCartItems] = useState<Product[]>([
-    {
-      id: '1',
-      name: 'Premium Wireless Headphones',
-      price: 249.99,
-      image: '/assets/image-1.png',
-      quantity: 1
-    },
-    {
-      id: '2',
-      name: 'Smart Fitness Watch',
-      price: 179.99,
-      image: '/assets/image-2.png',
-      quantity: 1
-    }
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     firstName: '',
@@ -73,9 +74,74 @@ const CheckoutPage: React.FC = () => {
     cvv: ''
   });
 
+  // Load product data and convert to cart items
+  useEffect(() => {
+    const loadCartItems = () => {
+      // First, try to get existing cart items
+      const existingCart = sessionStorage.getItem('cartItems');
+      if (existingCart) {
+        const parsedCart = JSON.parse(existingCart);
+        setCartItems(parsedCart);
+        return;
+      }
+
+      // If no cart exists, check for selected product from product page
+      const storedProduct = sessionStorage.getItem('selectedProduct');
+      if (storedProduct) {
+        const product: Product = JSON.parse(storedProduct);
+        
+        // Convert product to cart item
+        const cartItem: CartItem = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.imageUrl && product.imageUrl.length > 0 
+            ? product.imageUrl[0] 
+            : '/assets/bed room.jpg', // fallback image
+          quantity: 1, // Default quantity
+          description: product.description
+        };
+        
+        setCartItems([cartItem]);
+        
+        // Save to sessionStorage for persistence
+        sessionStorage.setItem('cartItems', JSON.stringify([cartItem]));
+      } else {
+        // Fallback to default items if no product data
+        const defaultItems: CartItem[] = [
+          {
+            id: '1',
+            name: 'Premium Wireless Headphones',
+            price: 249.99,
+            image: '/assets/image-1.png',
+            quantity: 1
+          },
+          {
+            id: '2',
+            name: 'Smart Fitness Watch',
+            price: 179.99,
+            image: '/assets/image-2.png',
+            quantity: 1
+          }
+        ];
+        setCartItems(defaultItems);
+        sessionStorage.setItem('cartItems', JSON.stringify(defaultItems));
+      }
+    };
+
+    loadCartItems();
+  }, []);
+
+  // Save cart items to sessionStorage whenever they change
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
+
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.08; // 8% tax
-  const shipping = 9.99;
+  const shipping = subtotal > 50 ? 0 : 9.99; // Free shipping over $50
   const total = subtotal + tax + shipping;
 
   const updateQuantity = (id: string, newQuantity: number) => {
@@ -147,8 +213,37 @@ const CheckoutPage: React.FC = () => {
       setLoading(false);
       setOrderComplete(true);
       
+      // Clear cart and product data after successful order
       setCartItems([]);
+      sessionStorage.removeItem('cartItems');
+      sessionStorage.removeItem('selectedProduct');
     }, 2000);
+  };
+
+  // Add item to cart (for future use)
+  const addToCart = (product: Product, quantity: number = 1) => {
+    const cartItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.imageUrl && product.imageUrl.length > 0 
+        ? product.imageUrl[0] 
+        : '/assets/bed room.jpg',
+      quantity: quantity,
+      description: product.description
+    };
+
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+      return [...prevItems, cartItem];
+    });
   };
 
   useEffect(() => {
@@ -181,6 +276,7 @@ const CheckoutPage: React.FC = () => {
             </p>
             <button 
               className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
+              onClick={() => window.location.href = '/'}
             >
               Continue Shopping
             </button>
@@ -241,6 +337,7 @@ const CheckoutPage: React.FC = () => {
                     <p className="text-gray-500 mb-4">Your cart is empty</p>
                     <button
                       className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                      onClick={() => window.location.href = '/'}
                     >
                       Continue Shopping
                     </button>
@@ -251,18 +348,20 @@ const CheckoutPage: React.FC = () => {
                       {cartItems.map(item => (
                         <div key={item.id} className="flex flex-col sm:flex-row items-center py-4 border-b border-gray-100 last:border-0">
                           <div className="relative h-24 w-24 sm:mr-6 mb-4 sm:mb-0 flex-shrink-0">
-                            <Image 
-                              src={item.image}
-                              alt={item.name}
-                              layout="fill"
-                              objectFit="contain"
-                              className="rounded-md"
-                            />
+                            <img
+  src={item.image}
+  alt={item.name}
+  className="h-24 w-24 object-contain rounded-md"
+/>
+
                           </div>
                           <div className="flex-1 sm:flex sm:justify-between w-full">
                             <div className="flex-1">
                               <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                              <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)}</p>
+                              {/* <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)}</p>
+                              {item.description && (
+                                <p className="mt-1 text-sm text-gray-600 line-clamp-2">{item.description}</p>
+                              )} */}
                             </div>
                             <div className="flex items-center justify-between sm:justify-end mt-4 sm:mt-0 w-full sm:w-auto">
                               <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">

@@ -109,6 +109,17 @@ export async function fetchProductsByCategory(categoryName: string) {
   return groupByArrayField(results, "id", "imageUrl");
 }
 
+export async function fetchAllLabels() {
+  const results = await db
+    .select({
+      id: Label.id,
+      name: Label.name,
+    })
+    .from(Label);
+  
+  return results;
+}
+
 
 export async function fetchProductsByLabel(labelName: string) {
   const results = await db
@@ -140,6 +151,8 @@ export async function fetchProductsByLabel(labelName: string) {
     )
     .orderBy(desc(Product.createdAt))
     ;
+
+    console.log(fetchProductsByLabel);
 
   return groupByArrayField(results, "id", "imageUrl");
 }

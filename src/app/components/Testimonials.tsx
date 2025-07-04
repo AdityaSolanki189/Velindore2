@@ -67,7 +67,7 @@ const Testimonials = ({
           <div className="w-full max-w-4xl relative">
             <button 
               onClick={handlePrev}
-              className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full border border-gray-300 p-2 z-10"
+              className="absolute left-0 top-1/5 -translate-y-1/2 rounded-full border border-gray-300 p-2 z-10"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -96,7 +96,7 @@ const Testimonials = ({
             
             <button 
               onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full border border-gray-300 p-2 z-10"
+              className="absolute right-0 top-1/5 -translate-y-1/2 rounded-full border border-gray-300 p-2 z-10"
               aria-label="Next testimonial"
             >
               <ChevronRight className="w-6 h-6" />

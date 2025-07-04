@@ -48,7 +48,8 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const collections = [1, 2, 3, 4, 5];
-
+  const [labels, setLabels] = useState([]);
+  const [loading, setLoading] = useState(true);
   const shopCategoryRef = useRef(null);
   const featuredCollectionsRef = useRef(null);
   const homeFixRef = useRef(null);
@@ -80,6 +81,7 @@ export default function Home() {
       rootMargin: '0px 0px -50px 0px'
     };
 
+  
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -204,7 +206,7 @@ export default function Home() {
                         </svg>
                       </div>
                     </div>
-                    <div className="text-4xl md:text-6xl lg:text-8xl font-bold mb-8">
+                    <div className="text-4xl md:text-6xl lg:text-8xl font-bold mb-28">
                       {carouselData[activeSlide].subtitle}
                     </div>
                   </div>
@@ -394,7 +396,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section 
+      {/* <section 
         ref={shopLookRef}
         data-section="shopLook"
         className={`mt-20 px-4 font-sans transition-all duration-1000 ${getAnimationClass('shopLook', 'animate__fadeInUp')}`}
@@ -457,7 +459,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section 
         ref={testimonialsRef}

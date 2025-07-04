@@ -8,7 +8,6 @@ const ProductCard = ({
     id: '1',
     title: 'Product Title',
     price: 99.99,
-    discountPrice: 79.99,
     rating: 4.5,
     image: '/assets/purple.jpg',
     category: 'Category',

@@ -1,20 +1,26 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Heart, Check, X, Box } from 'lucide-react';
-import Footer from '../components/footer';
-import Navbar from '../components/navbar';
+import Footer from '@/app/components/footer';
+import Navbar from '@/app/components/navbar';
 
 interface Product {
   id: string;
   name: string;
   price: number;
   description: string;
-  rating: number;
-  reviews: number;
-  stock: number;
-  categories: string[];
-  tag: string;
+  rating?: number;
+  reviews?: number;
+  quantity?: number;
+  stock?: number;
+  categories?: string[];
+  tag?: string;
+  imageUrl?: string[];
+  categoryName?: string;
+  discount?: number;
+  hot?: boolean;
 }
 
 type NavigationDirection = 'next' | 'prev';
@@ -24,28 +30,85 @@ export default function ProductPage() {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+  const [product, setProduct] = useState<Product | null>(null);
 
-  // Mock product data
-  const product: Product = {
-    id: 'IN0021',
-    name: 'Purecomfort pillows & cushions',
-    price: 20.00,
-    description: 'Morbi vitae erat auctor, eleifend nunc a, lobortis neque. Praesent aliquam dignissim viverra. Maecenas lacus odio, feugiat eu nunc sit amet, maximus sagittis dolor',
-    rating: 5,
-    reviews: 1,
-    stock: 98,
-    categories: ['Carpets', 'Pillow', 'Sofa Cover'],
-    tag: 'Carpets'
-  };
+  // Load product data on mount
+  useEffect(() => {
+    // Get product data from sessionStorage
+    const storedProduct = sessionStorage.getItem('selectedProduct');
+    if (storedProduct) {
+      const productData = JSON.parse(storedProduct);
+      setProduct(productData);
+    } else {
+      // Fallback to mock data if no stored product
+      setProduct({
+        id: 'IN0021',
+        name: 'Purecomfort pillows & cushions',
+        price: 20.00,
+        description: 'Morbi vitae erat auctor, eleifend nunc a, lobortis neque. Praesent aliquam dignissim viverra. Maecenas lacus odio, feugiat eu nunc sit amet, maximus sagittis dolor',
+        rating: 5,
+        reviews: 1,
+        stock: 98,
+        categories: ['Carpets', 'Pillow', 'Sofa Cover'],
+        tag: 'Carpets',
+        imageUrl: [
+          '/assets/bed room.jpg', 
+          '/assets/image-2.png',
+          '/assets/image-2.png',
+          '/assets/image-1.png',
+          '/assets/image-4.png',
+          '/assets/image-3.png',
+        ]
+      });
+    }
+  }, []);
 
-  const images: string[] = [
-    '/assets/bed room.jpg', 
-    '/assets/image-2.png',
-    '/assets/image-2.png',
-    '/assets/image-1.png',
-    '/assets/image-4.png',
-    '/assets/image-3.png',
-  ];
+  // Handle keyboard events for lightbox
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+    
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        navigateImage('next');
+      } else if (e.key === 'ArrowLeft') {
+        navigateImage('prev');
+      }
+    };
+    
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = 'auto';
+    };
+  }, [lightboxOpen]);
+
+  if (!product) {
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto p-4 font-sans">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-lg">Loading product...</div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Use product images if available, otherwise fallback to default images
+  const images: string[] = product.imageUrl && product.imageUrl.length > 0 
+    ? product.imageUrl 
+    : [
+        '/assets/bed room.jpg', 
+        '/assets/image-2.png',
+        '/assets/image-2.png',
+        '/assets/image-1.png',
+        '/assets/image-4.png',
+        '/assets/image-3.png',
+      ];
 
   const openLightbox = (index: number): void => {
     setSelectedImage(index);
@@ -66,27 +129,7 @@ export default function ProductPage() {
     }
   };
   
-  const handleKeyDown = (e: KeyboardEvent): void => {
-    if (!lightboxOpen) return;
-  
-    if (e.key === 'Escape') {
-      closeLightbox();
-    } else if (e.key === 'ArrowRight') {
-      navigateImage('next');
-    } else if (e.key === 'ArrowLeft') {
-      navigateImage('prev');
-    }
-  };
-  
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
-    
-    window.addEventListener('keydown', handleKey);
-    return () => {
-      window.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = 'auto';
-    };
-  }, [lightboxOpen]);
+
 
   const handle3DView = () => {
     alert('3D Model viewer would open here!');
@@ -97,7 +140,7 @@ export default function ProductPage() {
       <Navbar />
       <div className="max-w-6xl mx-auto p-4 font-sans">
         <div className="text-sm text-gray-600 mb-4">
-          {product.tag}
+          {product.tag || product.categoryName || 'Product'}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -112,7 +155,6 @@ export default function ProductPage() {
                 className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
               />
               
-              {/* 3D Model Icon */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -147,22 +189,22 @@ export default function ProductPage() {
             
             <div className="flex items-center mb-3">
               {[...Array(5)].map((_, i: number) => (
-                <span key={i} className={`text-xl ${i < product.rating ? 'text-yellow-500' : 'text-gray-300'}`}>★</span>
+                <span key={i} className={`text-xl ${i < (product.rating || 5) ? 'text-yellow-500' : 'text-gray-300'}`}>★</span>
               ))}
-              <span className="ml-2 text-sm text-gray-600">({product.reviews} customer review)</span>
+              <span className="ml-2 text-sm text-gray-600">({product.reviews || 0} customer review{(product.reviews || 0) !== 1 ? 's' : ''})</span>
             </div>
             
             <div className="text-sm text-gray-600 mb-4">SKU: {product.id}</div>
             
-            <div className="text-3xl text-black font-bold mb-4">${product.price.toFixed(2)}</div>
+            <div className="text-3xl text-black font-bold mb-4">${typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price || 0).toFixed(2)}</div>
             
             <div className="mb-6 text-gray-600 leading-relaxed">
-              <p>{product.description} <a href="#" className="text-black font-semibold">Read More</a></p>
+              <p>{product.description || 'No description available.'} <a href="#" className="text-black font-semibold">Read More</a></p>
             </div>
             
             <div className="flex items-center mb-6 text-green-600">
               <Check className="w-5 h-5 mr-2" />
-              <span>{product.stock} in stock</span>
+              <span>{product.quantity || 0} in stock</span>
             </div>
             
             <div className="flex gap-3 mb-6">
@@ -181,35 +223,40 @@ export default function ProductPage() {
               </button>
               
               <button 
-  className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
-  onClick={() => setIsFavorite(!isFavorite)}
->
-  <Heart 
-    className={`w-6 h-6 cursor-pointer transition-colors duration-200 ${isFavorite ? 'fill-red-500 text-red-500' : 'stroke-gray-500'}`} 
-    stroke={isFavorite ? 'none' : 'gray'} 
-    strokeWidth={1.5}
-  />
-</button>
-
+                className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
+                onClick={() => setIsFavorite(!isFavorite)}
+              >
+                <Heart 
+                  className={`w-6 h-6 cursor-pointer transition-colors duration-200 ${isFavorite ? 'fill-red-500 text-red-500' : 'stroke-gray-500'}`} 
+                  stroke={isFavorite ? 'none' : 'gray'} 
+                  strokeWidth={1.5}
+                />
+              </button>
             </div>
             
             <div className="mb-4 text-sm text-gray-600">
               <span>Categories: </span>
-              {product.categories.map((category: string, index: number) => (
-                <span key={index} className="text-black">
-                  {category}{index < product.categories.length - 1 ? ', ' : ''}
-                </span>
-              ))}
+              {product.categories && product.categories.length > 0 ? (
+                product.categories.map((category: string, index: number) => (
+                  <span key={index} className="text-black">
+                    {category}{index < product.categories!.length - 1 ? ', ' : ''}
+                  </span>
+                ))
+              ) : (
+                <span className="text-black">{product.categoryName || 'No category'}</span>
+              )}
             </div>
             
             <div className="mb-4 text-sm text-gray-600">
               <span>Tag: </span>
-              <span className="text-black">{product.tag}</span>
+              <span className="text-black">{product.tag || product.categoryName || 'No tag'}</span>
             </div>
             
-            <button className="w-full bg-black text-white py-3 mb-6 font-semibold rounded hover:bg-gray-800 transition-colors">
-              BUY IT NOW
-            </button>
+          <Link href="/checkout">
+            <div className="block w-full bg-black text-white py-3 mb-6 font-semibold rounded text-center hover:bg-gray-800 transition-colors">
+            BUY IT NOW
+            </div>
+          </Link>
             
             <div className="mb-6">
               <img 

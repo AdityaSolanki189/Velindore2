@@ -4,13 +4,37 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ShopByCategory = ({ 
-  categories = defaultCategories,
   backgroundColor = "bg-amber-50"
 }) => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/categories');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching categories:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   
   const getItemsToShow = () => {
     if (isMobile) return 1;
@@ -31,7 +55,7 @@ const ShopByCategory = ({
   }, []);
   
   const itemsToShow = getItemsToShow();
-  const maxIndex = categories.length - itemsToShow;
+  const maxIndex = Math.max(0, categories.length - itemsToShow);
   
   const handleNext = () => {
     setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
@@ -58,6 +82,45 @@ const ShopByCategory = ({
       handlePrev();
     }
   };
+  
+  // Loading state
+  if (loading) {
+    return (
+      <div className={`w-full py-8 px-4 ${backgroundColor}`}>
+        <div className="mx-auto md:ml-20">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-gray-500">Loading categories...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Error state
+  if (error) {
+    return (
+      <div className={`w-full py-8 px-4 ${backgroundColor}`}>
+        <div className="mx-auto md:ml-20">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-red-500">Error: {error}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // No categories state
+  if (categories.length === 0) {
+    return (
+      <div className={`w-full py-8 px-4 ${backgroundColor}`}>
+        <div className="mx-auto md:ml-20">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-gray-500">No categories available</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   const visibleCategories = categories.slice(currentIndex, currentIndex + itemsToShow);
 
@@ -101,7 +164,7 @@ const ShopByCategory = ({
                   style={{ flex: `0 0 ${100 / itemsToShow}%` }}
                 >
                   <Link 
-                    href='/accessories'
+                    href={`/categories/${category.slug || category.id}`}
                     className="block text-black"
                   >
                     <div className="overflow-hidden rounded-lg mb-3">
@@ -144,45 +207,5 @@ const ShopByCategory = ({
     </div>
   );
 };
-
-// Default categories if none are provided
-const defaultCategories = [
-  {
-    id: 1,
-    name: 'Pillow',
-    image: '/assets/photo-1.jpg',
-    slug: 'pillow',
-  },
-  {
-    id: 2,
-    name: 'Bedding',
-    image: '/assets/photo-1.jpg',
-    slug: 'bedding',
-  },
-  {
-    id: 3,
-    name: 'Mattresses',
-    image: '/assets/photo-1.jpg',
-    slug: 'mattresses',
-  },
-  {
-    id: 4,
-    name: 'Pillow & Cushion',
-    image: '/assets/photo-1.jpg',
-    slug: 'pillow-cushion',
-  },
-  {
-    id: 5,
-    name: 'Living Room',
-    image: '/assets/photo-1.jpg',
-    slug: 'living-room',
-  },
-  {
-    id: 6,
-    name: 'Home Decor',
-    image: '/assets/photo-1.jpg',
-    slug: 'home-decor',
-  },
-];
 
 export default ShopByCategory;

@@ -176,7 +176,7 @@ export default function Navbar() {
             }`}
           >
             <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-blue-600">Menu</h2>
+              <h2 className="text-xl font-semibold ">Menu</h2>
               <button
                 onClick={toggleMenu}
                 className="text-gray-800 hover:text-blue-600 transition-colors duration-300"
@@ -205,7 +205,7 @@ export default function Navbar() {
             <div className="px-6 py-4">
               <ul className="space-y-4">
                 {['/', '/accessories', '/contact', '/about', '/bedroom', '/kitchen'].map((path, index) => {
-                  const label = ['Home', 'Accessories', 'Contact us', 'About us', 'Bedroom', 'Kitchen'][index];
+                  const label = ['Home', 'Accessories', 'Contact', 'About',][index];
                   return (
                     <li key={path}>
                       <Link
@@ -224,7 +224,7 @@ export default function Navbar() {
             <div className="px-6 py-4 mt-4 bg-gray-50 rounded-lg mx-4">
               <div className="flex flex-col space-y-4">
                 {[
-                  { href: '/account', icon: faUser, label: 'My Account' },
+                  // { href: '/account', icon: faUser, label: 'My Account' },
                   { href: '/cart', icon: faCartShopping, label: 'Cart', badge: '3' },
                   { href: '/wishlist', icon: faHeart, label: 'Wishlist', badge: '5' }
                 ].map(({ href, icon, label, badge }) => (
@@ -248,11 +248,11 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="absolute bottom-8 w-full px-6">
+            {/* <div className="absolute bottom-8 w-full px-6">
               <div className="text-center py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 cursor-pointer">
                 Log In / Sign Up
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
