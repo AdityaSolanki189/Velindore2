@@ -1,11 +1,10 @@
 import { dump } from "@/backend/helper/debug";
+import { fetchAllLabels } from "@/backend/services/labels";
 import { fetchAllProducts } from "@/backend/services/products";
 import { getSettingsData } from "@/backend/services/settings";
 
 
 export default async function TestPage() {
-
-  dump( await getSettingsData() , "sett")
 
   return (
     <>

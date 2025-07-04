@@ -1,3 +1,5 @@
+'use server';
+
 import { eq, InferSelectModel } from "drizzle-orm";
 import { Setting } from "../db/schema";
 import { db } from "../db/db.config";

@@ -1,3 +1,6 @@
+'use server';
+
+
 import { db } from "../db/db.config";
 import { Label } from "../db/schema";
 

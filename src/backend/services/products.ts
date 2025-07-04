@@ -1,3 +1,5 @@
+'use server';
+
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "../db/db.config";
 import { Category, Label, Product, ProductImage } from "../db/schema";

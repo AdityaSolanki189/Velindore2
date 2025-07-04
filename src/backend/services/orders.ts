@@ -1,3 +1,5 @@
+'use server';
+
 import { db } from "../db/db.config"
 import { Order, Product } from "../db/schema"
 import { eq } from "drizzle-orm"; // or your query helper

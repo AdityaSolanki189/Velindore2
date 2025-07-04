@@ -13,6 +13,7 @@ import ShopByCategory from "./components/shopcategory";
 import ProductCard from "./components/product";
 import HeroSection from "./components/Herosection";
 import Testimonials from "./components/Testimonials";
+import { fetchAllLabels } from "@/backend/services/labels";
 
 export default function Home() {
   const carouselData = [
@@ -61,6 +62,14 @@ export default function Home() {
   const subscribeRef = useRef(null);
 
   const [visibleSections, setVisibleSections] = useState(new Set());
+
+  const getLabels = async () => {
+    console.log(await fetchAllLabels());
+  }
+
+  useEffect(()=>{
+    getLabels()
+  },[])
 
   useEffect(() => {
     const checkIfMobile = () => {
