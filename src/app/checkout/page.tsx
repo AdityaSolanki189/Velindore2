@@ -1,5 +1,5 @@
 "use client";
-
+import { getSettingsData } from '@/backend/services/settings';
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -49,11 +49,27 @@ interface PaymentInfo {
   cvv: string;
 }
 
+interface Settings {
+  id: number;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  paymentApiKey: string | null;
+  paymentTax: string | null;
+  homeTitle: string | null;
+  contactEmail: string | null;
+  contactNumber: string | null;
+  facebookLink: string | null;
+  instagramLink: string | null;
+  linkedinLink: string | null;
+}
+
 const CheckoutPage: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
-  
+  const [settings, setSettings] = useState<Settings | null>(null);
+const [taxPercentage, setTaxPercentage] = useState<number>(0); // Change from 0.08 to 0
+const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
@@ -132,6 +148,44 @@ const CheckoutPage: React.FC = () => {
     loadCartItems();
   }, []);
 
+ useEffect(() => {
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch('/api/settings');
+      if (response.ok) {
+        const settingsData = await response.json();
+        console.log('Fetched settings:', settingsData);
+        console.log('Payment tax from backend:', settingsData.paymentTax);
+        
+        setSettings(settingsData);
+        
+        // Get the actual tax percentage from paymentTax field
+        if (settingsData.paymentTax) {
+          const backendTaxPercentage = parseFloat(settingsData.paymentTax);
+          console.log('Parsed tax percentage:', backendTaxPercentage);
+          
+          setTaxDisplayPercentage(backendTaxPercentage);
+          // Convert to decimal for calculation
+          setTaxPercentage(backendTaxPercentage / 100);
+        } else {
+  // Fallback if paymentTax is null (remove the 8% fallback)
+  setTaxDisplayPercentage(0);
+  setTaxPercentage(0);
+}
+      }
+    } catch (error) {
+  console.error('Failed to fetch settings:', error);
+  // Keep 0% tax if fetch fails (remove the 8% fallback)
+  setTaxDisplayPercentage(0);
+  setTaxPercentage(0);
+}
+  };
+
+  fetchSettings();
+}, []);
+
+
+
   // Save cart items to sessionStorage whenever they change
   useEffect(() => {
     if (cartItems.length > 0) {
@@ -140,10 +194,9 @@ const CheckoutPage: React.FC = () => {
   }, [cartItems]);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const tax = subtotal * 0.08; // 8% tax
   const shipping = subtotal > 50 ? 0 : 9.99; // Free shipping over $50
-  const total = subtotal + tax + shipping;
-
+  const total = subtotal + taxPercentage + shipping; 
+  const tax = subtotal * taxPercentage;
   const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     
@@ -756,9 +809,9 @@ const CheckoutPage: React.FC = () => {
                   <p>${shipping.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
-                  <p>Tax</p>
-                  <p>${tax.toFixed(2)}</p>
-                </div>
+  <p>Tax ({taxDisplayPercentage}%)</p>
+  <p>${tax.toFixed(2)}</p>
+</div>
                 <div className="flex justify-between text-base font-medium text-gray-900">
                   <p>Total</p>
                   <p>${total.toFixed(2)}</p>

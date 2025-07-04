@@ -218,9 +218,9 @@ export default function ProductPage() {
                 />
               </div>
               
-              <button className="flex-1 bg-black text-white h-12 font-semibold rounded hover:bg-gray-800 transition-colors">
+              {/* <button className="flex-1 bg-black text-white h-12 font-semibold rounded hover:bg-gray-800 transition-colors">
                 ADD TO CART
-              </button>
+              </button> */}
               
               <button 
                 className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
