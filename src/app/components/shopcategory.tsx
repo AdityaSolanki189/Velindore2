@@ -83,7 +83,6 @@ const ShopByCategory = ({
     }
   };
   
-  // Loading state
   if (loading) {
     return (
       <div className={`w-full py-8 px-4 ${backgroundColor}`}>
@@ -96,7 +95,6 @@ const ShopByCategory = ({
     );
   }
   
-  // Error state
   if (error) {
     return (
       <div className={`w-full py-8 px-4 ${backgroundColor}`}>
@@ -109,7 +107,6 @@ const ShopByCategory = ({
     );
   }
   
-  // No categories state
   if (categories.length === 0) {
     return (
       <div className={`w-full py-8 px-4 ${backgroundColor}`}>
@@ -164,7 +161,7 @@ const ShopByCategory = ({
                   style={{ flex: `0 0 ${100 / itemsToShow}%` }}
                 >
                   <Link 
-                    href={`/categories/${category.slug || category.id}`}
+                    href={`/accessories/`}
                     className="block text-black"
                   >
                     <div className="overflow-hidden rounded-lg mb-3">
@@ -189,7 +186,6 @@ const ShopByCategory = ({
             </div>
           </div>
           
-          {/* Pagination dots for mobile */}
           {isMobile && (
             <div className="flex justify-center mt-4">
               {Array.from({ length: categories.length }, (_, i) => (

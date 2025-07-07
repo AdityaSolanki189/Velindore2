@@ -1,5 +1,6 @@
 import React from 'react';
 // import { Search } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
@@ -32,9 +33,11 @@ export default function HeroSection() {
                 <span className="block">mattresses.</span>
               </h1>
               
-              <button className="mt-8 px-6 py-3 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors">
-                VIEW COLLECTION
-              </button>
+              <Link href="/accessories">
+                <button className="mt-8 px-6 py-3 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors cursor-pointer">
+                  VIEW COLLECTION
+                </button>
+              </Link>
             </div>
             
             <div className="hidden md:block max-w-4xl mx-auto">
@@ -67,9 +70,11 @@ export default function HeroSection() {
                 </div>
               </h1>
               
-              <button className="mt-12 lg:mt-16 px-8 lg:px-10 py-4 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-colors">
-                VIEW COLLECTION
-              </button>
+              <Link href="/accessories">
+                <button className="mt-8 px-6 py-3 bg-black text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors cursor-pointer">
+                  VIEW COLLECTION
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -132,7 +132,6 @@ export async function fetchProductsByLabel(labelName: string) {
       price: Product.price,
       status: Product.status,
       quantity: Product.quantity,
-
       categoryId: Product.categoryId,
       categoryName: Category.name, // added
       labelId: Product.labelId,

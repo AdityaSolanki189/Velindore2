@@ -32,8 +32,8 @@ interface CartItem {
 }
 
 interface ShippingInfo {
-  firstName: string;
-  lastName: string;
+  name: string;
+  phone: string;
   email: string;
   address: string;
   city: string;
@@ -68,13 +68,13 @@ const CheckoutPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
   const [settings, setSettings] = useState<Settings | null>(null);
-const [taxPercentage, setTaxPercentage] = useState<number>(0); // Change from 0.08 to 0
-const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
+  const [taxPercentage, setTaxPercentage] = useState<number>(0);
+  const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
-    firstName: '',
-    lastName: '',
+    name: '',
+    phone: '',
     email: '',
     address: '',
     city: '',
@@ -148,43 +148,40 @@ const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
     loadCartItems();
   }, []);
 
- useEffect(() => {
-  const fetchSettings = async () => {
-    try {
-      const response = await fetch('/api/settings');
-      if (response.ok) {
-        const settingsData = await response.json();
+  // Fetch settings data directly using the backend function
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settingsData = await getSettingsData();
         console.log('Fetched settings:', settingsData);
-        console.log('Payment tax from backend:', settingsData.paymentTax);
         
-        setSettings(settingsData);
-        
-        // Get the actual tax percentage from paymentTax field
-        if (settingsData.paymentTax) {
-          const backendTaxPercentage = parseFloat(settingsData.paymentTax);
-          console.log('Parsed tax percentage:', backendTaxPercentage);
+        if (settingsData) {
+          setSettings(settingsData);
           
-          setTaxDisplayPercentage(backendTaxPercentage);
-          // Convert to decimal for calculation
-          setTaxPercentage(backendTaxPercentage / 100);
-        } else {
-  // Fallback if paymentTax is null (remove the 8% fallback)
-  setTaxDisplayPercentage(0);
-  setTaxPercentage(0);
-}
+          // Get the tax percentage from paymentTax field
+          if (settingsData.paymentTax) {
+            const backendTaxPercentage = parseFloat(settingsData.paymentTax);
+            console.log('Parsed tax percentage:', backendTaxPercentage);
+            
+            setTaxDisplayPercentage(backendTaxPercentage);
+            // Convert to decimal for calculation
+            setTaxPercentage(backendTaxPercentage / 100);
+          } else {
+            // No tax if paymentTax is null
+            setTaxDisplayPercentage(0);
+            setTaxPercentage(0);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch settings:', error);
+        // Keep 0% tax if fetch fails
+        setTaxDisplayPercentage(0);
+        setTaxPercentage(0);
       }
-    } catch (error) {
-  console.error('Failed to fetch settings:', error);
-  // Keep 0% tax if fetch fails (remove the 8% fallback)
-  setTaxDisplayPercentage(0);
-  setTaxPercentage(0);
-}
-  };
+    };
 
-  fetchSettings();
-}, []);
-
-
+    fetchSettings();
+  }, []);
 
   // Save cart items to sessionStorage whenever they change
   useEffect(() => {
@@ -195,8 +192,9 @@ const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = subtotal > 50 ? 0 : 9.99; // Free shipping over $50
-  const total = subtotal + taxPercentage + shipping; 
   const tax = subtotal * taxPercentage;
+  const total = subtotal + tax + shipping;
+
   const updateQuantity = (id: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     
@@ -233,8 +231,8 @@ const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
 
   const validateShippingInfo = (): boolean => {
     return !!(
-      shippingInfo.firstName &&
-      shippingInfo.lastName &&
+      shippingInfo.name &&
+      shippingInfo.phone &&
       shippingInfo.email &&
       shippingInfo.address &&
       shippingInfo.city &&
@@ -402,19 +400,14 @@ const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
                         <div key={item.id} className="flex flex-col sm:flex-row items-center py-4 border-b border-gray-100 last:border-0">
                           <div className="relative h-24 w-24 sm:mr-6 mb-4 sm:mb-0 flex-shrink-0">
                             <img
-  src={item.image}
-  alt={item.name}
-  className="h-24 w-24 object-contain rounded-md"
-/>
-
+                              src={item.image}
+                              alt={item.name}
+                              className="h-24 w-24 object-contain rounded-md"
+                            />
                           </div>
                           <div className="flex-1 sm:flex sm:justify-between w-full">
                             <div className="flex-1">
                               <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
-                              {/* <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)}</p>
-                              {item.description && (
-                                <p className="mt-1 text-sm text-gray-600 line-clamp-2">{item.description}</p>
-                              )} */}
                             </div>
                             <div className="flex items-center justify-between sm:justify-end mt-4 sm:mt-0 w-full sm:w-auto">
                               <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
@@ -467,37 +460,37 @@ const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Shipping Information</h2>
                 
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                  <div className="col-span-1">
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={shippingInfo.firstName}
-                      onChange={handleShippingChange}
-                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="col-span-1">
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={shippingInfo.lastName}
-                      onChange={handleShippingChange}
-                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      required
-                    />
-                  </div>
-                  
                   <div className="col-span-full">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={shippingInfo.name}
+                      onChange={handleShippingChange}
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-span-1">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={shippingInfo.phone}
+                      onChange={handleShippingChange}
+                      className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-span-1">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       Email Address *
                     </label>

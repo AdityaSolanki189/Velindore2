@@ -187,12 +187,12 @@ export default function ProductPage() {
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
-            <div className="flex items-center mb-3">
+            {/* <div className="flex items-center mb-3">
               {[...Array(5)].map((_, i: number) => (
                 <span key={i} className={`text-xl ${i < (product.rating || 5) ? 'text-yellow-500' : 'text-gray-300'}`}>★</span>
               ))}
               <span className="ml-2 text-sm text-gray-600">({product.reviews || 0} customer review{(product.reviews || 0) !== 1 ? 's' : ''})</span>
-            </div>
+            </div> */}
             
             <div className="text-sm text-gray-600 mb-4">SKU: {product.id}</div>
             
