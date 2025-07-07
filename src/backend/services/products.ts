@@ -118,7 +118,7 @@ export async function fetchAllLabels() {
       name: Label.name,
     })
     .from(Label);
-  
+
   return results;
 }
 
@@ -132,6 +132,7 @@ export async function fetchProductsByLabel(labelName: string) {
       price: Product.price,
       status: Product.status,
       quantity: Product.quantity,
+
       categoryId: Product.categoryId,
       categoryName: Category.name, // added
       labelId: Product.labelId,
@@ -150,10 +151,7 @@ export async function fetchProductsByLabel(labelName: string) {
         eq(Label.name, labelName)
       )
     )
-    .orderBy(desc(Product.createdAt))
-    ;
-
-    console.log(fetchProductsByLabel);
+    .orderBy(desc(Product.createdAt));
 
   return groupByArrayField(results, "id", "imageUrl");
 }
