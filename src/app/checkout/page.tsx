@@ -31,16 +31,29 @@ interface CartItem {
   description?: string;
 }
 
-interface ShippingInfo {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
+// interface ShippingInfo {
+//   name: string;
+//   phone: string;
+//   email: string;
+//   address: string;
+//   city: string;
+//   state: string;
+//   zipCode: string;
+//   country: string;
+// }
+
+type ShippingInfo = {
+  userEmail: string;
+  userName: string;
+  userPhone: string;
+
+  shippingStreetAddress: string;
+  shippingCity: string;
+  shippingStateProvince: string;
+  shippingPostalCode: string;
+  shippingCountry: string;
+};
+
 
 interface PaymentInfo {
   cardNumber: string;
@@ -72,16 +85,23 @@ const CheckoutPage: React.FC = () => {
   const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
-  const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
-    name: '',
-    phone: '',
-    email: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: 'United States'
-  });
+const [shippingInfo, setShippingInfo] = useState<ShippingInfo>(() => {
+  const storedInfo = localStorage.getItem('shippingInfo');
+  return storedInfo ? JSON.parse(storedInfo) : {
+    userName: '',
+    userPhone: '',
+    userEmail: '',
+    shippingStreetAddress: '',
+    shippingCity: '',
+    shippingStateProvince: '',
+    shippingPostalCode: '',
+    shippingCountry: ''
+  };
+});
+
+
+
+
   
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
     cardNumber: '',
@@ -231,13 +251,13 @@ const CheckoutPage: React.FC = () => {
 
   const validateShippingInfo = (): boolean => {
     return !!(
-      shippingInfo.name &&
-      shippingInfo.phone &&
-      shippingInfo.email &&
-      shippingInfo.address &&
-      shippingInfo.city &&
-      shippingInfo.state &&
-      shippingInfo.zipCode
+      shippingInfo.userName &&
+      shippingInfo.userPhone &&
+      shippingInfo.userEmail &&
+      shippingInfo.shippingStreetAddress &&
+      shippingInfo.shippingCity &&
+      shippingInfo.shippingPostalCode &&
+      shippingInfo.shippingCountry
     );
   };
 
@@ -257,6 +277,9 @@ const CheckoutPage: React.FC = () => {
       alert("Please fill out all required fields");
       return;
     }
+
+      localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
+
     
     setLoading(true);
     
@@ -320,7 +343,7 @@ const CheckoutPage: React.FC = () => {
             </div>
             <h2 className="text-3xl font-semibold text-gray-800 mb-4">Thank You For Your Order!</h2>
             <p className="text-gray-600 mb-6">
-              Your order has been placed successfully. We&apos;ve sent a confirmation email to {shippingInfo.email}.
+              Your order has been placed successfully. We&apos;ve sent a confirmation email to {shippingInfo.userEmail}.
             </p>
             <p className="text-gray-600 mb-8">
               Order #: <span className="font-medium">ORD-{Math.floor(Math.random() * 10000)}</span>
@@ -467,8 +490,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       id="name"
-                      name="name"
-                      value={shippingInfo.name}
+                      name="userName"
+                      value={shippingInfo.userName}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -482,8 +505,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="tel"
                       id="phone"
-                      name="phone"
-                      value={shippingInfo.phone}
+                      name="userPhone"
+                      value={shippingInfo.userPhone}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -497,8 +520,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="email"
                       id="email"
-                      name="email"
-                      value={shippingInfo.email}
+                      name="userEmail"
+                      value={shippingInfo.userEmail}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -512,8 +535,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       id="address"
-                      name="address"
-                      value={shippingInfo.address}
+                      name="shippingStreetAddress"
+                      value={shippingInfo.shippingStreetAddress}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -527,8 +550,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       id="city"
-                      name="city"
-                      value={shippingInfo.city}
+                      name="shippingCity"
+                      value={shippingInfo.shippingCity}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -542,8 +565,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       id="state"
-                      name="state"
-                      value={shippingInfo.state}
+                      name="shippingStateProvince"
+                      value={shippingInfo.shippingStateProvince}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -557,8 +580,8 @@ const CheckoutPage: React.FC = () => {
                     <input
                       type="text"
                       id="zipCode"
-                      name="zipCode"
-                      value={shippingInfo.zipCode}
+                      name="shippingPostalCode"
+                      value={shippingInfo.shippingPostalCode}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
@@ -571,8 +594,8 @@ const CheckoutPage: React.FC = () => {
                     </label>
                     <select
                       id="country"
-                      name="country"
-                      value={shippingInfo.country}
+                      name="shippingCountry"
+                      value={shippingInfo.shippingCountry}
                       onChange={handleShippingChange}
                       className="w-full px-3 py-2 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       required
