@@ -15,8 +15,41 @@ import HeroSection from "./components/Herosection";
 import Testimonials from "./components/Testimonials";
 import { fetchAllLabels, fetchLabelsWithProducts } from "@/backend/services/labels";
 
+// Define interfaces for type safety
+interface CarouselItem {
+  id: number;
+  title: string;
+  subtitle: string;
+  image: string;
+  backgroundColor: string;
+  buttonText: string;
+  promoText: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  quantity: number;
+  threeDImage: string | null;
+  status: "active" | "inactive";
+  categoryId: number;
+  labelId: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Label {
+  id: number;
+  name: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  products: Product[];
+}
+
 export default function Home() {
-  const carouselData = [
+  const carouselData: CarouselItem[] = [
     {
       id: 1,
       title: "Sleep Sanctuary",
@@ -46,21 +79,21 @@ export default function Home() {
     },
   ];
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [labels, setLabels] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const shopCategoryRef = useRef(null);
-  const featuredCollectionsRef = useRef(null);
-  const homeFixRef = useRef(null);
-  const heroSectionRef = useRef(null);
-  const latestCollectionRef = useRef(null);
-  const interiorDesignRef = useRef(null);
-  const shopLookRef = useRef(null);
-  const testimonialsRef = useRef(null);
-  const subscribeRef = useRef(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [labels, setLabels] = useState<Label[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const shopCategoryRef = useRef<HTMLElement>(null);
+  const featuredCollectionsRef = useRef<HTMLElement>(null);
+  const homeFixRef = useRef<HTMLElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const latestCollectionRef = useRef<HTMLElement>(null);
+  const interiorDesignRef = useRef<HTMLElement>(null);
+  const shopLookRef = useRef<HTMLElement>(null);
+  const testimonialsRef = useRef<HTMLElement>(null);
+  const subscribeRef = useRef<HTMLElement>(null);
 
-  const [visibleSections, setVisibleSections] = useState(new Set());
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -76,7 +109,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const observerOptions = {
+    const observerOptions: IntersectionObserverInit = {
       threshold: 0.1,
       rootMargin: '0px 0px -50px 0px'
     };
@@ -121,12 +154,12 @@ export default function Home() {
   }, []);
 
   // Updated function to fetch labels with their products
-  const getLabels = async () => {
+  const getLabels = async (): Promise<void> => {
     try {
       const labelsData = await fetchLabelsWithProducts(); // Changed to fetch labels with products
       setLabels(labelsData);
       setLoading(false);
-      console.log('Labels with products fetched:', labelsData);
+      // console.log('Labels with products fetched:', labelsData);
     } catch (error) {
       console.error('Error fetching labels:', error);
       setLoading(false);
@@ -151,13 +184,13 @@ export default function Home() {
     trackMouse: false,
   });
 
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState<number>(0);
 
-  const nextSlide = () => {
+  const nextSlide = (): void => {
     setActiveSlide((prev) => (prev === carouselData.length - 1 ? 0 : prev + 1));
   };
 
-  const prevSlide = () => {
+  const prevSlide = (): void => {
     setActiveSlide((prev) => (prev === 0 ? carouselData.length - 1 : prev - 1));
   };
 
@@ -303,7 +336,7 @@ export default function Home() {
           .map((label, index) => (             
             <Collection               
               key={label.id || index}               
-              label={{ ...label, products: (label.products || []).slice(0, 5) }}             
+              {...({ ...label, products: (label.products || []).slice(0, 5) } as any)}             
             />           
           ))}       
       </div>        
@@ -320,7 +353,7 @@ export default function Home() {
               .map((label, index) => (                 
                 <div key={label.id || index} className="min-w-full px-2">                   
                   <Collection                     
-                    label={{ ...label, products: (label.products || []).slice(0, 5) }}                   
+                    {...({ ...label, products: (label.products || []).slice(0, 5) } as any)}                   
                   />                 
                 </div>               
               ))}           
@@ -390,7 +423,7 @@ export default function Home() {
       <section 
         ref={interiorDesignRef}
         data-section="interiorDesign"
-        className={`relative w-full overflow-hidden py-8 md:py-16 mt-20 md:mt-2 font-sans transition-all duration-1000 ${getAnimationClass('interiorDesign', 'animate__slideInUp')}`}
+        className={`relative w-full overflow-hidden py-8 md:py-16 mt-[-320px] md:mt-2 font-sans transition-all duration-1000 ${getAnimationClass('interiorDesign', 'animate__slideInUp')}`}
       >
         <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-4">
           <div className="w-full md:w-1/3 mb-10 md:mb-0 text-center md:text-left">

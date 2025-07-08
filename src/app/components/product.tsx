@@ -1,120 +1,204 @@
-// ProductCard.jsx
-import Image from 'next/image';
-// import Link from 'next/link';
-import { useState } from 'react';
+'use client';
 
-const ProductCard = ({ 
-  product = {
-    id: '1',
-    title: 'Product Title',
-    price: 99.99,
-    rating: 4.5,
-    image: '/assets/purple.jpg',
-    category: 'Category',
-    inStock: true,
-  }
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  const {
-    // id,
-    title,
-    price,
-    discountPrice,
-    // rating,
-    image,
-    // category,
-    inStock
-  } = product;
-  
-  const discount = price && discountPrice 
-    ? Math.round((1 - discountPrice / price) * 100) 
-    : 0;
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl: string[];
+  discount?: number;
+  hot?: boolean;
+  categoryName?: string;
+}
+
+interface Category {
+  name: string;
+}
+
+export default function HomefixProductSection() {
+  const router = useRouter();
+  const [activeCategory, setActiveCategory] = useState<string>('All Products');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>(['All Products']);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        let url = '/api/products';
+        if (activeCategory !== 'All Products') {
+          url = `/api/products?category=${encodeURIComponent(activeCategory)}`;
+        }
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+
+        const fetchedProducts: Product[] = await response.json();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [activeCategory]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+
+        const fetchedCategories: Category[] = await response.json();
+        const categoryNames = ['All Products', ...fetchedCategories.map((cat: Category) => cat.name)];
+        setCategories(categoryNames);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategories(['All Products']);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleProductClick = (product: Product) => {
+    // console.log('Navigating to product:', product.id);
+    sessionStorage.setItem('selectedProduct', JSON.stringify(product));
+    router.push(`/product/${product.id}`);
+  };
+
+  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>, productId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // console.log('Added to wishlist:', productId);
+  };
 
   return (
-    <div 
-      className="bg-white overflow-hidden transition-all duration-300 w-64 relative"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {discount > 0 && (
-        <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1 z-10">
-          {discount}% OFF
-        </div>
-      )}
-      
-      {!inStock && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
-          <span className="text-white text-lg font-bold">Out of Stock</span>
-        </div>
-      )}
-      
-      <div className="relative h-48 overflow-hidden">
-        <Image 
-          src={image}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-300"
-          style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}
-        />
-      </div>
-      
-      <div className="p-4">
-        {/* <span className="text-xs text-gray-500 uppercase">{category}</span> */}
-        <h3 className="font-medium text-left text-gray-900 mt-1 text-lg truncate">{title}</h3>
-        
-        {/* Rating */}
-        {/* <div className="flex items-center mt-1">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <svg 
-                key={i}
-                className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 20 20"
-                fill="currentColor"
+    <div className="max-w-screen-xl mx-auto px-4 py-8 text-black">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-1/5">
+          <div className="space-y-2">
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                className={`p-4 border border-gray-500 rounded-md cursor-pointer transition-all duration-300 ${
+                  activeCategory === category ? 'bg-black text-white' : 'hover:bg-black hover:text-white'
+                }`}
+                onClick={() => setActiveCategory(category)}
               >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
+                {index === 0 && <span className="mr-2">•</span>}
+                {category}
+              </div>
             ))}
           </div>
-          <span className="text-xs text-gray-500 ml-1">({rating})</span>
-        </div> */}
-        
-        {/* Price */}
-        <div className="mt-2 flex items-center">
-          {discountPrice ? (
-            <>
-              <span className="text-lg font-bold text-gray-900">${discountPrice.toFixed(2)}</span>
-              <span className="ml-2 text-sm text-gray-500 line-through">${price.toFixed(2)}</span>
-            </>
+        </div>
+
+        <div className="w-full md:w-4/5 text-black">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="text-lg">Loading products...</div>
+            </div>
           ) : (
-            <span className="text-lg font-bold text-gray-900">${price.toFixed(2)}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => {
+                const discountPrice = product.discount
+                  ? product.price - (product.price * product.discount) / 100
+                  : null;
+
+                return (
+                  <div key={product.id} className="block">
+                    <div
+                      className="group relative cursor-pointer"
+                      onClick={() => handleProductClick(product)}
+                    >
+                      <div className="relative overflow-hidden">
+                        {product.discount && (
+                          <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-medium px-2 py-1 rounded z-10">
+                            -{product.discount}%
+                          </div>
+                        )}
+                        {product.hot && (
+                          <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-medium px-4 py-1 rounded z-10">
+                            Hot
+                          </div>
+                        )}
+                        <img
+                          src={
+                            product.imageUrl && product.imageUrl.length > 0
+                              ? product.imageUrl[0]
+                              : '/assets/placeholder.jpg'
+                          }
+                          alt={product.name}
+                          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+
+                        <div className="absolute inset-0 backdrop-blur-sm backdrop-filter opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
+
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 z-10">
+                          <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <button
+                              className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm"
+                              onClick={(e) => handleWishlistClick(e, product.id)}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 space-y-1">
+                        <h3 className="font-medium text-gray-900">{product.name}</h3>
+                        <div className="flex items-center gap-2">
+                          {discountPrice !== null ? (
+                            <>
+                              <span className="text-red-600 font-semibold">${discountPrice.toFixed(2)}</span>
+                              <span className="text-gray-400 line-through">${product.price.toFixed(2)}</span>
+                            </>
+                          ) : (
+                            <span className="font-semibold">${product.price.toFixed(2)}</span>
+                          )}
+
+                          {product.categoryName && (
+                            <span className="ml-2 text-xs text-gray-500 capitalize">
+                              ({product.categoryName})
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {!loading && products.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No products found in this category.</p>
+            </div>
           )}
         </div>
-        
-        {/* <div className="mt-4 flex justify-between items-center">
-          <Link 
-            href={`/products/${id}`}
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            View Details
-          </Link>
-          
-          <button 
-            className={`px-3 py-1 rounded text-sm font-medium ${
-              inStock 
-                ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-            disabled={!inStock}
-          >
-            {inStock ? 'Add to Cart' : 'Sold Out'}
-          </button>
-        </div> */}
       </div>
     </div>
   );
-};
-
-export default ProductCard;
+}

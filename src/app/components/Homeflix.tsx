@@ -3,12 +3,28 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Define the Product interface
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  imageUrl: string[];
+  discount?: number;
+  hot?: boolean;
+  categoryName?: string;
+}
+
+// Define the Category interface
+interface Category {
+  name: string;
+}
+
 export default function HomefixProductSection() {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState('All Products');
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(['All Products']);
-  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<string>('All Products');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>(['All Products']);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,7 +40,7 @@ export default function HomefixProductSection() {
           throw new Error('Failed to fetch products');
         }
         
-        const fetchedProducts = await response.json();
+        const fetchedProducts: Product[] = await response.json();
         setProducts(fetchedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -44,9 +60,9 @@ export default function HomefixProductSection() {
           throw new Error('Failed to fetch categories');
         }
         
-      const fetchedCategories = await response.json();
+        const fetchedCategories: Category[] = await response.json();
         
-      const categoryNames = ['All Products', ...fetchedCategories.map((cat: { name: string }) => cat.name)];
+        const categoryNames = ['All Products', ...fetchedCategories.map((cat: Category) => cat.name)];
         setCategories(categoryNames);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -57,19 +73,17 @@ export default function HomefixProductSection() {
     fetchCategories();
   }, []);
 
-  const handleProductClick = (product: { id: string }) => {
-  console.log('Navigating to product:', product.id);
-  sessionStorage.setItem('selectedProduct', JSON.stringify(product));
-  router.push(`/product/${product.id}`);
-};
-
+  const handleProductClick = (product: Product) => {
+    // console.log('Navigating to product:', product.id);
+    sessionStorage.setItem('selectedProduct', JSON.stringify(product));
+    router.push(`/product/${product.id}`);
+  };
 
   const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>, productId: string) => {
-  e.preventDefault();
-  e.stopPropagation();
-  console.log('Added to wishlist:', productId);
-};
-
+    e.preventDefault();
+    e.stopPropagation();
+    // console.log('Added to wishlist:', productId);
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-8 text-black">
@@ -142,9 +156,9 @@ export default function HomefixProductSection() {
                     <div className="mt-3 space-y-1">
                       <h3 className="font-medium text-gray-900">{product.name}</h3>
                       <div className="flex items-center">
-                      <span className="font-semibold">
+                        <span className="font-semibold">
                           ${Number(product.price).toFixed(2)}
-                      </span>
+                        </span>
 
                         {product.categoryName && (
                           <span className="ml-2 text-xs text-gray-500 capitalize">({product.categoryName})</span>

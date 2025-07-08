@@ -31,8 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Added to wishlist:', id);
-    // Add your wishlist logic here
+    // console.log('Added to wishlist:', id);
   };
 
   return (

@@ -199,7 +199,7 @@ export default function ProductPage() {
             <div className="text-3xl text-black font-bold mb-4">${typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price || 0).toFixed(2)}</div>
             
             <div className="mb-6 text-gray-600 leading-relaxed">
-              <p>{product.description || 'No description available.'} <a href="#" className="text-black font-semibold">Read More</a></p>
+              <p>{product.description || 'No description available.'}</p>
             </div>
             
             <div className="flex items-center mb-6 text-green-600">

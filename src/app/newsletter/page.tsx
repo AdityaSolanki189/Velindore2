@@ -18,7 +18,7 @@ export default function NewsletterPage() {
       return;
     }
   
-    console.log('Subscribing email:', email);
+    // console.log('Subscribing email:', email);
     setSubscribed(true);
     setError('');
   };

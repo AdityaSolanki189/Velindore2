@@ -32,7 +32,7 @@ export default function OrderTracking() {
   ];
 
   const handleSubmit = () => {
-    console.log("Feedback submitted:", { rating, remarks, deliveryExperience });
+    // console.log("Feedback submitted:", { rating, remarks, deliveryExperience });
     alert("Feedback submitted successfully!");
   };
 
