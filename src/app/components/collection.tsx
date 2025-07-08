@@ -4,8 +4,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchProductsByLabel } from "@/backend/services/products";
 
+type Product = {
+  id: string | number;
+  name?: string;
+  price?: number;
+  imageUrl?: string;
+};
+
 const Collection = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -24,7 +31,7 @@ const Collection = () => {
     load();
   }, []);
 
-  const handleProductClick = (product) => {
+  const handleProductClick = (product: Product) => {
     sessionStorage.setItem("selectedProduct", JSON.stringify(product));
     router.push(`/product/${product.id}`);
   };
@@ -53,7 +60,7 @@ const Collection = () => {
               </h3>
               {product.price && (
                 <p className="text-md text-gray-700 font-medium mt-1">
-                  ${parseFloat(product.price).toFixed(2)}
+                  ${parseFloat(product.price.toString()).toFixed(2)}
                 </p>
               )}
             </div>

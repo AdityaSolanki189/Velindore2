@@ -44,9 +44,9 @@ export default function HomefixProductSection() {
           throw new Error('Failed to fetch categories');
         }
         
-        const fetchedCategories = await response.json();
+      const fetchedCategories = await response.json();
         
-        const categoryNames = ['All Products', ...fetchedCategories.map(cat => cat.name)];
+      const categoryNames = ['All Products', ...fetchedCategories.map((cat: { name: string }) => cat.name)];
         setCategories(categoryNames);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -57,19 +57,19 @@ export default function HomefixProductSection() {
     fetchCategories();
   }, []);
 
-  const handleProductClick = (product) => {
-    console.log('Navigating to product:', product.id);
-    // Store the product data in sessionStorage so the ProductPage can access it
-    sessionStorage.setItem('selectedProduct', JSON.stringify(product));
-    router.push(`/product/${product.id}`);
-  };
+  const handleProductClick = (product: { id: string }) => {
+  console.log('Navigating to product:', product.id);
+  sessionStorage.setItem('selectedProduct', JSON.stringify(product));
+  router.push(`/product/${product.id}`);
+};
 
-  const handleWishlistClick = (e, productId) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Added to wishlist:', productId);
-    // Add your wishlist logic here
-  };
+
+  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>, productId: string) => {
+  e.preventDefault();
+  e.stopPropagation();
+  console.log('Added to wishlist:', productId);
+};
+
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-8 text-black">

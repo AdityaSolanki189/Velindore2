@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { fetchAllProducts, fetchProductsByCategory, fetchProductsByLabel } from '../../../backend/services/products';
+import { NextRequest } from 'next/server';
 
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');

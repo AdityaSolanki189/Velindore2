@@ -252,11 +252,11 @@ export default function ProductPage() {
               <span className="text-black">{product.tag || product.categoryName || 'No tag'}</span>
             </div>
             
-          <Link href="/checkout">
-            <div className="block w-full bg-black text-white py-3 mb-6 font-semibold rounded text-center hover:bg-gray-800 transition-colors">
-            BUY IT NOW
-            </div>
-          </Link>
+          <Link href={`/checkout?productId=${product.id}`}>
+  <div className="block w-full bg-black text-white py-3 mb-6 font-semibold rounded text-center hover:bg-gray-800 transition-colors">
+    BUY IT NOW
+  </div>
+</Link>
             
             <div className="mb-6">
               <img 
