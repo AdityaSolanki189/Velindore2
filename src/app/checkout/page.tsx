@@ -270,9 +270,7 @@ const CheckoutPage: React.FC = () => {
   }
 
   // Save shipping info to localStorage
-  if (typeof window !== 'undefined') {
     localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
-  }
   
   setLoading(true);
   
@@ -309,10 +307,7 @@ const CheckoutPage: React.FC = () => {
       setOrderComplete(true);
       setCartItems([]);
       
-      // Clear localStorage after successful order
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('shippingInfo');
-      }
+
       
       showToast("Order placed successfully!", 'success');
       

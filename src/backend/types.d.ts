@@ -1,4 +1,7 @@
-type OrderInsert = {
+import { InferSelectModel } from "drizzle-orm";
+import { Setting } from "./db/schema";
+
+export type OrderInsert = {
   id: string;
   productId: string;
 
@@ -19,3 +22,5 @@ type OrderInsert = {
   totalPrice: string ;
 
 };
+
+export type SettingType = InferSelectModel<typeof Setting>;
