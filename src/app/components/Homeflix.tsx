@@ -75,8 +75,8 @@ export default function HomefixProductSection() {
   }, []);
 
   const handleProductClick = (product: Product) => {
-    // console.log('Navigating to product:', product.id);
-    sessionStorage.setItem('selectedProduct', JSON.stringify(product));
+    // Using localStorage instead of sessionStorage (you can change this back if needed)
+    localStorage.setItem('selectedProduct', JSON.stringify(product));
     router.push(`/product/${product.id}`);
   };
 
@@ -121,7 +121,8 @@ export default function HomefixProductSection() {
                     className="group relative cursor-pointer"
                     onClick={() => handleProductClick(product)}
                   >
-                    <div className="relative overflow-hidden">
+                    {/* Fixed image container with proper positioning and dimensions */}
+                    <div className="relative overflow-hidden rounded-lg bg-gray-100 aspect-square">
                       {product.discount && (
                         <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-medium px-2 py-1 rounded z-10">
                           -{product.discount}%
@@ -132,13 +133,20 @@ export default function HomefixProductSection() {
                           Hot
                         </div>
                       )}
+                      
                       <Image 
-                        src={product.imageUrl && product.imageUrl.length > 0 ? product.imageUrl[0] : '/assets/placeholder.jpg'} 
+                        src={(product.imageUrl?.[0]?.trim()) || '/assets/placeholder.jpg'} 
                         alt={product.name}
-                        className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/assets/placeholder.jpg';
+                        }}
                       />
                       
-                      <div className="absolute inset-0 backdrop-blur-sm backdrop-filter opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
+                      <div className="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-sm opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
                       
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 z-10">
                         <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">

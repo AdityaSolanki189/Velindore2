@@ -92,24 +92,48 @@ export default function ProductPage() {
     }
   }, [id]);
 
+  // Move navigateImage function BEFORE the useEffect that uses it
+  const navigateImage = useCallback((direction: NavigationDirection): void => {
+    setShow3DLightbox(false);
+    setShow3D(false);
+    setSelectedImage((prev) => {
+      if (!product) return prev;
+      const images = product.imageUrl && product.imageUrl.length > 0 
+        ? product.imageUrl 
+        : [
+            '/assets/bed room.jpg', 
+            '/assets/image-2.png',
+            '/assets/image-2.png',
+            '/assets/image-1.png',
+            '/assets/image-4.png',
+            '/assets/image-3.png',
+          ];
+      if (direction === "next") {
+        return prev === images.length - 1 ? 0 : prev + 1;
+      } else {
+        return prev === 0 ? images.length - 1 : prev - 1;
+      }
+    });
+  }, [product]);
+
   useEffect(() => {
-  const handleKey = (e: KeyboardEvent) => {
-    if (!lightboxOpen) return;
-    if (e.key === 'Escape') {
-      closeLightbox();
-    } else if (e.key === 'ArrowRight') {
-      navigateImage('next');
-    } else if (e.key === 'ArrowLeft') {
-      navigateImage('prev');
-    }
-  };
+    const handleKey = (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        navigateImage('next');
+      } else if (e.key === 'ArrowLeft') {
+        navigateImage('prev');
+      }
+    };
 
     window.addEventListener('keydown', handleKey);
-  return () => {
-    window.removeEventListener('keydown', handleKey);
-    document.body.style.overflow = 'auto';
-  };
-}, [lightboxOpen, navigateImage]);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = 'auto';
+    };
+  }, [lightboxOpen, navigateImage]);
 
   const openLightbox = (index: number): void => {
     setSelectedImage(index);
@@ -123,29 +147,6 @@ export default function ProductPage() {
     setShow3DLightbox(false);
     document.body.style.overflow = "auto";
   };
-
-  const navigateImage = useCallback((direction: NavigationDirection): void => {
-  setShow3DLightbox(false);
-  setShow3D(false);
-  setSelectedImage((prev) => {
-    if (!product) return prev;
-    const images = product.imageUrl && product.imageUrl.length > 0 
-      ? product.imageUrl 
-      : [
-          '/assets/bed room.jpg', 
-          '/assets/image-2.png',
-          '/assets/image-2.png',
-          '/assets/image-1.png',
-          '/assets/image-4.png',
-          '/assets/image-3.png',
-        ];
-    if (direction === "next") {
-      return prev === images.length - 1 ? 0 : prev + 1;
-    } else {
-      return prev === 0 ? images.length - 1 : prev - 1;
-    }
-  });
-}, [product]);
 
   if (loading) {
     return (
@@ -214,11 +215,19 @@ export default function ProductPage() {
               {show3D && has3DModel ? (
                 <Product3DModel url={product.threeDImage} />
               ) : (
-                <Image
-                  src={images[selectedImage]}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src={images[selectedImage]}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/assets/placeholder.jpg';
+                    }}
+                  />
+                </div>
               )}
 
               {/* 3D Model Icon - Only show if product has 3D model */}
@@ -248,7 +257,7 @@ export default function ProductPage() {
                     selectedImage === index
                       ? "border-black border-2"
                       : "border-gray-200"
-                  } cursor-pointer overflow-hidden bg-white rounded`}
+                  } cursor-pointer overflow-hidden bg-white rounded relative`}
                   onClick={() => {
                     setSelectedImage(index);
                     setShow3D(false); // Always return to image when thumbnail is clicked
@@ -257,7 +266,13 @@ export default function ProductPage() {
                   <Image
                     src={image}
                     alt={`${product.name} thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
+                    fill
+                    sizes="(max-width: 768px) 20vw, 10vw"
+                    className="object-cover hover:scale-110 transition-transform duration-200"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/assets/placeholder.jpg';
+                    }}
                   />
                 </div>
               ))}
@@ -396,11 +411,19 @@ export default function ProductPage() {
                 {show3DLightbox && has3DModel ? (
                   <Product3DModel url={product.threeDImage} />
                 ) : (
-                  <Image
-                    src={images[selectedImage]}
-                    alt={product.name}
-                    className="w-full h-full object-contain"
-                  />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={images[selectedImage]}
+                      alt={product.name}
+                      fill
+                      sizes="100vw"
+                      className="object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/assets/placeholder.jpg';
+                      }}
+                    />
+                  </div>
                 )}
 
                 {/* 3D Model Icon in Lightbox - Only show if product has 3D model */}
