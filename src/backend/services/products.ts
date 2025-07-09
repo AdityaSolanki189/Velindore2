@@ -44,6 +44,7 @@ export async function fetchSingleProduct(productId: string): Promise<{
   categoryId: string;
   labelId: string | null;
   categoryName: string;
+  threeDImage : string;
   createdAt: Date;
   updatedAt: Date;
   imageUrl: string[];
@@ -60,6 +61,7 @@ export async function fetchSingleProduct(productId: string): Promise<{
       categoryId: Product.categoryId,
       labelId: Product.labelId,
       categoryName: Category.name,
+      threeDImage: Product.threeDImage,
       createdAt: Product.createdAt,
       updatedAt: Product.updatedAt,
       imageUrl: ProductImage.imagePath,
