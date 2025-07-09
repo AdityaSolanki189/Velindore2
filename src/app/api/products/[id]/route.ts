@@ -2,13 +2,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchSingleProduct } from '../../../../backend/services/products';
 
+
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+ { params }: { params: { id: string } }
 ) {
   try {
     const productId = params.id;
-    
+
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },
@@ -17,7 +19,7 @@ export async function GET(
     }
 
     const product = await fetchSingleProduct(productId);
-    
+
     if (!product) {
       return NextResponse.json(
         { error: 'Product not found' },
