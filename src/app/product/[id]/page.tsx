@@ -27,6 +27,7 @@ interface Product {
   categoryName?: string;
   discount?: number;
   hot?: boolean;
+  threeDImage?: string | null; // Added 3D model property
 }
 
 type NavigationDirection = "next" | "prev";
@@ -39,9 +40,11 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  
   // 3D states
   const [show3D, setShow3D] = useState<boolean>(false);
   const [show3DLightbox, setShow3DLightbox] = useState<boolean>(false);
+  
   const { id } = useParams();
 
   const fetchProductById = async (productId: string) => {
@@ -67,6 +70,7 @@ export default function ProductPage() {
       console.error('Error fetching product:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch product');
       
+      // Fallback product with 3D model
       setProduct({
         id: productId as string,
         name: 'Purecomfort pillows & cushions',
@@ -84,7 +88,8 @@ export default function ProductPage() {
           '/assets/image-1.png',
           '/assets/image-4.png',
           '/assets/image-3.png',
-        ]
+        ],
+        threeDImage: '/models/01_chair.glb' // Example 3D model
       });
     } finally {
       setLoading(false);
@@ -101,18 +106,8 @@ export default function ProductPage() {
   }, [id]);
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
-    window.addEventListener("keydown", handleKey);
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "auto";
-    };
-  }, [lightboxOpen, selectedImage]);
-
-  useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!lightboxOpen) return;
-    
       if (e.key === 'Escape') {
         closeLightbox();
       } else if (e.key === 'ArrowRight') {
@@ -128,73 +123,6 @@ export default function ProductPage() {
       document.body.style.overflow = 'auto';
     };
   }, [lightboxOpen]);
-
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto p-4 font-sans">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg">Loading product...</div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  // Error state
-  if (error && !product) {
-    return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto p-4 font-sans">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg text-red-600">Error: {error}</div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  // No product found
-  if (!product) {
-    return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto p-4 font-sans">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg">Product not found</div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  // Use product images if available, otherwise fallback to default images
-  const images: string[] = product.imageUrl && product.imageUrl.length > 0 
-    ? product.imageUrl 
-    : [
-        '/assets/bed room.jpg', 
-        '/assets/image-2.png',
-        '/assets/image-2.png',
-        '/assets/image-1.png',
-        '/assets/image-4.png',
-        '/assets/image-3.png',
-      ];
-  
-
-  const glbUrls: string[] = [
-    "/models/01_chair.glb",
-    "/models/01_bed.glb",
-    "/models/01_couch.glb",
-    "/models/01_diningtable.glb",
-    "/models/01_sChair.glb",
-    "/models/01_sofa.glb",
-    "/models/01_table.glb",
-  ];
 
   const openLightbox = (index: number): void => {
     setSelectedImage(index);
@@ -220,17 +148,59 @@ export default function ProductPage() {
       }
     });
   };
-  
-  const handleKeyDown = (e: KeyboardEvent): void => {
-    if (!lightboxOpen) return;
-    if (e.key === "Escape") {
-      closeLightbox();
-    } else if (e.key === "ArrowRight") {
-      navigateImage("next");
-    } else if (e.key === "ArrowLeft") {
-      navigateImage("prev");
-    }
-  };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto p-4 font-sans">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-lg">Loading product...</div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error && !product) {
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto p-4 font-sans">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-lg text-red-600">Error: {error}</div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!product) {
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto p-4 font-sans">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-lg">Product not found</div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  const images: string[] = product.imageUrl && product.imageUrl.length > 0 
+    ? product.imageUrl 
+    : [
+        '/assets/bed room.jpg', 
+        '/assets/image-2.png',
+        '/assets/image-2.png',
+        '/assets/image-1.png',
+        '/assets/image-4.png',
+        '/assets/image-3.png',
+      ];
 
   return (
     <>
@@ -242,15 +212,16 @@ export default function ProductPage() {
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
+            {/* MAIN IMAGE/3D AREA */}
             <div
               className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm relative group"
               onClick={() => {
                 if (!show3D) openLightbox(selectedImage);
               }}
             >
-              {/* Show 3D if toggled and GLB available, else image */}
-              {show3D && glbUrls[selectedImage] ? (
-                <Product3DModel url={glbUrls[selectedImage]} />
+              {/* Show 3D if toggled and threeDImage available, else image */}
+              {show3D && product.threeDImage ? (
+                <Product3DModel url={product.threeDImage} />
               ) : (
                 <img
                   src={images[selectedImage]}
@@ -260,7 +231,7 @@ export default function ProductPage() {
               )}
 
               {/* 3D Model Icon */}
-              {glbUrls[selectedImage] && (
+              {product.threeDImage && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -306,6 +277,25 @@ export default function ProductPage() {
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
+            {/* Rating section (from second file) */}
+            {product.rating && (
+              <div className="flex items-center mb-3">
+                {[...Array(5)].map((_, i: number) => (
+                  <span
+                    key={i}
+                    className={`text-xl ${
+                      i < product.rating! ? "text-yellow-500" : "text-gray-300"
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+                <span className="ml-2 text-sm text-gray-600">
+                  ({product.reviews || 0} customer review)
+                </span>
+              </div>
+            )}
+            
             <div className="text-sm text-gray-600 mb-4">SKU: {product.id}</div>
             
             <div className="text-3xl text-black font-bold mb-4">${typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price || 0).toFixed(2)}</div>
@@ -332,6 +322,10 @@ export default function ProductPage() {
                 />
               </div>
               
+              <button className="flex-1 bg-black text-white h-12 font-semibold rounded hover:bg-gray-800 transition-colors">
+                ADD TO CART
+              </button>
+              
               <button 
                 className="w-12 h-12 flex items-center justify-center bg-white border border-gray-300 rounded hover:border-black transition-colors"
                 onClick={() => setIsFavorite(!isFavorite)}
@@ -357,7 +351,7 @@ export default function ProductPage() {
               )}
             </div>
             
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-4 text-sm text-gray-2">
               <span>Tag: </span>
               <span className="text-black">{product.tag || product.categoryName || 'No tag'}</span>
             </div>
@@ -367,8 +361,6 @@ export default function ProductPage() {
                 BUY IT NOW
               </div>
             </Link>
-            
-            
             
             <div className="border border-gray-200 p-4 rounded mt-6">
               <div className="flex items-center mb-2">
@@ -408,10 +400,10 @@ export default function ProductPage() {
               <span className="text-2xl px-1">&rsaquo;</span>
             </button>
             <div className="w-full h-full max-w-4xl max-h-4xl flex items-center justify-center">
-              <div className="relative w-full h-full max-w-3xl max-h-3xl bg-white bg-opacity-5 rounded-lg">
-                {/* Show 3D if toggled and GLB available, else image */}
-                {show3DLightbox && glbUrls[selectedImage] ? (
-                  <Product3DModel url={glbUrls[selectedImage]} />
+              <div className="relative w-full h-full max-w-3xl max-3xl bg-white bg-opacity-5 rounded-lg">
+                {/* Show 3D if toggled and threeDImage available, else image */}
+                {show3DLightbox && product.threeDImage ? (
+                  <Product3DModel url={product.threeDImage} />
                 ) : (
                   <img
                     src={images[selectedImage]}
@@ -421,7 +413,7 @@ export default function ProductPage() {
                 )}
 
                 {/* 3D Model Icon in Lightbox */}
-                {glbUrls[selectedImage] && (
+                {product.threeDImage && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
