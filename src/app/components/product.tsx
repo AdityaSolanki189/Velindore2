@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface Product {
   id: string;
@@ -34,9 +35,7 @@ export default function HomefixProductSection() {
         }
 
         const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
+        if (!response.ok) throw new Error('Failed to fetch products');
 
         const fetchedProducts: Product[] = await response.json();
         setProducts(fetchedProducts);
@@ -54,12 +53,10 @@ export default function HomefixProductSection() {
     const fetchCategories = async () => {
       try {
         const response = await fetch('/api/categories');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
+        if (!response.ok) throw new Error('Failed to fetch categories');
 
         const fetchedCategories: Category[] = await response.json();
-        const categoryNames = ['All Products', ...fetchedCategories.map((cat: Category) => cat.name)];
+        const categoryNames = ['All Products', ...fetchedCategories.map(cat => cat.name)];
         setCategories(categoryNames);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -71,16 +68,17 @@ export default function HomefixProductSection() {
   }, []);
 
   const handleProductClick = (product: Product) => {
-    // console.log('Navigating to product:', product.id);
     sessionStorage.setItem('selectedProduct', JSON.stringify(product));
     router.push(`/product/${product.id}`);
   };
 
-  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>, productId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // console.log('Added to wishlist:', productId);
-  };
+  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  // No productId logic needed
+};
+
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-8 text-black">
@@ -109,7 +107,7 @@ export default function HomefixProductSection() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product) => {
+              {products.map(product => {
                 const discountPrice = product.discount
                   ? product.price - (product.price * product.discount) / 100
                   : null;
@@ -120,7 +118,7 @@ export default function HomefixProductSection() {
                       className="group relative cursor-pointer"
                       onClick={() => handleProductClick(product)}
                     >
-                      <div className="relative overflow-hidden">
+                      <div className="relative overflow-hidden w-full h-64 bg-white">
                         {product.discount && (
                           <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-medium px-2 py-1 rounded z-10">
                             -{product.discount}%
@@ -131,15 +129,19 @@ export default function HomefixProductSection() {
                             Hot
                           </div>
                         )}
-                        <img
-                          src={
-                            product.imageUrl && product.imageUrl.length > 0
-                              ? product.imageUrl[0]
-                              : '/assets/placeholder.jpg'
-                          }
-                          alt={product.name}
-                          className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
+
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={
+                              product.imageUrl && product.imageUrl.length > 0
+                                ? product.imageUrl[0]
+                                : '/assets/placeholder.jpg'
+                            }
+                            alt={product.name}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
 
                         <div className="absolute inset-0 backdrop-blur-sm backdrop-filter opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
 
@@ -147,7 +149,7 @@ export default function HomefixProductSection() {
                           <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                             <button
                               className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm"
-                              onClick={(e) => handleWishlistClick(e, product.id)}
+                              onClick={(e) => handleWishlistClick(e)}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -171,8 +173,12 @@ export default function HomefixProductSection() {
                         <div className="flex items-center gap-2">
                           {discountPrice !== null ? (
                             <>
-                              <span className="text-red-600 font-semibold">${discountPrice.toFixed(2)}</span>
-                              <span className="text-gray-400 line-through">${product.price.toFixed(2)}</span>
+                              <span className="text-red-600 font-semibold">
+                                ${discountPrice.toFixed(2)}
+                              </span>
+                              <span className="text-gray-400 line-through">
+                                ${product.price.toFixed(2)}
+                              </span>
                             </>
                           ) : (
                             <span className="font-semibold">${product.price.toFixed(2)}</span>

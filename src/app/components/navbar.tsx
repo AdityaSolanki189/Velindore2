@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHeart,
   faBars,
-  faXmark
+  faXmark,
+  // faHeart, // Uncomment if used in the commented wishlist block
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
@@ -59,7 +60,14 @@ export default function Navbar() {
 
           <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center">
             <Link href="/">
-              <img src="/assets/LOGO-PNG.png" alt="Logo" className="w-16 md:w-24 transition-transform duration-300 hover:scale-110 cursor-pointer" />
+              <div className="relative w-16 md:w-24 h-10 md:h-14 cursor-pointer transition-transform duration-300 hover:scale-110">
+                <Image
+                  src="/assets/LOGO-PNG.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
           </div>
 
@@ -74,28 +82,21 @@ export default function Navbar() {
 
             <div className="hidden md:flex space-x-4 md:space-x-6 items-center">
               <div className="relative group">
+                {/* Example: Add image using Next.js <Image /> if needed */}
                 {/* <Link href="/cart" className="transition-transform duration-300 hover:text-blue-300">
-                  <img src="/assets/window.svg" alt="" className='w-6' />
+                  <div className="relative w-6 h-6">
+                    <Image src="/assets/window.svg" alt="Cart" fill className="object-contain" />
+                  </div>
                   <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full group-hover:scale-110 transition-transform duration-300">
                     3
                   </span>
                 </Link> */}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
               </div>
-              {/* <div className="relative group">
-                <Link href="/wishlist" className="transition-transform duration-300 hover:text-blue-300">
-                  <img src="/assets/heart.svg" alt="" className='w-6' />
-                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full group-hover:scale-110 transition-transform duration-300">
-                    5
-                  </span>
-                </Link>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
-              </div> */}
             </div>
           </div>
         </div>
 
-        <div 
+        <div
           className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden flex justify-end transition-opacity duration-500 ease-in-out ${
             isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
@@ -103,7 +104,7 @@ export default function Navbar() {
             if (e.target === e.currentTarget) toggleMenu();
           }}
         >
-          <div 
+          <div
             className={`w-4/5 max-w-xs h-full bg-white text-black shadow-lg transform transition-transform duration-500 ease-in-out ${
               isMenuOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
@@ -137,31 +138,6 @@ export default function Navbar() {
                 })}
               </ul>
             </div>
-
-            {/* <div className="px-6 py-4 mt-4 bg-gray-50 rounded-lg mx-4">
-              <div className="flex flex-col space-y-4">
-                {[
-                  { href: '/wishlist', icon: faHeart, label: 'Wishlist', badge: '5' }
-                ].map(({ href, icon, label, badge }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="flex items-center space-x-3 text-gray-800 hover:text-blue-600 transition-colors duration-300"
-                    onClick={toggleMenu}
-                  >
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 relative">
-                      <FontAwesomeIcon icon={icon} />
-                      {badge && (
-                        <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                          {badge}
-                        </span>
-                      )}
-                    </div>
-                    <span>{label}</span>
-                  </Link>
-                ))}
-              </div>
-            </div> */}
 
           </div>
         </div>

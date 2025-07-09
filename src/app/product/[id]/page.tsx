@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Heart, Check, X, Box, Undo2 } from "lucide-react";
 import Footer from "../../components/footer";
 import Navbar from "../../components/navbar";
 import dynamic from "next/dynamic";
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { fetchSingleProduct } from '@/backend/services/products'; 
 import toast, { Toaster } from 'react-hot-toast';
@@ -92,23 +93,23 @@ export default function ProductPage() {
   }, [id]);
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return;
-      if (e.key === 'Escape') {
-        closeLightbox();
-      } else if (e.key === 'ArrowRight') {
-        navigateImage('next');
-      } else if (e.key === 'ArrowLeft') {
-        navigateImage('prev');
-      }
-    };
+  const handleKey = (e: KeyboardEvent) => {
+    if (!lightboxOpen) return;
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowRight') {
+      navigateImage('next');
+    } else if (e.key === 'ArrowLeft') {
+      navigateImage('prev');
+    }
+  };
 
     window.addEventListener('keydown', handleKey);
-    return () => {
-      window.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = 'auto';
-    };
-  }, [lightboxOpen]);
+  return () => {
+    window.removeEventListener('keydown', handleKey);
+    document.body.style.overflow = 'auto';
+  };
+}, [lightboxOpen, navigateImage]);
 
   const openLightbox = (index: number): void => {
     setSelectedImage(index);
@@ -123,28 +124,28 @@ export default function ProductPage() {
     document.body.style.overflow = "auto";
   };
 
-  const navigateImage = (direction: NavigationDirection): void => {
-    setShow3DLightbox(false);
-    setShow3D(false);
-    setSelectedImage((prev) => {
-      if (!product) return prev;
-      const images = product.imageUrl && product.imageUrl.length > 0 
-        ? product.imageUrl 
-        : [
-            '/assets/bed room.jpg', 
-            '/assets/image-2.png',
-            '/assets/image-2.png',
-            '/assets/image-1.png',
-            '/assets/image-4.png',
-            '/assets/image-3.png',
-          ];
-      if (direction === "next") {
-        return prev === images.length - 1 ? 0 : prev + 1;
-      } else {
-        return prev === 0 ? images.length - 1 : prev - 1;
-      }
-    });
-  };
+  const navigateImage = useCallback((direction: NavigationDirection): void => {
+  setShow3DLightbox(false);
+  setShow3D(false);
+  setSelectedImage((prev) => {
+    if (!product) return prev;
+    const images = product.imageUrl && product.imageUrl.length > 0 
+      ? product.imageUrl 
+      : [
+          '/assets/bed room.jpg', 
+          '/assets/image-2.png',
+          '/assets/image-2.png',
+          '/assets/image-1.png',
+          '/assets/image-4.png',
+          '/assets/image-3.png',
+        ];
+    if (direction === "next") {
+      return prev === images.length - 1 ? 0 : prev + 1;
+    } else {
+      return prev === 0 ? images.length - 1 : prev - 1;
+    }
+  });
+}, [product]);
 
   if (loading) {
     return (
@@ -213,7 +214,7 @@ export default function ProductPage() {
               {show3D && has3DModel ? (
                 <Product3DModel url={product.threeDImage} />
               ) : (
-                <img
+                <Image
                   src={images[selectedImage]}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"
@@ -253,7 +254,7 @@ export default function ProductPage() {
                     setShow3D(false); // Always return to image when thumbnail is clicked
                   }}
                 >
-                  <img
+                  <Image
                     src={image}
                     alt={`${product.name} thumbnail ${index + 1}`}
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
@@ -395,7 +396,7 @@ export default function ProductPage() {
                 {show3DLightbox && has3DModel ? (
                   <Product3DModel url={product.threeDImage} />
                 ) : (
-                  <img
+                  <Image
                     src={images[selectedImage]}
                     alt={product.name}
                     className="w-full h-full object-contain"

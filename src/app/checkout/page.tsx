@@ -9,23 +9,6 @@ import Image from 'next/image';
 import Navbar from '../components/navbar';
 import { useSearchParams } from 'next/navigation';
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
-  rating?: number;
-  reviews?: number;
-  quantity?: number;
-  stock?: number;
-  categories?: string[];
-  tag?: string;
-  imageUrl?: string[];
-  categoryName?: string;
-  discount?: number;
-  hot?: boolean;
-}
-
 interface CartItem {
   id: string;
   name: string;
@@ -63,25 +46,10 @@ interface OrderInsert {
   totalPrice: string;
 }
 
-interface Settings {
-  id: number;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  paymentApiKey: string | null;
-  paymentTax: string | null;
-  homeTitle: string | null;
-  contactEmail: string | null;
-  contactNumber: string | null;
-  facebookLink: string | null;
-  instagramLink: string | null;
-  linkedinLink: string | null;
-}
-
 const CheckoutPage: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [orderComplete, setOrderComplete] = useState<boolean>(false);
-  const [settings, setSettings] = useState<Settings | null>(null);
   const [taxPercentage, setTaxPercentage] = useState<number>(0);
   const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -93,10 +61,10 @@ const CheckoutPage: React.FC = () => {
   const productId = searchParams.get('productId');
 
   const generateOrderId = () => {
-  return 'xxxx-xxxx-xxxx'.replace(/[x]/g, () => {
-    return (Math.random() * 16 | 0).toString(16);
-  });
-};
+    return 'xxxx-xxxx-xxxx'.replace(/[x]/g, () => {
+      return (Math.random() * 16 | 0).toString(16);
+    });
+  };
   
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>(() => {
     if (typeof window !== 'undefined') {
@@ -126,7 +94,6 @@ const CheckoutPage: React.FC = () => {
 
   // Toast notification function
   const showToast = (message: string, type: 'success' | 'error' = 'error') => {
-    // Create toast element
     const toast = document.createElement('div');
     toast.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg text-white font-medium transition-all duration-300 transform translate-x-full ${
       type === 'success' ? 'bg-green-500' : 'bg-red-500'
@@ -135,12 +102,10 @@ const CheckoutPage: React.FC = () => {
     
     document.body.appendChild(toast);
     
-    // Show toast
     setTimeout(() => {
       toast.classList.remove('translate-x-full');
     }, 100);
     
-    // Hide and remove toast after 4 seconds
     setTimeout(() => {
       toast.classList.add('translate-x-full');
       setTimeout(() => {
@@ -163,7 +128,6 @@ const CheckoutPage: React.FC = () => {
         const product = await fetchSingleProduct(productId);
         
         if (product) {
-          // Convert database product to cart item format
           const cartItem: CartItem = {
             id: product.id,
             name: product.name,
@@ -195,17 +159,13 @@ const CheckoutPage: React.FC = () => {
       try {
         const settingsData = await getSettingsData();
         
-        if (settingsData) {
-          setSettings(settingsData);
-          
-          if (settingsData.paymentTax) {
-            const backendTaxPercentage = parseFloat(settingsData.paymentTax);
-            setTaxDisplayPercentage(backendTaxPercentage);
-            setTaxPercentage(backendTaxPercentage / 100);
-          } else {
-            setTaxDisplayPercentage(0);
-            setTaxPercentage(0);
-          }
+        if (settingsData?.paymentTax) {
+          const backendTaxPercentage = parseFloat(settingsData.paymentTax);
+          setTaxDisplayPercentage(backendTaxPercentage);
+          setTaxPercentage(backendTaxPercentage / 100);
+        } else {
+          setTaxDisplayPercentage(0);
+          setTaxPercentage(0);
         }
       } catch (error) {
         console.error('Failed to fetch settings:', error);
@@ -264,66 +224,61 @@ const CheckoutPage: React.FC = () => {
   };
 
   const handleSubmitOrder = async () => {
-  if (!validateShippingInfo()) {
-    showToast("Please fill out all required fields");
-    return;
-  }
+    if (!validateShippingInfo()) {
+      showToast("Please fill out all required fields");
+      return;
+    }
 
-  // Save shipping info to localStorage
     localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
-  
-  setLoading(true);
-  
-  try {
-    const cartItem = cartItems[0];
     
-    if (!cartItem) {
-      throw new Error("No product found in cart");
+    setLoading(true);
+    
+    try {
+      const cartItem = cartItems[0];
+      
+      if (!cartItem) {
+        throw new Error("No product found in cart");
+      }
+
+      const orderId = generateOrderId();
+      
+      const orderData: OrderInsert = {
+        id: orderId,
+        productId: cartItem.id,
+        userEmail: shippingInfo.userEmail,
+        userName: shippingInfo.userName,
+        userPhone: shippingInfo.userPhone,
+        shippingStreetAddress: shippingInfo.shippingStreetAddress,
+        shippingCity: shippingInfo.shippingCity,
+        shippingStateProvince: shippingInfo.shippingStateProvince,
+        shippingPostalCode: shippingInfo.shippingPostalCode,
+        shippingCountry: shippingInfo.shippingCountry,
+        quantity: cartItem.quantity,
+        price: cartItem.price.toString(),
+        tax: tax.toFixed(2),
+        totalPrice: total.toFixed(2),
+      };
+
+      const result = await createOrder(orderData);
+      
+      if (result.success) {
+        setOrderNumber(`ORD-${orderId.substring(0, 8).toUpperCase()}`);
+        setOrderComplete(true);
+        setCartItems([]);
+        
+        showToast("Order placed successfully!", 'success');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error(result.message || "Failed to create order");
+      }
+      
+    } catch (error) {
+      console.error("Order creation failed:", error);
+      showToast(error instanceof Error ? error.message : "Failed to create order. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    const orderId = generateOrderId();
-    
-    const orderData: OrderInsert = {
-      id: orderId,
-      productId: cartItem.id,
-      userEmail: shippingInfo.userEmail,
-      userName: shippingInfo.userName,
-      userPhone: shippingInfo.userPhone,
-      shippingStreetAddress: shippingInfo.shippingStreetAddress,
-      shippingCity: shippingInfo.shippingCity,
-      shippingStateProvince: shippingInfo.shippingStateProvince,
-      shippingPostalCode: shippingInfo.shippingPostalCode,
-      shippingCountry: shippingInfo.shippingCountry,
-      quantity: cartItem.quantity,
-      price: cartItem.price.toString(),
-      tax: tax.toFixed(2),
-      totalPrice: total.toFixed(2),
-    };
-
-    const result = await createOrder(orderData);
-    
-    if (result.success) {
-      setOrderNumber(`ORD-${orderId.substring(0, 8).toUpperCase()}`);
-      setOrderComplete(true);
-      setCartItems([]);
-      
-
-      
-      showToast("Order placed successfully!", 'success');
-      
-      // Auto-scroll to top for better UX
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      throw new Error(result.message || "Failed to create order");
-    }
-    
-  } catch (error) {
-    console.error("Order creation failed:", error);
-    showToast(error instanceof Error ? error.message : "Failed to create order. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   if (productLoading) {
     return (
@@ -337,12 +292,11 @@ const CheckoutPage: React.FC = () => {
   }
 
   if (!productId || (cartItems.length === 0 && !orderComplete)) {
-
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist or is no longer available.</p>
+          <p className="text-gray-600 mb-6">The product you&apos;re looking for doesn&apos;t exist or is no longer available.</p>
           <button
             className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
             onClick={() => window.location.href = '/products'}
@@ -354,87 +308,85 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
-if (orderComplete) {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
-      <Head>
-        <title>Order Confirmation | Your Store</title>
-      </Head>
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="bg-white rounded-lg shadow-xl p-8 text-center animate-fade-in">
-          {/* Animated Success Icon */}
-          <div className="mb-6 relative">
-            <div className="mx-auto h-20 w-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
-              <svg className="h-12 w-12 text-green-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-              </svg>
+  if (orderComplete) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
+        <Head>
+          <title>Order Confirmation | Your Store</title>
+        </Head>
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="bg-white rounded-lg shadow-xl p-8 text-center animate-fade-in">
+            <div className="mb-6 relative">
+              <div className="mx-auto h-20 w-20 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
+                <svg className="h-12 w-12 text-green-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <div className="absolute inset-0 animate-ping">
+                <div className="h-2 w-2 bg-yellow-400 rounded-full absolute top-4 left-8 animate-bounce"></div>
+                <div className="h-2 w-2 bg-blue-400 rounded-full absolute top-8 right-12 animate-bounce delay-100"></div>
+                <div className="h-2 w-2 bg-red-400 rounded-full absolute bottom-8 left-12 animate-bounce delay-200"></div>
+                <div className="h-2 w-2 bg-green-400 rounded-full absolute bottom-4 right-8 animate-bounce delay-300"></div>
+              </div>
             </div>
-            {/* Confetti animation */}
-            <div className="absolute inset-0 animate-ping">
-              <div className="h-2 w-2 bg-yellow-400 rounded-full absolute top-4 left-8 animate-bounce"></div>
-              <div className="h-2 w-2 bg-blue-400 rounded-full absolute top-8 right-12 animate-bounce delay-100"></div>
-              <div className="h-2 w-2 bg-red-400 rounded-full absolute bottom-8 left-12 animate-bounce delay-200"></div>
-              <div className="h-2 w-2 bg-green-400 rounded-full absolute bottom-4 right-8 animate-bounce delay-300"></div>
-            </div>
-          </div>
-          
-          <h2 className="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
-            Thank You For Your Order! 🎉
-          </h2>
-          
-          <p className="text-lg text-gray-600 mb-6 animate-slide-up delay-200">
-            Your order has been placed successfully. We've sent a confirmation email to{' '}
-            <span className="font-semibold text-indigo-600">{shippingInfo.userEmail}</span>.
-          </p>
-          
-          <div className="bg-gray-50 rounded-lg p-6 mb-8 animate-slide-up delay-300">
-            <p className="text-gray-700 mb-2">Order Number:</p>
-            <p className="text-2xl font-bold text-indigo-600">{orderNumber}</p>
-          </div>
-          
-          <div className="space-y-4 animate-slide-up delay-400">
-            <button 
-              className="w-full sm:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
-              onClick={() => window.location.href = '/'}
-            >
-              Continue Shopping
-            </button>
             
-            <div className="text-sm text-gray-500 mt-4">
-              <p>You will receive an email confirmation shortly.</p>
-              <p>Estimated delivery: 3-5 business days</p>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4 animate-slide-up">
+              Thank You For Your Order! 🎉
+            </h2>
+            
+            <p className="text-lg text-gray-600 mb-6 animate-slide-up delay-200">
+              Your order has been placed successfully. We&apos;ve sent a confirmation email to{' '}
+              <span className="font-semibold text-indigo-600">{shippingInfo.userEmail}</span>.
+            </p>
+            
+            <div className="bg-gray-50 rounded-lg p-6 mb-8 animate-slide-up delay-300">
+              <p className="text-gray-700 mb-2">Order Number:</p>
+              <p className="text-2xl font-bold text-indigo-600">{orderNumber}</p>
+            </div>
+            
+            <div className="space-y-4 animate-slide-up delay-400">
+              <button 
+                className="w-full sm:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                onClick={() => window.location.href = '/'}
+              >
+                Continue Shopping
+              </button>
+              
+              <div className="text-sm text-gray-500 mt-4">
+                <p>You will receive an email confirmation shortly.</p>
+                <p>Estimated delivery: 3-5 business days</p>
+              </div>
             </div>
           </div>
         </div>
+        
+        <style jsx>{`
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .animate-fade-in {
+            animation: fade-in 0.6s ease-out;
+          }
+          
+          .animate-slide-up {
+            animation: slide-up 0.6s ease-out;
+          }
+          
+          .delay-100 { animation-delay: 0.1s; }
+          .delay-200 { animation-delay: 0.2s; }
+          .delay-300 { animation-delay: 0.3s; }
+          .delay-400 { animation-delay: 0.4s; }
+        `}</style>
       </div>
-      
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-        
-        .animate-slide-up {
-          animation: slide-up 0.6s ease-out;
-        }
-        
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-400 { animation-delay: 0.4s; }
-      `}</style>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -447,7 +399,7 @@ if (orderComplete) {
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 font-sans">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
-            {/* Progress Steps - Updated to only show 2 steps */}
+            {/* Progress Steps */}
             <div className="mb-8">
               <div className="flex items-center">
                 <div className={`flex items-center relative ${step >= 1 ? 'text-indigo-600' : 'text-gray-400'}`}>
@@ -479,7 +431,7 @@ if (orderComplete) {
                   {cartItems.map(item => (
                     <div key={item.id} className="flex flex-col sm:flex-row items-center py-4 border-b border-gray-100 last:border-0">
                       <div className="relative h-24 w-24 sm:mr-6 mb-4 sm:mb-0 flex-shrink-0">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
                           className="h-24 w-24 object-contain rounded-md"

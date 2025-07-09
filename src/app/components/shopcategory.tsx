@@ -25,25 +25,30 @@ const ShopByCategory = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/categories');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        const data = await response.json();
-        setCategories(data);
-      } catch (err: any) {
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/categories');
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
         setError(err.message);
         console.error('Error fetching categories:', err);
-      } finally {
-        setLoading(false);
+      } else {
+        setError('An unknown error occurred');
+        console.error('Unknown error:', err);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchCategories();
-  }, []);
+  fetchCategories();
+}, []);
 
   const getItemsToShow = () => {
     if (isMobile) return 1;
@@ -128,7 +133,7 @@ const ShopByCategory = ({
     );
   }
 
-  const visibleCategories = categories.slice(currentIndex, currentIndex + itemsToShow);
+  // const visibleCategories = categories.slice(currentIndex, currentIndex + itemsToShow);
 
   return (
     <div className={`w-full py-8 px-4 ${backgroundColor}`}>

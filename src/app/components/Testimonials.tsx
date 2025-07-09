@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface Testimonial {
   id: number;
@@ -74,13 +75,14 @@ const Testimonials = ({
             </button>
             
             <div className="flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full overflow-hidden mb-8">
-                <img 
-                  src={currentTestimonial.avatar} 
-                  alt={currentTestimonial.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <div className="relative w-20 h-20 rounded-full overflow-hidden mb-8">
+  <Image 
+    src={currentTestimonial.avatar} 
+    alt={currentTestimonial.name}
+    fill
+    className="object-cover"
+  />
+</div>
               
               <div className="text-center max-w-3xl mx-auto mb-6">
                 <p className="text-lg italic">

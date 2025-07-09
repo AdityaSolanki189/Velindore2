@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 // Define the Product interface
 interface Product {
@@ -79,7 +80,7 @@ export default function HomefixProductSection() {
     router.push(`/product/${product.id}`);
   };
 
-  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>, productId: string) => {
+  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     // console.log('Added to wishlist:', productId);
@@ -131,7 +132,7 @@ export default function HomefixProductSection() {
                           Hot
                         </div>
                       )}
-                      <img 
+                      <Image 
                         src={product.imageUrl && product.imageUrl.length > 0 ? product.imageUrl[0] : '/assets/placeholder.jpg'} 
                         alt={product.name}
                         className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
@@ -143,7 +144,7 @@ export default function HomefixProductSection() {
                         <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                           <button 
                             className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm"
-                            onClick={(e) => handleWishlistClick(e, product.id)}
+                            onClick={(e) => handleWishlistClick(e)}
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />

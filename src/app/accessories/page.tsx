@@ -39,29 +39,39 @@ const Accessories: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('/api/categories');
-        if (!response.ok) {
-          throw new Error('Failed to fetch categories');
-        }
-        const categoriesData = await response.json();
-        
-        const sanitizedCategories = categoriesData.map((category: any) => ({
-          id: category.id || 0,
-          name: category.name || 'Unknown Category',
-          count: category.count || 0
-        }));
-        setCategories(sanitizedCategories);
-      } catch (err) {
-        console.error('Error fetching categories:', err);
-        setError('Failed to load categories');
-      }
-    };
+  interface Category {
+  id: number;
+  name: string;
+  count: number;
+}
 
-    fetchCategories();
-  }, []);
+
+  useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories');
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+
+      const categoriesData: Category[] = await response.json();
+
+      const sanitizedCategories = categoriesData.map((category) => ({
+        id: category.id || 0,
+        name: category.name || 'Unknown Category',
+        count: category.count || 0,
+      }));
+
+      setCategories(sanitizedCategories);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      setError('Failed to load categories');
+    }
+  };
+
+  fetchCategories();
+}, []);
+
 
   // Fetch all products on component mount
   useEffect(() => {
@@ -75,18 +85,20 @@ const Accessories: NextPage = () => {
         }
         const productsData = await response.json();
         
-        // Sanitize products data to match your API structure
-        const sanitizedProducts = productsData.map((product: any) => ({
-          id: product.id || 0,
-          name: product.name || 'Unnamed Product',
-          imageUrl: Array.isArray(product.imageUrl) ? product.imageUrl : [],
-          discount: product.discount,
-          hot: product.hot || false,
-          description: product.description,
-          quantity: product.quantity,
-          categoryName: product.categoryName,
-          price: product.price || 0
-        }));
+        const sanitizedProducts = productsData.map((product: unknown) => {
+  const p = product as any;
+  return {
+    id: p.id || 0,
+    name: p.name || 'Unnamed Product',
+    imageUrl: Array.isArray(p.imageUrl) ? p.imageUrl : [],
+    discount: p.discount,
+    hot: p.hot || false,
+    description: p.description,
+    quantity: p.quantity,
+    categoryName: p.categoryName,
+    price: p.price || 0
+  };
+});
         
         setAllProducts(sanitizedProducts);
         setProducts(sanitizedProducts); // Initially show all products

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "animate.css";
 import "swiper/css";
 import "./globals.css";
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navbar from "./components/navbar";
 import { useSwipeable } from "react-swipeable";
@@ -10,10 +11,10 @@ import Collection from "./components/collection";
 import Footer from "./components/footer";
 import HomefixProductSection from "./components/Homeflix";
 import ShopByCategory from "./components/shopcategory";
-import ProductCard from "./components/product";
+// import ProductCard from "./components/product";
 import HeroSection from "./components/Herosection";
 import Testimonials from "./components/Testimonials";
-import { fetchAllLabels, fetchLabelsWithProducts } from "@/backend/services/labels";
+import {fetchLabelsWithProducts } from "@/backend/services/labels";
 
 // Define interfaces for type safety
 interface CarouselItem {
@@ -45,7 +46,7 @@ interface Label {
   name: string;
   createdAt: Date | null;
   updatedAt: Date | null;
-  products: Product[];
+  products?: Product[];
 }
 
 export default function Home() {
@@ -215,13 +216,14 @@ export default function Home() {
                   index === activeSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
-                <div className="w-full h-full relative">
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <div className="relative w-full h-full">
+  <Image
+    src={slide.image}
+    alt={slide.title}
+    fill
+    className="object-cover"
+  />
+</div>
               </div>
             ))}
           </div>
@@ -330,14 +332,18 @@ export default function Home() {
   {!loading && (     
     <>       
       <div className="hidden md:flex m-10 rounded-3xl justify-center gap-2 space-x-5 font-sans">         
-        {labels           
-          .filter(label => label.name !== "Featured Collections")           
-          .map((label, index) => (             
-            <Collection               
-              key={label.id || index}               
-              {...({ ...label, products: (label.products || []).slice(0, 5) } as any)}             
-            />           
-          ))}       
+        {(labels as Label[])
+  .filter(label => label.name !== "Featured Collections")
+  .map((label, index) => (
+    <Collection
+      key={label.id || index}
+      {...{
+        ...label,
+        products: (label.products || []).slice(0, 5),
+      }}
+    />
+))}
+      
       </div>        
 
       {isMobile && (         
@@ -419,7 +425,7 @@ export default function Home() {
         </div>
       </section> */}
 
-      <section 
+       <section 
         ref={interiorDesignRef}
         data-section="interiorDesign"
         className={`relative w-full overflow-hidden py-8 md:py-16 mt-[-320px] md:mt-2 font-sans transition-all duration-1000 ${getAnimationClass('interiorDesign', 'animate__slideInUp')}`}
@@ -441,16 +447,20 @@ export default function Home() {
 
           <div className="w-full md:w-2/3 lg:ml-20 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-6 md:mt-0">
             <div className="rounded-lg overflow-hidden w-full">
-              <img
+              <Image
                 src="/assets/purple.jpg"
                 alt="Scandinavian bedroom with mint green walls, white bedding, and minimalist furniture"
+                width={800}
+                height={600}
                 className="w-full h-64 md:h-full object-cover"
               />
             </div>
             <div className="rounded-lg overflow-hidden w-full md:mt-20">
-              <img
+              <Image
                 src="/assets/purple.jpg"
                 alt="Modern green sofa with large plants and decorative pillows"
+                width={800}
+                height={600}
                 className="w-full h-64 md:h-full object-cover"
               />
             </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { fetchProductsByLabel } from "@/backend/services/products";
 
 type Product = {
@@ -48,11 +49,12 @@ const Collection = () => {
               className="w-full sm:w-[48%] md:w-[30%] lg:w-[18%] bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition duration-300 text-center cursor-pointer"
               onClick={() => handleProductClick(product)}
             >
-              <div className="w-full h-40 mb-4 rounded-lg overflow-hidden">
-                <img
+              <div className="w-full h-40 mb-4 rounded-lg overflow-hidden relative">
+                <Image
                   src={product.imageUrl || "/assets/photo-3.jpg"}
                   alt={product.name || "Product"}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <h3 className="text-lg font-semibold text-gray-800 truncate">

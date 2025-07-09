@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CheckCircle, ArrowRight, Mail } from 'lucide-react';
+import Image from 'next/image';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
@@ -12,17 +13,16 @@ export default function NewsletterPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setError('Please enter a valid email address');
       return;
     }
-  
-    // console.log('Subscribing email:', email);
+
     setSubscribed(true);
     setError('');
   };
-  
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">
       <Navbar />
@@ -42,7 +42,7 @@ export default function NewsletterPage() {
         <div className="grid md:grid-cols-2 gap-12 md:gap-24 items-center">
           <div className="bg-white p-8 md:p-12 rounded-xl shadow-lg">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6">Subscribe to our newsletter</h2>
-            
+
             {subscribed ? (
               <div className="text-center py-8">
                 <div className="inline-flex justify-center items-center w-16 h-16 bg-green-100 rounded-full mb-4">
@@ -75,7 +75,7 @@ export default function NewsletterPage() {
                   </div>
                   {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -86,10 +86,11 @@ export default function NewsletterPage() {
                     />
                   </div>
                   <label htmlFor="privacy" className="ml-2 text-sm text-stone-600">
-                    I agree to receive marketing emails and accept the <a href="#" className="text-amber-600 underline">privacy policy</a>
+                    I agree to receive marketing emails and accept the{' '}
+                    <a href="#" className="text-amber-600 underline">privacy policy</a>
                   </label>
                 </div>
-                
+
                 <button
                   type="submit"
                   className="w-full py-3 px-6 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition flex items-center justify-center"
@@ -100,64 +101,61 @@ export default function NewsletterPage() {
               </form>
             )}
           </div>
-          
+
           <div>
             <h2 className="text-2xl md:text-3xl font-semibold mb-8">Why join our mailing list?</h2>
-            
+
             <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-                  <CheckCircle size={24} className="text-amber-600" />
+              {[
+                {
+                  title: 'Exclusive Offers',
+                  desc: 'Get access to subscriber-only discounts and promotions on our premium furniture collections.'
+                },
+                {
+                  title: 'New Arrivals',
+                  desc: 'Be the first to know when we launch new products, styles, and limited collections.'
+                },
+                {
+                  title: 'Design Inspiration',
+                  desc: 'Receive curated design tips, style guides, and inspiration for your home from our interior experts.'
+                },
+                {
+                  title: 'Seasonal Updates',
+                  desc: 'Stay updated with seasonal trends and special holiday promotions throughout the year.'
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                    <CheckCircle size={24} className="text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-medium mb-2">{item.title}</h3>
+                    <p className="text-stone-600">{item.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-medium mb-2">Exclusive Offers</h3>
-                  <p className="text-stone-600">Get access to subscriber-only discounts and promotions on our premium furniture collections.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-                  <CheckCircle size={24} className="text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-medium mb-2">New Arrivals</h3>
-                  <p className="text-stone-600">Be the first to know when we launch new products, styles, and limited collections.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-                  <CheckCircle size={24} className="text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-medium mb-2">Design Inspiration</h3>
-                  <p className="text-stone-600">Receive curated design tips, style guides, and inspiration for your home from our interior experts.</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
-                  <CheckCircle size={24} className="text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-medium mb-2">Seasonal Updates</h3>
-                  <p className="text-stone-600">Stay updated with seasonal trends and special holiday promotions throughout the year.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-        
+
         <div className="mt-24 mb-12">
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-center">Preview our latest newsletter</h2>
-          
+
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="h-64 md:h-96 bg-stone-200 flex items-center justify-center">
-              <img src="/api/placeholder/800/600" alt="Newsletter Preview" className="w-full h-full object-cover" />
+            <div className="h-64 md:h-96 bg-stone-200 relative">
+              <Image
+                src="/api/placeholder/800/600"
+                alt="Newsletter Preview"
+                layout="fill"
+                objectFit="cover"
+                priority
+              />
             </div>
             <div className="p-8">
               <h3 className="text-xl font-medium mb-4">Spring Collection 2025: Bringing Nature Indoors</h3>
-              <p className="text-stone-600 mb-6">Discover our latest spring collection featuring natural materials, earthy tones, and sustainable designs for a fresh, organic look that brings the outdoors into your home...</p>
+              <p className="text-stone-600 mb-6">
+                Discover our latest spring collection featuring natural materials, earthy tones, and sustainable designs for a fresh, organic look that brings the outdoors into your home...
+              </p>
               <a href="#" className="text-amber-600 font-medium flex items-center hover:text-amber-700">
                 Read more
                 <ArrowRight size={18} className="ml-2" />
@@ -165,81 +163,80 @@ export default function NewsletterPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-24">
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-center">Frequently Asked Questions</h2>
-          
+
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium mb-2">How often will I receive emails?</h3>
-              <p className="text-stone-600">We send our newsletter once every two weeks. For special events or promotions, you may receive additional emails, but we promise not to overwhelm your inbox.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium mb-2">Can I unsubscribe at any time?</h3>
-              <p className="text-stone-600">Absolutely! You can unsubscribe with a single click from any email we send. There&apos;s an unsubscribe link at the bottom of every newsletter.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium mb-2">Are the subscriber discounts significant?</h3>
-              <p className="text-stone-600">Yes! Our subscribers typically get access to exclusive discounts ranging from 10-25% off selected items, plus early access to sales and special promotions.</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium mb-2">Do you share my email with third parties?</h3>
-              <p className="text-stone-600">We value your privacy and will never sell or share your email address with third parties. Your information is used solely for our newsletter and related communications.</p>
-            </div>
+            {[
+              {
+                q: 'How often will I receive emails?',
+                a: 'We send our newsletter once every two weeks. For special events or promotions, you may receive additional emails, but we promise not to overwhelm your inbox.'
+              },
+              {
+                q: 'Can I unsubscribe at any time?',
+                a: 'Absolutely! You can unsubscribe with a single click from any email we send. There\'s an unsubscribe link at the bottom of every newsletter.'
+              },
+              {
+                q: 'Are the subscriber discounts significant?',
+                a: 'Yes! Our subscribers typically get access to exclusive discounts ranging from 10-25% off selected items, plus early access to sales and special promotions.'
+              },
+              {
+                q: 'Do you share my email with third parties?',
+                a: 'We value your privacy and will never sell or share your email address with third parties. Your information is used solely for our newsletter and related communications.'
+              }
+            ].map((faq, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-lg font-medium mb-2">{faq.q}</h3>
+                <p className="text-stone-600">{faq.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      
+
       <div className="bg-stone-100 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <h2 className="text-2xl md:text-3xl font-semibold mb-12 text-center">What our subscribers say</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 md:p-8 rounded-xl shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">JD</div>
-                <div className="ml-4">
-                  <h3 className="font-medium">Jessica Daniels</h3>
-                  <p className="text-sm text-stone-500">Subscriber since 2023</p>
+            {[
+              {
+                name: 'Jessica Daniels',
+                initials: 'JD',
+                since: '2023',
+                text: 'I love receiving design inspiration in my inbox every two weeks. The exclusive discounts have helped me furnish my entire living room for less!'
+              },
+              {
+                name: 'Michael Rodriguez',
+                initials: 'MR',
+                since: '2024',
+                text: 'The style guides and seasonal updates keep me informed about the latest trends. I\'ve completely transformed my home office thanks to their recommendations.'
+              },
+              {
+                name: 'Laura Peterson',
+                initials: 'LP',
+                since: '2022',
+                text: 'Being a subscriber has saved me money and time. I get early access to sales and can plan my purchases around upcoming collections and promotions.'
+              }
+            ].map((review, idx) => (
+              <div key={idx} className="bg-white p-6 md:p-8 rounded-xl shadow-md">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">
+                    {review.initials}
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="font-medium">{review.name}</h3>
+                    <p className="text-sm text-stone-500">Subscriber since {review.since}</p>
+                  </div>
                 </div>
+                <p className="text-stone-600">{review.text}</p>
               </div>
-              <p className="text-stone-600">
-                &apos;I love receiving design inspiration in my inbox every two weeks. The exclusive discounts have helped me furnish my entire living room for less!&apos;
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 md:p-8 rounded-xl shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">MR</div>
-                <div className="ml-4">
-                  <h3 className="font-medium">Michael Rodriguez</h3>
-                  <p className="text-sm text-stone-500">Subscriber since 2024</p>
-                </div>
-              </div>
-              <p className="text-stone-600">
-                &apos;The style guides and seasonal updates keep me informed about the latest trends. I&apos;ve completely transformed my home office thanks to their recommendations.&apos;
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 md:p-8 rounded-xl shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">LP</div>
-                <div className="ml-4">
-                  <h3 className="font-medium">Laura Peterson</h3>
-                  <p className="text-sm text-stone-500">Subscriber since 2022</p>
-                </div>
-              </div>
-              <p className="text-stone-600">
-                &apos;Being a subscriber has saved me money and time. I get early access to sales and can plan my purchases around upcoming collections and promotions.&apos;
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

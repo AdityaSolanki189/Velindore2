@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import Image from "next/image";
 
 const AccessoryBento = () => {
   return (
@@ -11,22 +14,26 @@ const AccessoryBento = () => {
             <div className="w-full">
               <div className="text-lg font-medium mb-2 pl-4">Antique Couch</div>
               <div className="flex justify-center">
-                <img 
-                  src="/assets/living room.jpg" 
-                  alt="Antique Couch" 
+                <Image
+                  src="/assets/living room.jpg"
+                  alt="Antique Couch"
+                  width={240}
+                  height={160}
                   className="object-contain h-40"
                 />
               </div>
             </div>
           </div>
-          
+
           {/* Antique Light */}
           <div className="bg-gray-100 rounded p-4 md:w-1/3">
             <div className="flex flex-col items-center">
               <div className="flex justify-center h-48">
-                <img 
-                  src="/assets/living room.jpg" 
-                  alt="Antique Light" 
+                <Image
+                  src="/assets/living room.jpg"
+                  alt="Antique Light"
+                  width={180}
+                  height={180}
                   className="object-contain"
                 />
               </div>
@@ -34,55 +41,63 @@ const AccessoryBento = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Middle Row */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Antique Chair */}
           <div className="bg-gray-100 rounded p-4 md:w-1/2">
             <div className="pl-4 text-lg font-medium mb-2">Antique Chair</div>
             <div className="flex justify-center">
-              <img 
-                src="/assets/living room.jpg" 
-                alt="Antique Chair" 
+              <Image
+                src="/assets/living room.jpg"
+                alt="Antique Chair"
+                width={300}
+                height={256}
                 className="object-contain h-64"
               />
             </div>
           </div>
-          
+
           {/* Right Column with Pillow and Bench */}
           <div className="flex flex-col gap-6 md:w-1/2">
             {/* Antique Pillow */}
             <div className="bg-gray-100 rounded p-4">
               <div className="flex justify-center mb-2">
-                <img 
-                  src="/assets/living room.jpg" 
-                  alt="Antique Pillow" 
+                <Image
+                  src="/assets/living room.jpg"
+                  alt="Antique Pillow"
+                  width={120}
+                  height={96}
                   className="object-contain h-24"
                 />
               </div>
               <div className="text-lg font-medium text-center">Antique Pillow</div>
             </div>
-            
-            {/* Antique bench */}
+
+            {/* Antique Bench */}
             <div className="bg-gray-100 rounded p-4">
               <div className="text-lg font-medium text-center mb-2">Antique bench</div>
               <div className="flex justify-center">
-                <img 
-                  src="/assets/living room.jpg" 
-                  alt="Antique Bench" 
+                <Image
+                  src="/assets/living room.jpg"
+                  alt="Antique Bench"
+                  width={120}
+                  height={96}
                   className="object-contain h-24"
                 />
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Bottom Row */}
         <div className="bg-gray-100 rounded p-4 md:ml-auto md:w-2/3">
           <div className="flex justify-center">
-            <img 
-              src="/assets/living room.jpg" 
-              alt="Wooden Bench" 
+            <Image
+              src="/assets/living room.jpg"
+              alt="Wooden Bench"
+              width={240}
+              height={128}
               className="object-contain h-32"
             />
           </div>
