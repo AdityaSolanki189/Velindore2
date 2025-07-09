@@ -5,7 +5,6 @@ import { db } from "../db/db.config";
 import { Category, Label, Product, ProductImage } from "../db/schema";
 import { groupByArrayField } from "../helper/realtions";
 
-// fetches all products
 export async function fetchAllProducts() {
   const results = await db
     .select({

@@ -7,6 +7,8 @@ import Footer from "../../components/footer";
 import Navbar from "../../components/navbar";
 import dynamic from "next/dynamic";
 import { useParams } from 'next/navigation';
+import { fetchSingleProduct } from '@/backend/services/products'; 
+import toast, { Toaster } from 'react-hot-toast';
 
 const Product3DModel = dynamic(() => import("../../components/product3DModel"), {
   ssr: false,
@@ -17,17 +19,22 @@ interface Product {
   name: string;
   price: number;
   description: string;
+  status: string;
+  quantity: number;
+  categoryId: string;
+  labelId: string | null;
+  categoryName: string;
+  threeDImage: string;
+  createdAt: Date;
+  updatedAt: Date;
+  imageUrl: string[];
   rating?: number;
   reviews?: number;
-  quantity?: number;
   stock?: number;
   categories?: string[];
   tag?: string;
-  imageUrl?: string[];
-  categoryName?: string;
   discount?: number;
   hot?: boolean;
-  threeDImage?: string | null; // Added 3D model property
 }
 
 type NavigationDirection = "next" | "prev";
@@ -40,57 +47,36 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // 3D states
+
   const [show3D, setShow3D] = useState<boolean>(false);
   const [show3DLightbox, setShow3DLightbox] = useState<boolean>(false);
-  
+
   const { id } = useParams();
 
   const fetchProductById = async (productId: string) => {
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await fetch('/api/products');
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch products: ${response.status}`);
-      }
-      
-      const allProducts = await response.json();
-      const foundProduct = allProducts.find((p: Product) => p.id === productId);
-      
+      const foundProduct = await fetchSingleProduct(productId);
+
       if (foundProduct) {
-        setProduct(foundProduct);
+        const transformedProduct: Product = {
+          ...foundProduct,
+          rating: 5,
+          reviews: 1,
+          stock: foundProduct.quantity,
+          categories: [foundProduct.categoryName],
+          tag: foundProduct.categoryName,
+        };
+        setProduct(transformedProduct);
       } else {
         throw new Error('Product not found');
       }
     } catch (err) {
       console.error('Error fetching product:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch product');
-      
-      // Fallback product with 3D model
-      setProduct({
-        id: productId as string,
-        name: 'Purecomfort pillows & cushions',
-        price: 20.00,
-        description: 'Morbi vitae erat auctor, eleifend nunc a, lobortis neque. Praesent aliquam dignissim viverra. Maecenas lacus odio, feugiat eu nunc sit amet, maximus sagittis dolor',
-        rating: 5,
-        reviews: 1,
-        stock: 98,
-        categories: ['Carpets', 'Pillow', 'Sofa Cover'],
-        tag: 'Carpets',
-        imageUrl: [
-          '/assets/bed room.jpg', 
-          '/assets/image-2.png',
-          '/assets/image-2.png',
-          '/assets/image-1.png',
-          '/assets/image-4.png',
-          '/assets/image-3.png',
-        ],
-        threeDImage: '/models/01_chair.glb' // Example 3D model
-      });
+      toast.error('Error fetching product');
+      setProduct(null);
     } finally {
       setLoading(false);
     }
@@ -116,7 +102,7 @@ export default function ProductPage() {
         navigateImage('prev');
       }
     };
-    
+
     window.addEventListener('keydown', handleKey);
     return () => {
       window.removeEventListener('keydown', handleKey);
@@ -141,6 +127,17 @@ export default function ProductPage() {
     setShow3DLightbox(false);
     setShow3D(false);
     setSelectedImage((prev) => {
+      if (!product) return prev;
+      const images = product.imageUrl && product.imageUrl.length > 0 
+        ? product.imageUrl 
+        : [
+            '/assets/bed room.jpg', 
+            '/assets/image-2.png',
+            '/assets/image-2.png',
+            '/assets/image-1.png',
+            '/assets/image-4.png',
+            '/assets/image-3.png',
+          ];
       if (direction === "next") {
         return prev === images.length - 1 ? 0 : prev + 1;
       } else {
@@ -153,6 +150,7 @@ export default function ProductPage() {
     return (
       <>
         <Navbar />
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="max-w-6xl mx-auto p-4 font-sans">
           <div className="flex justify-center items-center h-64">
             <div className="text-lg">Loading product...</div>
@@ -163,27 +161,16 @@ export default function ProductPage() {
     );
   }
 
-  if (error && !product) {
+  if (error || !product) {
     return (
       <>
         <Navbar />
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="max-w-6xl mx-auto p-4 font-sans">
           <div className="flex justify-center items-center h-64">
-            <div className="text-lg text-red-600">Error: {error}</div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
-  if (!product) {
-    return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto p-4 font-sans">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg">Product not found</div>
+            <div className="text-lg text-red-600">
+              {error || 'Product not found'}
+            </div>
           </div>
         </div>
         <Footer />
@@ -202,9 +189,12 @@ export default function ProductPage() {
         '/assets/image-3.png',
       ];
 
+  const has3DModel = product.threeDImage && product.threeDImage.trim() !== '';
+
   return (
     <>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="max-w-6xl mx-auto p-4 font-sans">
         <div className="text-sm text-gray-600 mb-4">
           {product.tag || product.categoryName || 'Product'}
@@ -220,7 +210,7 @@ export default function ProductPage() {
               }}
             >
               {/* Show 3D if toggled and threeDImage available, else image */}
-              {show3D && product.threeDImage ? (
+              {show3D && has3DModel ? (
                 <Product3DModel url={product.threeDImage} />
               ) : (
                 <img
@@ -230,8 +220,8 @@ export default function ProductPage() {
                 />
               )}
 
-              {/* 3D Model Icon */}
-              {product.threeDImage && (
+              {/* 3D Model Icon - Only show if product has 3D model */}
+              {has3DModel && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -277,7 +267,7 @@ export default function ProductPage() {
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
-            {/* Rating section (from second file) */}
+            {/* Rating section */}
             {product.rating && (
               <div className="flex items-center mb-3">
                 {[...Array(5)].map((_, i: number) => (
@@ -351,7 +341,7 @@ export default function ProductPage() {
               )}
             </div>
             
-            <div className="mb-4 text-sm text-gray-2">
+            <div className="mb-4 text-sm text-gray-600">
               <span>Tag: </span>
               <span className="text-black">{product.tag || product.categoryName || 'No tag'}</span>
             </div>
@@ -400,9 +390,9 @@ export default function ProductPage() {
               <span className="text-2xl px-1">&rsaquo;</span>
             </button>
             <div className="w-full h-full max-w-4xl max-h-4xl flex items-center justify-center">
-              <div className="relative w-full h-full max-w-3xl max-3xl bg-white bg-opacity-5 rounded-lg">
+              <div className="relative w-full h-full max-w-3xl max-h-3xl bg-white bg-opacity-5 rounded-lg">
                 {/* Show 3D if toggled and threeDImage available, else image */}
-                {show3DLightbox && product.threeDImage ? (
+                {show3DLightbox && has3DModel ? (
                   <Product3DModel url={product.threeDImage} />
                 ) : (
                   <img
@@ -412,8 +402,8 @@ export default function ProductPage() {
                   />
                 )}
 
-                {/* 3D Model Icon in Lightbox */}
-                {product.threeDImage && (
+                {/* 3D Model Icon in Lightbox - Only show if product has 3D model */}
+                {has3DModel && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

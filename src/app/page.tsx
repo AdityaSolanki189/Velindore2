@@ -153,10 +153,9 @@ export default function Home() {
     };
   }, []);
 
-  // Updated function to fetch labels with their products
   const getLabels = async (): Promise<void> => {
     try {
-      const labelsData = await fetchLabelsWithProducts(); // Changed to fetch labels with products
+      const labelsData = await fetchLabelsWithProducts(); 
       setLabels(labelsData);
       setLoading(false);
       // console.log('Labels with products fetched:', labelsData);
