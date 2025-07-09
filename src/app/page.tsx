@@ -14,7 +14,7 @@ import ShopByCategory from "./components/shopcategory";
 // import ProductCard from "./components/product";
 import HeroSection from "./components/Herosection";
 import Testimonials from "./components/Testimonials";
-import {fetchLabelsWithProducts } from "@/backend/services/labels";
+import { fetchLabelsWithProducts } from "@/backend/services/labels";
 
 // Define interfaces for type safety
 interface CarouselItem {
@@ -126,7 +126,7 @@ export default function Home() {
         }
       });
     }, observerOptions);
-    
+
     const refs = [
       shopCategoryRef,
       featuredCollectionsRef,
@@ -156,7 +156,7 @@ export default function Home() {
 
   const getLabels = async (): Promise<void> => {
     try {
-      const labelsData = await fetchLabelsWithProducts(); 
+      const labelsData = await fetchLabelsWithProducts();
       setLabels(labelsData);
       setLoading(false);
       // console.log('Labels with products fetched:', labelsData);
@@ -212,18 +212,17 @@ export default function Home() {
             {carouselData.map((slide, index) => (
               <div
                 key={slide.id}
-                className={`absolute inset-0 transition-opacity duration-700 ${
-                  index === activeSlide ? "opacity-100" : "opacity-0"
-                }`}
+                className={`absolute inset-0 transition-opacity duration-700 ${index === activeSlide ? "opacity-100" : "opacity-0"
+                  }`}
               >
                 <div className="relative w-full h-full">
-  <Image
-    src={slide.image}
-    alt={slide.title}
-    fill
-    className="object-cover"
-  />
-</div>
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -299,7 +298,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section 
+      <section
         ref={shopCategoryRef}
         data-section="shopCategory"
         className={`container mt-10 font-sans transition-all duration-1000 ${getAnimationClass('shopCategory')}`}
@@ -315,84 +314,84 @@ export default function Home() {
         </div>
       </section>
 
-     <section    
-  ref={featuredCollectionsRef}   
-  data-section="featuredCollections"   
-  className={`transition-all duration-1000 ${getAnimationClass('featuredCollections', 'animate__fadeInUp')}`} 
->   
-  <div className="text-center">     
-    <h2 className="text-[#321900] font-sans mt-20 text-3xl font-bold">       
-      Featured Collections     
-    </h2>     
-    <p className="mb-10 text-gray-500 mt-2 font-sans">       
-      Shop our best selling collections for a range of styles loved by you     
-    </p>   
-  </div>    
+      <section
+        ref={featuredCollectionsRef}
+        data-section="featuredCollections"
+        className={`transition-all duration-1000 ${getAnimationClass('featuredCollections', 'animate__fadeInUp')}`}
+      >
+        <div className="text-center">
+          <h2 className="text-[#321900] font-sans mt-20 text-3xl font-bold">
+            Featured Collections
+          </h2>
+          <p className="mb-10 text-gray-500 mt-2 font-sans">
+            Shop our best selling collections for a range of styles loved by you
+          </p>
+        </div>
 
-  {!loading && (     
-    <>       
-      <div className="hidden md:flex m-10 rounded-3xl justify-center gap-2 space-x-5 font-sans">         
-        {(labels as Label[])
-  .filter(label => label.name !== "Featured Collections")
-  .map((label, index) => (
-    <Collection
-      key={label.id || index}
-      {...{
-        ...label,
-        products: (label.products || []).slice(0, 5),
-      }}
-    />
-))}
-      
-      </div>        
+        {!loading && (
+          <>
+            <div className="hidden md:flex m-10 rounded-3xl justify-center gap-2 space-x-5 font-sans">
+              {(labels as Label[])
+                .filter(label => label.name !== "Featured Collections")
+                .map((label, index) => (
+                  <Collection
+                    key={label.id || index}
+                    {...{
+                      ...label,
+                      products: (label.products || []).slice(0, 5),
+                    }}
+                  />
+                ))}
 
-      {isMobile && (         
-        <div className="md:hidden w-full overflow-hidden px-4">           
-          <div             
-            {...handlers}             
-            className="flex transition-transform duration-300 ease-out"             
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}           
-          >             
-            {labels               
-              .filter(label => label.name !== "Featured Collections")               
-              .map((label, index) => (                 
-                <div key={label.id || index} className="min-w-full px-2">                   
-                  <Collection                     
-                    {...({ ...label, products: (label.products || []).slice(0, 5) } as any)}                   
-                  />                 
-                </div>               
-              ))}           
-          </div>            
+            </div>
 
-          <div className="flex justify-center mt-4 space-x-2">             
-            {labels               
-              .filter(label => label.name !== "Featured Collections")               
-              .map((_, index) => (                 
-                <button                   
-                  key={index}                   
-                  className={`w-2 h-2 rounded-full ${                     
-                    activeIndex === index ? "bg-black" : "bg-gray-300"                   
-                  }`}                   
-                  onClick={() => setActiveIndex(index)}                 
-                />               
-              ))}           
-          </div>         
-        </div>       
-      )}     
-    </>   
-  )} 
-</section>
+            {isMobile && (
+              <div className="md:hidden w-full overflow-hidden px-4">
+                <div
+                  {...handlers}
+                  className="flex transition-transform duration-300 ease-out"
+                  style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+                >
+                  {labels
+                    .filter(label => label.name !== "Featured Collections")
+                    .map((label, index) => (
+                      <div key={label.id || index} className="min-w-full px-2">
+                        <Collection
+                          key={label.id || index}
+                          {...({ ...label, products: (label.products || []).slice(0, 5) } as Label)}
+                        />
+                      </div>
+                    ))}
+                </div>
+
+                <div className="flex justify-center mt-4 space-x-2">
+                  {labels
+                    .filter(label => label.name !== "Featured Collections")
+                    .map((_, index) => (
+                      <button
+                        key={index}
+                        className={`w-2 h-2 rounded-full ${activeIndex === index ? "bg-black" : "bg-gray-300"
+                          }`}
+                        onClick={() => setActiveIndex(index)}
+                      />
+                    ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </section>
 
 
 
-      <section 
+      <section
         ref={homeFixRef}
         data-section="homeFix"
       >
         <HomefixProductSection />
       </section>
 
-      <section 
+      <section
         ref={heroSectionRef}
         data-section="heroSection"
         className={`font-sans transition-all duration-1000 ${getAnimationClass('heroSection', 'animate__fadeIn')}`}
@@ -425,7 +424,7 @@ export default function Home() {
         </div>
       </section> */}
 
-       <section 
+      <section
         ref={interiorDesignRef}
         data-section="interiorDesign"
         className={`relative w-full overflow-hidden py-8 md:py-16 mt-[-320px] md:mt-2 font-sans transition-all duration-1000 ${getAnimationClass('interiorDesign', 'animate__slideInUp')}`}
@@ -468,7 +467,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section 
+      <section
         ref={testimonialsRef}
         data-section="testimonials"
         className={`text-[#321900] font-sans transition-all duration-1000 ${getAnimationClass('testimonials', 'animate__fadeIn')}`}
@@ -476,7 +475,7 @@ export default function Home() {
         <Testimonials />
       </section>
 
-      <section 
+      <section
         ref={subscribeRef}
         data-section="subscribe"
         className={`px-4 py-10 font-sans transition-all duration-1000 ${getAnimationClass('subscribe', 'animate__fadeInUp')}`}
@@ -499,7 +498,7 @@ export default function Home() {
             <button className="bg-black text-white py-3 px-8 rounded-full font-extrabold w-full md:w-auto">
               Subscribe
             </button>
-            </div>
+          </div>
         </div>
       </section>
 
