@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function groupByArrayField<T>(
   data: T[],
   idKey: keyof T,

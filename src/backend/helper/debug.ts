@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const dump = (...datas: any[]) => {
   console.log('\n🪵 Debug Dump -------------------------');

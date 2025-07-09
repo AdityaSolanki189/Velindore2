@@ -33,7 +33,6 @@ export async function fetchAllProducts() {
 
 }
 
-
 //fetch single product by id
 export async function fetchSingleProduct(productId: string): Promise<{
   id: string;

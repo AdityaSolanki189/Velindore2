@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Heart, Check, X, Box } from 'lucide-react';
-import Footer from '@/app/components/footer';
-import Navbar from '@/app/components/navbar';
+import { Heart, Check, X, Box, Undo2 } from "lucide-react";
+import Footer from "../../components/footer";
+import Navbar from "../../components/navbar";
+import dynamic from "next/dynamic";
+
+const Product3DModel = dynamic(() => import("../../components/product3DModel"), {
+  ssr: false,
+});
 
 interface Product {
   id: string;
@@ -23,7 +28,7 @@ interface Product {
   hot?: boolean;
 }
 
-type NavigationDirection = 'next' | 'prev';
+type NavigationDirection = "next" | "prev";
 
 export default function ProductPage() {
   const [quantity, setQuantity] = useState<number>(1);
@@ -109,31 +114,65 @@ export default function ProductPage() {
         '/assets/image-4.png',
         '/assets/image-3.png',
       ];
+  // 3D states
+  const [show3D, setShow3D] = useState<boolean>(false);
+  const [show3DLightbox, setShow3DLightbox] = useState<boolean>(false);
+
+  const glbUrls: string[] = [
+    "/models/01_chair.glb",
+    "/models/01_bed.glb",
+    "/models/01_couch.glb",
+    "/models/01_diningtable.glb",
+    "/models/01_sChair.glb",
+    "/models/01_sofa.glb",
+    "/models/01_table.glb",
+  ];
 
   const openLightbox = (index: number): void => {
     setSelectedImage(index);
     setLightboxOpen(true);
-    document.body.style.overflow = 'hidden';
+    setShow3DLightbox(false);
+    document.body.style.overflow = "hidden";
   };
-  
+
   const closeLightbox = (): void => {
     setLightboxOpen(false);
-    document.body.style.overflow = 'auto';
+    setShow3DLightbox(false);
+    document.body.style.overflow = "auto";
   };
 
   const navigateImage = (direction: NavigationDirection): void => {
-    if (direction === 'next') {
-      setSelectedImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    } else {
-      setSelectedImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-    }
+    setShow3DLightbox(false);
+    setShow3D(false);
+    setSelectedImage((prev) => {
+      if (direction === "next") {
+        return prev === images.length - 1 ? 0 : prev + 1;
+      } else {
+        return prev === 0 ? images.length - 1 : prev - 1;
+      }
+    });
   };
   
-
-
-  const handle3DView = () => {
-    alert('3D Model viewer would open here!');
+  const handleKeyDown = (e: KeyboardEvent): void => {
+    if (!lightboxOpen) return;
+    if (e.key === "Escape") {
+      closeLightbox();
+    } else if (e.key === "ArrowRight") {
+      navigateImage("next");
+    } else if (e.key === "ArrowLeft") {
+      navigateImage("prev");
+    }
   };
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "auto";
+    };
+    // eslint-disable-next-line
+  }, [lightboxOpen, selectedImage]);
 
   return (
     <>
@@ -145,37 +184,59 @@ export default function ProductPage() {
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
-            <div 
+            {/* MAIN IMAGE/3D AREA */}
+            <div
               className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm relative group"
-              onClick={() => openLightbox(selectedImage)}
+              onClick={() => {
+                if (!show3D) openLightbox(selectedImage);
+              }}
             >
-              <img 
-                src={images[selectedImage]} 
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
-              />
-              
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handle3DView();
-                }}
-                className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80"
-                title="View 3D Model"
-              >
-                <Box className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
-              </button>
+              {/* Show 3D if toggled and GLB available, else image */}
+              {show3D && glbUrls[selectedImage] ? (
+                <Product3DModel url={glbUrls[selectedImage]} />
+              ) : (
+                <img
+                  src={images[selectedImage]}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"
+                />
+              )}
+
+              {/* 3D Model Icon */}
+              {glbUrls[selectedImage] && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShow3D((v) => !v);
+                  }}
+                  className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80 cursor-pointer"
+                  title={show3D ? "Close 3D Model" : "View 3D Model"}
+                >
+                  {show3D ? (
+                    <Undo2 className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
+                  ) : (
+                    <Box className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
+                  )}
+                </button>
+              )}
             </div>
-            
+
             <div className="grid grid-cols-6 gap-2">
               {images.map((image: string, index: number) => (
-                <div 
+                <div
                   key={index}
-                  className={`aspect-square border ${selectedImage === index ? 'border-black border-2' : 'border-gray-200'} cursor-pointer overflow-hidden bg-white rounded`}
-                  onClick={() => setSelectedImage(index)}
+                  className={`aspect-square border ${
+                    selectedImage === index
+                      ? "border-black border-2"
+                      : "border-gray-200"
+                  } cursor-pointer overflow-hidden bg-white rounded`}
+                  onClick={() => {
+                    setSelectedImage(index);
+                    setShow3D(false); // Always return to image when thumbnail is clicked
+                  }}
                 >
-                  <img 
-                    src={image} 
+                  <img
+                    src={image}
                     alt={`${product.name} thumbnail ${index + 1}`}
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-200"
                   />
@@ -184,6 +245,7 @@ export default function ProductPage() {
             </div>
           </div>
 
+          {/* --- Product Info --- */}
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
@@ -201,19 +263,27 @@ export default function ProductPage() {
             <div className="mb-6 text-gray-600 leading-relaxed">
               <p>{product.description || 'No description available.'}</p>
             </div>
-            
+            <div className="mb-6 text-gray-600 leading-relaxed">
+              <p>
+                {product.description}{" "}
+                <a href="#" className="text-black font-semibold">
+                  Read More
+                </a>
+              </p>
+            </div>
             <div className="flex items-center mb-6 text-green-600">
               <Check className="w-5 h-5 mr-2" />
               <span>{product.quantity || 0} in stock</span>
             </div>
-            
             <div className="flex gap-3 mb-6">
               <div className="w-20">
                 <input
                   type="number"
                   min="1"
                   value={quantity}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value) || 1)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setQuantity(parseInt(e.target.value) || 1)
+                  }
                   className="w-full h-12 px-2 text-center border text-black border-gray-300 rounded"
                 />
               </div>
@@ -233,7 +303,6 @@ export default function ProductPage() {
                 />
               </button>
             </div>
-            
             <div className="mb-4 text-sm text-gray-600">
               <span>Categories: </span>
               {product.categories && product.categories.length > 0 ? (
@@ -246,7 +315,6 @@ export default function ProductPage() {
                 <span className="text-black">{product.categoryName || 'No category'}</span>
               )}
             </div>
-            
             <div className="mb-4 text-sm text-gray-600">
               <span>Tag: </span>
               <span className="text-black">{product.tag || product.categoryName || 'No tag'}</span>
@@ -259,17 +327,18 @@ export default function ProductPage() {
 </Link>
             
             <div className="mb-6">
-              <img 
-                src="/api/placeholder/300/40" 
+              <img
+                src="/api/placeholder/300/40"
                 alt="Payment methods"
                 className="h-10"
               />
             </div>
-            
             <div className="border border-gray-200 p-4 rounded mt-6">
               <div className="flex items-center mb-2">
                 <span className="mr-2 text-xl">🔥</span>
-                <span className="text-red-500 font-semibold">SPECIAL OFFERS</span>
+                <span className="text-red-500 font-semibold">
+                  SPECIAL OFFERS
+                </span>
               </div>
               <div className="text-sm text-gray-800">
                 Get 1,000/- Off on your first order!! USE CODE HEY1000
@@ -279,40 +348,60 @@ export default function ProductPage() {
         </div>
       </div>
 
+      {/* LIGHTBOX for images/3D */}
       {lightboxOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center p-4">
-            <button 
+            <button
               onClick={closeLightbox}
               className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
               <X className="w-6 h-6" />
             </button>
-            
-            <button 
-              onClick={() => navigateImage('prev')}
+            <button
+              onClick={() => navigateImage("prev")}
               className="absolute left-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
               <span className="text-2xl px-1">&lsaquo;</span>
             </button>
-            
-            <button 
-              onClick={() => navigateImage('next')}
+            <button
+              onClick={() => navigateImage("next")}
               className="absolute right-4 text-white hover:text-gray-300 z-10 bg-black bg-opacity-50 rounded-full p-2"
             >
               <span className="text-2xl px-1">&rsaquo;</span>
             </button>
-            
             <div className="w-full h-full max-w-4xl max-h-4xl flex items-center justify-center">
-              <div className="relative w-full h-full max-w-3xl max-h-3xl">
-                <img 
-                  src={images[selectedImage]} 
-                  alt={product.name}
-                  className="w-full h-full object-contain"
-                />
+              <div className="relative w-full h-full max-w-3xl max-h-3xl bg-white bg-opacity-5 rounded-lg">
+                {/* Show 3D if toggled and GLB available, else image */}
+                {show3DLightbox && glbUrls[selectedImage] ? (
+                  <Product3DModel url={glbUrls[selectedImage]} />
+                ) : (
+                  <img
+                    src={images[selectedImage]}
+                    alt={product.name}
+                    className="w-full h-full object-contain"
+                  />
+                )}
+
+                {/* 3D Model Icon in Lightbox */}
+                {glbUrls[selectedImage] && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShow3DLightbox((v) => !v);
+                    }}
+                    className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 opacity-90"
+                    title={show3DLightbox ? "Close 3D Model" : "View 3D Model"}
+                  >
+                    {show3DLightbox ? (
+                      <Undo2 className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
+                    ) : (
+                      <Box className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
-            
             <div className="absolute bottom-4 left-0 right-0 text-center text-white bg-black bg-opacity-50 py-2 mx-4 rounded">
               {selectedImage + 1} / {images.length}
             </div>
