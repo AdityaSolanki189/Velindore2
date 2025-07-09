@@ -36,6 +36,9 @@ export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
+  // 3D states
+  const [show3D, setShow3D] = useState<boolean>(false);
+  const [show3DLightbox, setShow3DLightbox] = useState<boolean>(false);
 
   // Load product data on mount
   useEffect(() => {
@@ -67,6 +70,16 @@ export default function ProductPage() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "auto";
+    };
+    // eslint-disable-next-line
+  }, [lightboxOpen, selectedImage]);
 
   // Handle keyboard events for lightbox
   useEffect(() => {
@@ -114,9 +127,7 @@ export default function ProductPage() {
         '/assets/image-4.png',
         '/assets/image-3.png',
       ];
-  // 3D states
-  const [show3D, setShow3D] = useState<boolean>(false);
-  const [show3DLightbox, setShow3DLightbox] = useState<boolean>(false);
+  
 
   const glbUrls: string[] = [
     "/models/01_chair.glb",
@@ -164,15 +175,7 @@ export default function ProductPage() {
     }
   };
 
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => handleKeyDown(e);
-    window.addEventListener("keydown", handleKey);
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "auto";
-    };
-    // eslint-disable-next-line
-  }, [lightboxOpen, selectedImage]);
+  
 
   return (
     <>
