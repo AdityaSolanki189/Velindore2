@@ -82,7 +82,7 @@ export default function Navbar() {
                 </Link> */}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
               </div>
-              <div className="relative group">
+              {/* <div className="relative group">
                 <Link href="/wishlist" className="transition-transform duration-300 hover:text-blue-300">
                   <img src="/assets/heart.svg" alt="" className='w-6' />
                   <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full group-hover:scale-110 transition-transform duration-300">
@@ -90,7 +90,7 @@ export default function Navbar() {
                   </span>
                 </Link>
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full"></span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function Navbar() {
               </ul>
             </div>
 
-            <div className="px-6 py-4 mt-4 bg-gray-50 rounded-lg mx-4">
+            {/* <div className="px-6 py-4 mt-4 bg-gray-50 rounded-lg mx-4">
               <div className="flex flex-col space-y-4">
                 {[
                   { href: '/wishlist', icon: faHeart, label: 'Wishlist', badge: '5' }
@@ -161,7 +161,7 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </div> */}
 
           </div>
         </div>
