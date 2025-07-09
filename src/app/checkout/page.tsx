@@ -9,6 +9,8 @@ import Image from 'next/image';
 import Navbar from '../components/navbar';
 import { useSearchParams } from 'next/navigation';
 
+import { Suspense } from 'react';
+
 interface CartItem {
   id: string;
   name: string;
@@ -432,6 +434,8 @@ const CheckoutPage: React.FC = () => {
                     <div key={item.id} className="flex flex-col sm:flex-row items-center py-4 border-b border-gray-100 last:border-0">
                       <div className="relative h-24 w-24 sm:mr-6 mb-4 sm:mb-0 flex-shrink-0">
                         <Image
+                        width={200}
+                        height={200}
                           src={item.image}
                           alt={item.name}
                           className="h-24 w-24 object-contain rounded-md"
@@ -667,7 +671,8 @@ const CheckoutPage: React.FC = () => {
                         <Image
                           src={item.image}
                           alt={item.name}
-                          layout="fill"
+                          width={200}
+                          height={200}
                           objectFit="cover"
                         />
                       </div>
@@ -745,4 +750,12 @@ const CheckoutPage: React.FC = () => {
   );
 };
 
-export default CheckoutPage;
+
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading Checkout...</div>}>
+      <CheckoutPage />
+    </Suspense>
+  );
+}
