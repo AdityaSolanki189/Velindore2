@@ -94,7 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     </>
   ) : (
 <span className="font-medium">
-  ₹{Number(price).toFixed(2)}
+  ${Number(price).toFixed(2)}
 </span>
   )}
 </div>

@@ -32,14 +32,13 @@ export type CategoryType = {
 const Accessories: NextPage = () => {
   const [sorting, setSorting] = useState<SortingType>('default');
   const [filterOpen, setFilterOpen] = useState(false);
-  const [allProducts, setAllProducts] = useState<ProductType[]>([]); // Store all products
-  const [products, setProducts] = useState<ProductType[]>([]); // Filtered products
+  const [allProducts, setAllProducts] = useState<ProductType[]>([]); 
+  const [products, setProducts] = useState<ProductType[]>([]); 
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All Products');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch categories on component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -49,7 +48,6 @@ const Accessories: NextPage = () => {
         }
         const categoriesData = await response.json();
         
-        // Ensure categories have proper structure
         const sanitizedCategories = categoriesData.map((category: any) => ({
           id: category.id || 0,
           name: category.name || 'Unknown Category',
@@ -280,7 +278,6 @@ const Accessories: NextPage = () => {
                 </span>
               </div>
 
-              {/* Loading State */}
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {[...Array(6)].map((_, index) => (
@@ -294,7 +291,6 @@ const Accessories: NextPage = () => {
                   ))}
                 </div>
               ) : (
-                /* Products Grid */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {sortedProducts.length > 0 ? (
                     sortedProducts.slice(0, 9).map(product => (
@@ -337,7 +333,6 @@ const Accessories: NextPage = () => {
                 </div>
               )}
 
-              {/* Pagination/Load More */}
               {sortedProducts.length > 9 && (
                 <div className="mt-8 text-center">
                   <button className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
