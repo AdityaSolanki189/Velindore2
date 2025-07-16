@@ -60,11 +60,12 @@ export default function Navbar() {
 
           <div className="absolute left-1/2 transform -translate-x-1/2 flex justify-center items-center">
             <Link href="/">
-              <div className="relative w-16 md:w-24 h-10 md:h-14 cursor-pointer transition-transform duration-300 hover:scale-110">
+              <div className="relative w-16 md:w-24 mt-[-45px] h-10 md:h-14 cursor-pointer transition-transform duration-300 hover:scale-110">
                 <Image
                   src="/assets/LOGO-PNG.png"
                   alt="Logo"
-                  fill
+                  width={80}
+                  height={80}
                   className="object-contain"
                 />
               </div>

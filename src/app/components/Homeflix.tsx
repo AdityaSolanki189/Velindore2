@@ -80,11 +80,11 @@ export default function HomefixProductSection() {
     router.push(`/product/${product.id}`);
   };
 
-  const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // console.log('Added to wishlist:', productId);
-  };
+  // const handleWishlistClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   // console.log('Added to wishlist:', productId);
+  // };
 
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-8 text-black">
@@ -146,18 +146,16 @@ export default function HomefixProductSection() {
                         }}
                       />
                       
-                      <div className="absolute inset-0 bg-black bg-opacity-20 backdrop-blur-sm opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
+                      <div className="absolute inset-0 bg-opacity-20 backdrop-blur-sm opacity-0 transition-all duration-300 group-hover:opacity-100"></div>
                       
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 opacity-0 transition-all duration-500 group-hover:opacity-100 z-10">
                         <div className="flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                          <button 
-                            className="bg-white bg-opacity-90 p-3 rounded-full hover:bg-black hover:text-white transition-colors shadow-md backdrop-filter backdrop-blur-sm"
-                            onClick={(e) => handleWishlistClick(e)}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                            </svg>
-                          </button>
+                          <Image
+                            src="/assets/LOGO-PNG.png"
+                            alt="Logo"
+                            fill
+                            className="object-contain"
+                          />
                         </div>
                       </div>
                     </div>

@@ -100,7 +100,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="ml-0 md:ml-4 lg:ml-20">
+          {/* <div className="ml-0 md:ml-4 lg:ml-20">
             <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">HELP</h3>
             <ul className="space-y-3">
               <li>
@@ -134,7 +134,7 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Company Column */}
           <div className="ml-0 md:ml-4 lg:ml-20">
@@ -145,7 +145,7 @@ const Footer = () => {
                   About Us
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/blog" className="hover:text-gray-300">
                   Our Blog
                 </Link>
@@ -169,7 +169,7 @@ const Footer = () => {
                 <Link href="/sitemap" className="hover:text-gray-300">
                   Sitemap
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -185,7 +185,7 @@ const Footer = () => {
                   Accessories
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/category/living-room"
                   className="hover:text-gray-300"
@@ -218,14 +218,14 @@ const Footer = () => {
                 <Link href="/category/kitchen" className="hover:text-gray-300">
                   Kitchen
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-12 pt-6 text-center md:text-left">
           <p className="text-sm">
-            Copyright © 2025 Velindore. All rights reserved.
+            Copyright © 2025 Velondore. All rights reserved.
           </p>
         </div>
       </div>

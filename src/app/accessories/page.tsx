@@ -242,7 +242,6 @@ const Accessories: NextPage = () => {
           </div>
 
           <div className="flex flex-col md:flex-row md:gap-8">
-            {/* Product Categories Sidebar */}
             <div
               className={`w-full md:w-1/4 ${
                 filterOpen ? "block" : "hidden"
@@ -251,14 +250,13 @@ const Accessories: NextPage = () => {
               <div className="bg-white md:bg-transparent p-4 md:p-0 rounded-lg shadow-md md:shadow-none">
                 <h3 className="text-lg font-bold mb-2 md:hidden">Categories</h3>
                 <ul>
-                  {/* All Products option */}
                   <li className="mb-3 flex items-center">
                     <span className="mr-2">○</span>
                     <button
                       onClick={() => handleCategoryClick("All Products")}
                       className={`hover:text-gray-600 text-sm md:text-base text-left ${
                         selectedCategory === "All Products"
-                          ? "font-bold text-blue-600"
+                          ? "font-bold text-[#432818]"
                           : ""
                       }`}
                     >

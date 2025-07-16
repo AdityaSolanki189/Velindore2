@@ -301,7 +301,7 @@ const CheckoutPage: React.FC = () => {
           <p className="text-gray-600 mb-6">The product you&apos;re looking for doesn&apos;t exist or is no longer available.</p>
           <button
             className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
-            onClick={() => window.location.href = '/products'}
+            onClick={() => window.location.href = '/home'}
           >
             Browse Products
           </button>
@@ -438,6 +438,7 @@ const CheckoutPage: React.FC = () => {
                         height={200}
                           src={item.image}
                           alt={item.name}
+                          
                           className="h-24 w-24 object-contain rounded-md"
                         />
                       </div>

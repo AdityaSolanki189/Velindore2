@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Heart, Check, X, Box, Undo2 } from "lucide-react";
+import {Check, X, Box, Undo2 } from "lucide-react";
 import Footer from "../../components/footer";
 import Navbar from "../../components/navbar";
 import dynamic from "next/dynamic";
@@ -41,8 +41,8 @@ interface Product {
 type NavigationDirection = "next" | "prev";
 
 export default function ProductPage() {
-  const [quantity, setQuantity] = useState<number>(1);
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  // const [quantity, setQuantity] = useState<number>(1);
+  // const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
@@ -202,88 +202,87 @@ export default function ProductPage() {
           {product.tag || product.categoryName || 'Product'}
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="flex-1">
-            {/* MAIN IMAGE/3D AREA */}
-            <div
-              className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm relative group"
-              onClick={() => {
-                if (!show3D) openLightbox(selectedImage);
-              }}
-            >
-              {/* Show 3D if toggled and threeDImage available, else image */}
-              {show3D && has3DModel ? (
-                <Product3DModel url={product.threeDImage} />
-              ) : (
-                <div className="relative w-full h-full">
-                  <Image
-                    src={images[selectedImage]}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/assets/placeholder.jpg';
-                    }}
-                  />
-                </div>
-              )}
+        <div className="flex flex-col lg:flex-row gap-8">           
+  <div className="flex-1">             
+    <div               
+      className="w-full aspect-square border border-gray-200 mb-4 overflow-hidden cursor-pointer bg-white rounded-lg shadow-sm relative group"               
+      onClick={() => {                 
+        if (!show3D) openLightbox(selectedImage);               
+      }}             
+    >               
+      {show3D && has3DModel ? (                 
+        <Product3DModel url={product.threeDImage} />               
+      ) : (                 
+        <div className="relative w-full h-full">                   
+          <Image                     
+            src={images[selectedImage]}                     
+            alt={product.name}                     
+            fill                     
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"                     
+            className="object-cover transition-transform hover:scale-105 duration-300 cursor-pointer"                     
+            onError={(e) => {                       
+              const target = e.target as HTMLImageElement;                       
+              target.src = '/assets/placeholder.jpg';                     
+            }}                   
+          />                 
+        </div>               
+      )}                
+      
+      {/* 3D Model Button with Text - Only show if product has 3D model */}               
+      {has3DModel && (                 
+        <button                   
+          onClick={(e) => {                     
+            e.stopPropagation();                     
+            setShow3D((v) => !v);                   
+          }}                   
+          className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full px-3 py-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80 cursor-pointer flex items-center gap-2"                   
+          title={show3D ? "Close 3D Model" : "View 3D Model"}                 
+        >                   
+          <span className="text-sm font-medium text-gray-700 hover:text-black transition-colors whitespace-nowrap">
+            {show3D ? "Close 3D" : "View in 3D"}
+          </span>
+          {show3D ? (                     
+            <Undo2 className="w-5 h-5 text-gray-700 hover:text-black transition-colors" />                   
+          ) : (                     
+            <Box className="w-5 h-5 text-gray-700 hover:text-black transition-colors" />                   
+          )}                 
+        </button>               
+      )}             
+    </div>              
+    
+    <div className="grid grid-cols-6 gap-2">               
+      {images.map((image: string, index: number) => (                 
+        <div                   
+          key={index}                   
+          className={`aspect-square border ${                     
+            selectedImage === index                       
+              ? "border-black border-2"                       
+              : "border-gray-200"                   
+          } cursor-pointer overflow-hidden bg-white rounded relative`}                   
+          onClick={() => {                     
+            setSelectedImage(index);                     
+            setShow3D(false);                    
+          }}                 
+        >                   
+          <Image                     
+            src={image}                     
+            alt={`${product.name} thumbnail ${index + 1}`}                     
+            fill                     
+            sizes="(max-width: 768px) 20vw, 10vw"                     
+            className="object-cover hover:scale-110 transition-transform duration-200"                     
+            onError={(e) => {                       
+              const target = e.target as HTMLImageElement;                       
+              target.src = '/assets/placeholder.jpg';                     
+            }}                   
+          />                 
+        </div>               
+      ))}             
+    </div>           
+  </div>
 
-              {/* 3D Model Icon - Only show if product has 3D model */}
-              {has3DModel && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShow3D((v) => !v);
-                  }}
-                  className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80 cursor-pointer"
-                  title={show3D ? "Close 3D Model" : "View 3D Model"}
-                >
-                  {show3D ? (
-                    <Undo2 className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
-                  ) : (
-                    <Box className="w-6 h-6 text-gray-700 hover:text-black transition-colors" />
-                  )}
-                </button>
-              )}
-            </div>
-
-            <div className="grid grid-cols-6 gap-2">
-              {images.map((image: string, index: number) => (
-                <div
-                  key={index}
-                  className={`aspect-square border ${
-                    selectedImage === index
-                      ? "border-black border-2"
-                      : "border-gray-200"
-                  } cursor-pointer overflow-hidden bg-white rounded relative`}
-                  onClick={() => {
-                    setSelectedImage(index);
-                    setShow3D(false); // Always return to image when thumbnail is clicked
-                  }}
-                >
-                  <Image
-                    src={image}
-                    alt={`${product.name} thumbnail ${index + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 20vw, 10vw"
-                    className="object-cover hover:scale-110 transition-transform duration-200"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/assets/placeholder.jpg';
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* --- Product Info --- */}
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
-            {/* Rating section */}
             {product.rating && (
               <div className="flex items-center mb-3">
                 {[...Array(5)].map((_, i: number) => (
@@ -315,7 +314,7 @@ export default function ProductPage() {
               <span>{product.stock || product.quantity || 0} in stock</span>
             </div>
             
-            <div className="flex gap-3 mb-6">
+            {/* <div className="flex gap-3 mb-6">
               <div className="w-20">
                 <input
                   type="number"
@@ -342,7 +341,7 @@ export default function ProductPage() {
                   strokeWidth={1.5}
                 />
               </button>
-            </div>
+            </div> */}
             
             <div className="mb-4 text-sm text-gray-600">
               <span>Categories: </span>
@@ -363,12 +362,12 @@ export default function ProductPage() {
             </div>
             
             <Link href={`/checkout?productId=${product.id}`}>
-              <div className="block w-full bg-black text-white py-3 mb-6 font-semibold rounded text-center hover:bg-gray-800 transition-colors">
+              <div className="block w-full bg-black text-white py-3 mb-6 md:mt-36 font-semibold rounded text-center hover:bg-gray-800 transition-colors">
                 BUY IT NOW
               </div>
             </Link>
             
-            <div className="border border-gray-200 p-4 rounded mt-6">
+            {/* <div className="border border-gray-200 p-4 rounded mt-6">
               <div className="flex items-center mb-2">
                 <span className="mr-2 text-xl">🔥</span>
                 <span className="text-red-500 font-semibold">
@@ -378,7 +377,7 @@ export default function ProductPage() {
               <div className="text-sm text-gray-800">
                 Get 1,000/- Off on your first order!! USE CODE HEY1000
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

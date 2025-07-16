@@ -49,7 +49,7 @@ const ContactPage: React.FC = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 mt-12">
-          <div className="bg-[#000814] text-white rounded-lg p-8 md:w-1/3">
+          <div className="bg-[#20140D] text-white rounded-lg p-8 md:w-1/3">
             <h2 className="text-2xl font-bold mb-4">Contact Information</h2>
             <p className="mb-8">
               Well create high-quality linkable content and build at least 40 high-authority.
@@ -57,7 +57,7 @@ const ContactPage: React.FC = () => {
             
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="bg-teal-400 rounded-full p-2">
+                <div className="bg-[#1C0E0B] rounded-full p-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
@@ -69,7 +69,7 @@ const ContactPage: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="bg-teal-400 rounded-full p-2">
+                <div className="bg-[#1C0E0B] rounded-full p-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -78,7 +78,7 @@ const ContactPage: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="bg-teal-400 rounded-full p-2">
+                <div className="bg-[#1C0E0B] rounded-full p-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -89,7 +89,7 @@ const ContactPage: React.FC = () => {
             </div>
             
             <div className="relative">
-              <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-teal-400 opacity-20"></div>
+              <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#1C0E0B] opacity-20"></div>
             </div>
           </div>
 
@@ -161,7 +161,7 @@ const ContactPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="bg-[#000814] cursor-pointer text-white px-6 py-3 rounded-md hover:bg-teal-600 transition-colors"
+                className="bg-[#1C0E0B] cursor-pointer text-white px-6 py-3 rounded-md hover:bg-teal-600 transition-colors"
               >
                 Send Message
               </button>

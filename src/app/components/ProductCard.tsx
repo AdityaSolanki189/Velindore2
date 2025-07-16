@@ -28,11 +28,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  const handleWishlistClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // console.log('Added to wishlist:', id);
-  };
+  // const handleWishlistClick = (e: React.MouseEvent) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   // console.log('Added to wishlist:', id);
+  // };
 
   return (
     <div className="group relative">
@@ -64,7 +64,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </Link>
         
-        <button 
+        {/* <button 
           className="absolute top-2 right-2 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-md hover:bg-black hover:text-white transition-colors duration-200 z-10"
           onClick={handleWishlistClick}
         >
@@ -75,7 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           >
             <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
           </svg>
-        </button>
+        </button> */}
       </div>
       
       <div className="text-center">

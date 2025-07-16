@@ -1,4 +1,3 @@
-"use client";
 import React from 'react';
 import Image from 'next/image';
 // import Link from 'next/link';
@@ -77,12 +76,12 @@ const AboutUs: NextPage = () => {
           <p className="text-gray-600 mb-4">
             If something happens to your home - or any attached structures on your property - well cover the repairs or the rebuild.
           </p>
-            <a href='' className="flex items-center text-gray-600 hover:text-black">
+            {/* <a href='' className="flex items-center text-gray-600 hover:text-black">
               Learn More
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </a> */}
           
         </div>
 
@@ -97,12 +96,12 @@ const AboutUs: NextPage = () => {
           <p className="text-gray-600 mb-4">
             If not just stuff, its your life. And if theres ever a theft, fire, or other unfortunate event, well help with the repair or replacement.
           </p>
-            <a className="flex items-center text-gray-600 hover:text-black">
+            {/* <a className="flex items-center text-gray-600 hover:text-black">
               Learn More
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </a> */}
         </div>
 
         {/* Extended stays */}
@@ -116,16 +115,15 @@ const AboutUs: NextPage = () => {
           <p className="text-gray-600 mb-4">
             Our coverage protects you from bodily injury or property damage to others (or their stuff) - at home or anywhere else.
           </p>
-            <a className="flex items-center text-gray-600 hover:text-black">
+            {/* <a className="flex items-center text-gray-600 hover:text-black">
               Learn More
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </a> */}
         </div>
       </div>
 
-      {/* Corporate Housing Banner */}
       <div className="bg-white rounded-lg overflow-hidden mb-12">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/2 relative h-64 md:h-auto">
@@ -142,12 +140,10 @@ const AboutUs: NextPage = () => {
               From catering firms and sports leagues to individual business travelers, our fully furnished apartments are crafted to make your team feel perfectly at home.
             </p>
             <div className="flex space-x-4">
-              <button className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">
+              <a href='/contact' className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">
                 Contact us
-              </button>
-              <button className="text-gray-600 px-6 py-2 hover:text-black transition">
-                Read more
-              </button>
+              </a>
+              
             </div>
           </div>
         </div>
