@@ -161,7 +161,7 @@ const ContactPage: React.FC = () => {
 
               <button
                 type="submit"
-                className="bg-[#1C0E0B] cursor-pointer text-white px-6 py-3 rounded-md hover:bg-teal-600 transition-colors"
+                className="bg-[#1C0E0B] cursor-pointer text-white px-6 py-3 rounded-md transition-colors"
               >
                 Send Message
               </button>

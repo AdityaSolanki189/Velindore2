@@ -56,7 +56,7 @@ const CheckoutPage: React.FC = () => {
   const [taxDisplayPercentage, setTaxDisplayPercentage] = useState<number>(0);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [productLoading, setProductLoading] = useState<boolean>(true);
-  const [orderNumber, setOrderNumber] = useState<string>('');
+  // const [orderNumber, setOrderNumber] = useState<string>('');
   
   // Get product ID from URL params
   const searchParams = useSearchParams();
@@ -264,7 +264,7 @@ const CheckoutPage: React.FC = () => {
       const result = await createOrder(orderData);
       
       if (result.success) {
-        setOrderNumber(`ORD-${orderId.substring(0, 8).toUpperCase()}`);
+        // setOrderNumber(`ORD-${orderId.substring(0, 8).toUpperCase()}`);
         setOrderComplete(true);
         setCartItems([]);
         
@@ -338,17 +338,17 @@ const CheckoutPage: React.FC = () => {
             
             <p className="text-lg text-gray-600 mb-6 animate-slide-up delay-200">
               Your order has been placed successfully. We&apos;ve sent a confirmation email to{' '}
-              <span className="font-semibold text-indigo-600">{shippingInfo.userEmail}</span>.
+              <span className="font-semibold text-[#1C0E0B]">{shippingInfo.userEmail}</span>.
             </p>
             
-            <div className="bg-gray-50 rounded-lg p-6 mb-8 animate-slide-up delay-300">
+            {/* <div className="bg-gray-50 rounded-lg p-6 mb-8 animate-slide-up delay-300">
               <p className="text-gray-700 mb-2">Order Number:</p>
               <p className="text-2xl font-bold text-indigo-600">{orderNumber}</p>
-            </div>
+            </div> */}
             
             <div className="space-y-4 animate-slide-up delay-400">
               <button 
-                className="w-full sm:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="w-full sm:w-auto bg-[#1C0E0B] text-white px-8 py-3 rounded-lg  transition-all duration-200 transform hover:scale-105 shadow-lg"
                 onClick={() => window.location.href = '/'}
               >
                 Continue Shopping
@@ -404,17 +404,17 @@ const CheckoutPage: React.FC = () => {
             {/* Progress Steps */}
             <div className="mb-8">
               <div className="flex items-center">
-                <div className={`flex items-center relative ${step >= 1 ? 'text-indigo-600' : 'text-gray-400'}`}>
-                  <div className={`rounded-full transition-colors flex items-center justify-center h-12 w-12 py-3 border-2 ${step >= 1 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300'}`}>
+                <div className={`flex items-center relative ${step >= 1 ? 'text-[#1C0E0B]' : 'text-gray-400'}`}>
+                  <div className={`rounded-full transition-colors flex items-center justify-center h-12 w-12 py-3 border-2 ${step >= 1 ? ' bg-[#1C0E0B] text-white' : 'border-gray-300'}`}>
                     1
                   </div>
                   <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-sm font-medium">
                     Cart Review
                   </div>
                 </div>
-                <div className={`flex-auto border-t-2 transition-colors ${step > 1 ? 'border-indigo-600' : 'border-gray-300'}`}></div>
-                <div className={`flex items-center relative ${step >= 2 ? 'text-indigo-600' : 'text-gray-400'}`}>
-                  <div className={`rounded-full transition-colors flex items-center justify-center h-12 w-12 py-3 border-2 ${step >= 2 ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-gray-300'}`}>
+                <div className={`flex-auto border-t-2 transition-colors ${step > 1 ? 'border-[#1C0E0B]' : 'border-gray-300'}`}></div>
+                <div className={`flex items-center relative ${step >= 2 ? 'text-[#1C0E0B]' : 'text-gray-400'}`}>
+                  <div className={`rounded-full transition-colors flex items-center justify-center h-12 w-12 py-3 border-2 ${step >= 2 ? ' bg-[#1C0E0B] text-white' : 'border-gray-300'}`}>
                     2
                   </div>
                   <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-sm font-medium">
@@ -485,7 +485,7 @@ const CheckoutPage: React.FC = () => {
                 <div className="mt-8 flex justify-end">
                   <button
                     onClick={nextStep}
-                    className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                    className="px-6 py-3 bg-[#1C0E0B] text-white rounded-md transition-colors"
                   >
                     Continue to Shipping
                   </button>
@@ -639,7 +639,7 @@ const CheckoutPage: React.FC = () => {
                   <button
                     onClick={handleSubmitOrder}
                     disabled={loading || !validateShippingInfo()}
-                    className={`px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors flex items-center ${
+                    className={`px-6 py-3 bg-[#1C0E0B] text-white rounded-md transition-colors flex items-center ${
                       loading || !validateShippingInfo() ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
