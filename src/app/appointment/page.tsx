@@ -131,7 +131,7 @@ const BookAppointment: React.FC = () => {
 
           <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex flex-col lg:flex-row">
-              <div className="bg-neutral-800 text-white p-8 lg:p-12 flex flex-col justify-between lg:w-2/5">
+              <div className="bg-[#1C0E0B] text-white p-8 lg:p-12 flex flex-col justify-between lg:w-2/5">
                 <div>
                   <h2 className="text-2xl font-semibold mb-6">What to expect</h2>
                   <ul className="space-y-4">
@@ -172,7 +172,7 @@ const BookAppointment: React.FC = () => {
               </div>
               
               <div className="p-8 lg:p-12 lg:w-3/5">
-                <h2 className="text-2xl font-semibold text-neutral-800 mb-6">Book your appointment</h2>
+                <h2 className="text-2xl font-semibold text-[#1C0E0B] mb-6">Book your appointment</h2>
                 
                 {isSuccess ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700">
@@ -180,8 +180,8 @@ const BookAppointment: React.FC = () => {
                     <p>Your appointment request has been received. We&apos;ll contact you shortly to confirm your consultation.</p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-6 text-black">
+                    <div className="space-y-4 text-black">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-1">
                           Full Name *
@@ -352,7 +352,7 @@ const BookAppointment: React.FC = () => {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-3 font-medium transition duration-200 ease-in-out flex items-center justify-center"
+                      className="w-full bg-[#1C0E0B] text-white rounded-lg px-6 py-3 font-medium transition duration-200 ease-in-out flex items-center justify-center"
                     >
                       {isSubmitting ? (
                         <>
