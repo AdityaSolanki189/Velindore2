@@ -15,6 +15,8 @@ const Product3DModel = dynamic(() => import("../../components/product3DModel"), 
   ssr: false,
 });
 
+import { ThreeDModelErrorBoundary } from "../../components/errorBoundary";
+
 interface Product {
   id: string;
   name: string;
@@ -210,8 +212,10 @@ export default function ProductPage() {
         if (!show3D) openLightbox(selectedImage);               
       }}             
     >               
-      {show3D && has3DModel ? (                 
-        <Product3DModel url={product.threeDImage} />               
+      {show3D && has3DModel ? (
+        <ThreeDModelErrorBoundary>
+          <Product3DModel url={product.threeDImage} />
+        </ThreeDModelErrorBoundary>
       ) : (                 
         <div className="relative w-full h-full">                   
           <Image                     
@@ -408,7 +412,9 @@ export default function ProductPage() {
               <div className="relative w-full h-full max-w-3xl max-h-3xl bg-white bg-opacity-5 rounded-lg">
                 {/* Show 3D if toggled and threeDImage available, else image */}
                 {show3DLightbox && has3DModel ? (
-                  <Product3DModel url={product.threeDImage} />
+                  <ThreeDModelErrorBoundary>
+                    <Product3DModel url={product.threeDImage} />
+                  </ThreeDModelErrorBoundary>
                 ) : (
                   <div className="relative w-full h-full">
                     <Image
