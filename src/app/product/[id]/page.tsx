@@ -56,6 +56,39 @@ export default function ProductPage() {
 
   const { id } = useParams();
 
+  // Device and capability detection
+  useEffect(() => {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const deviceInfo = {
+      isMobile,
+      userAgent: navigator.userAgent,
+      screen: { width: screen.width, height: screen.height },
+      devicePixelRatio: window.devicePixelRatio,
+      memory: (navigator as { deviceMemory?: number }).deviceMemory || 'unknown',
+      hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+      connection: (navigator as { connection?: { effectiveType?: string; downlink?: number; rtt?: number } }).connection ? {
+        effectiveType: (navigator as { connection?: { effectiveType?: string } }).connection?.effectiveType,
+        downlink: (navigator as { connection?: { downlink?: number } }).connection?.downlink,
+        rtt: (navigator as { connection?: { rtt?: number } }).connection?.rtt
+      } : 'unknown'
+    };
+    
+    console.log('[ProductPage] Device capabilities detected:', deviceInfo);
+    
+    // Check WebGL support
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    const webglInfo = gl ? {
+      version: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).VERSION),
+      renderer: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).RENDERER),
+      vendor: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).VENDOR),
+      maxTextureSize: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).MAX_TEXTURE_SIZE),
+      maxViewportDims: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).MAX_VIEWPORT_DIMS)
+    } : null;
+    
+    console.log('[ProductPage] WebGL capabilities:', webglInfo);
+  }, []);
+
   const fetchProductById = async (productId: string) => {
     try {
       setLoading(true);
@@ -214,7 +247,10 @@ export default function ProductPage() {
     >               
       {show3D && has3DModel ? (
         <ThreeDModelErrorBoundary>
-          <Product3DModel url={product.threeDImage} />
+          {(() => {
+            console.log('[ProductPage] Rendering 3D model with URL:', product.threeDImage);
+            return <Product3DModel url={product.threeDImage} />;
+          })()}
         </ThreeDModelErrorBoundary>
       ) : (                 
         <div className="relative w-full h-full">                   
@@ -235,9 +271,14 @@ export default function ProductPage() {
       {/* 3D Model Button with Text - Only show if product has 3D model */}               
       {has3DModel && (                 
         <button                   
-          onClick={(e) => {                     
-            e.stopPropagation();                     
-            setShow3D((v) => !v);                   
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('[ProductPage] 3D toggle clicked', {
+              currentShow3D: show3D,
+              threeDImage: product.threeDImage,
+              userAgent: navigator.userAgent
+            });
+            setShow3D((v) => !v);
           }}                   
           className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full px-3 py-2 shadow-md transition-all duration-200 hover:scale-110 group-hover:opacity-100 opacity-80 cursor-pointer flex items-center gap-2"                   
           title={show3D ? "Close 3D Model" : "View 3D Model"}                 
@@ -413,7 +454,10 @@ export default function ProductPage() {
                 {/* Show 3D if toggled and threeDImage available, else image */}
                 {show3DLightbox && has3DModel ? (
                   <ThreeDModelErrorBoundary>
-                    <Product3DModel url={product.threeDImage} />
+                    {(() => {
+                      console.log('[ProductPage] Rendering 3D model in lightbox with URL:', product.threeDImage);
+                      return <Product3DModel url={product.threeDImage} />;
+                    })()}
                   </ThreeDModelErrorBoundary>
                 ) : (
                   <div className="relative w-full h-full">
@@ -436,6 +480,10 @@ export default function ProductPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      console.log('[ProductPage] 3D lightbox toggle clicked', {
+                        currentShow3DLightbox: show3DLightbox,
+                        threeDImage: product.threeDImage
+                      });
                       setShow3DLightbox((v) => !v);
                     }}
                     className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 opacity-90"
