@@ -201,7 +201,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#FEF8EF]">
+    <div className="">
       <Navbar />
 
       <section className="relative w-full h-screen max-h-[700px] overflow-hidden">
@@ -475,7 +475,7 @@ export default function Home() {
         <Testimonials />
       </section>
 
-      <section
+      {/* <section
         ref={subscribeRef}
         data-section="subscribe"
         className={`px-4 py-10 font-sans transition-all duration-1000 ${getAnimationClass('subscribe', 'animate__fadeInUp')}`}
@@ -500,7 +500,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="mt-20">
         <Footer />

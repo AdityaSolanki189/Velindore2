@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { Phone, Mail, Calendar } from "lucide-react";
+import { Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSettingsData } from "@/backend/services/settings";
 import { SettingType } from "@/backend/types";
@@ -21,21 +21,55 @@ const Footer = () => {
     <footer className="text-black pt-12 pb-4">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-lg font-bold mb-6">CONTACT US</h3>
-            <p className="mb-4">
+          <div className="ml-20">
+            <h3 className="text-lg font-bold mb-3">CONTACT INFO</h3>
+            <p className="font-bold text-lg">Hotline free 24/7</p>
+
+            {/* <p className="mb-4">
               Morbi ullamcorper ligula sit amet efficitur pellentesque. Aliquam
               ornare quam tellus ultricies molestie tortor.
-            </p>
+            </p> */}
 
             <div className="mt-6">
-              <p className="font-bold">HOTLINE :</p>
               <div className="flex items-center mt-2">
                 <Phone size={20} className="mr-2" />
-                <span>{settings?.contactNumber}</span>
+                <span className="font-black text-lg">{settings?.contactNumber}</span>
               </div>
 
-              <div className="flex items-center mt-4">
+              <p className="mt-5 font-regular">58 A, East Madison Street,Baltimore, MD, USA 4508 admin@gmail.com</p>
+
+              <p className="text-md mt-5 font-semibold">Payment method</p>
+<div className="flex items-center mt-4 space-x-3">
+  {/* VISA */}
+  <svg width="40" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="38" height="24" rx="4" fill="#1A1F71"/>
+    <path fill="#fff" d="M14.34 7.64L12.84 16H10.83L9.33 7.64H11.34L11.83 11.3L12.18 8.97H13.5L13.86 11.3L14.34 7.64ZM18.6 10.35C18.59 9.53 18.24 8.79 17.59 8.3C16.96 7.83 16.06 7.6 14.98 7.6H12.44V16H14.42V13.19H14.96C15.91 13.19 16.67 12.93 17.21 12.42C17.74 11.91 18.01 11.2 18.01 10.35H18.6ZM16.25 10.35C16.25 11.03 15.8 11.53 14.93 11.53H14.42V9.17H14.92C15.8 9.17 16.25 9.67 16.25 10.35ZM19.55 13.48L19.92 15.17H21.87L21.49 13.43C21.27 12.38 20.48 11.6 19.28 11.19L20.38 7.64H18.37L17.44 11.04C17.41 11.13 17.39 11.22 17.37 11.3C17.24 11.84 17.31 12.41 17.57 12.91C17.83 13.42 18.26 13.8 18.76 14.02C19.26 14.23 19.85 14.26 20.39 14.1L20.26 13.52C19.98 13.63 19.68 13.67 19.4 13.62C19.32 13.6 19.25 13.58 19.19 13.56C19.3 13.5 19.42 13.47 19.55 13.48Z"/>
+  </svg>
+
+  {/* MasterCard */}
+  <svg width="40" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="38" height="24" rx="4" fill="#EB001B"/>
+    <circle cx="15" cy="12" r="6" fill="#FF5F00"/>
+    <circle cx="23" cy="12" r="6" fill="#F79E1B"/>
+    <path d="M19 6A6 6 0 1 0 19 18A6 6 0 1 0 19 6Z" fill="#FF5F00"/>
+  </svg>
+
+  {/* Visa Electron (simulated) */}
+  <svg width="40" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="38" height="24" rx="4" fill="#005BAC"/>
+    <text x="8" y="16" fill="white" fontSize="10" fontWeight="bold" fontFamily="Arial">Electron</text>
+  </svg>
+
+  {/* Maestro (simulated) */}
+  <svg width="40" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="38" height="24" rx="4" fill="#000"/>
+    <circle cx="16" cy="12" r="6" fill="#EB001B"/>
+    <circle cx="22" cy="12" r="6" fill="#0079BE"/>
+    <text x="11" y="21" fill="white" fontSize="6" fontFamily="Arial">Maestro</text>
+  </svg>
+</div>
+
+              {/* <div className="flex items-center mt-4">
                 <Mail size={20} className="mr-2" />
                 <span>{settings?.contactEmail}</span>
               </div>
@@ -43,8 +77,9 @@ const Footer = () => {
               <div className="flex items-center mt-4">
                 <Calendar size={20} className="mr-2" />
                 <span>Monday till Friday 10 to 6 EST</span>
-              </div>
+              </div> */}
 
+              <p className="text-md mt-5 font-semibold">Connect with us</p>
               <div className="flex items-center mt-6 space-x-4">
                 {settings?.facebookLink && (
                   <Link
@@ -138,19 +173,19 @@ const Footer = () => {
 
           {/* Company Column */}
           <div className="ml-0 md:ml-4 lg:ml-20">
-            <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">COMPANY</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-black mb-6 mt-6 md:mt-0">COMPANY</h3>
+            <ul className="space-y-3 font-bold">
               <li>
                 <Link href="/about" className="hover:text-gray-300">
                   About Us
                 </Link>
               </li>
-              {/* <li>
-                <Link href="/blog" className="hover:text-gray-300">
-                  Our Blog
+              <li>
+                <Link href="/appointment" className="hover:text-gray-300">
+                  Book an appointment
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/careers" className="hover:text-gray-300">
                   Careers
                 </Link>
@@ -175,8 +210,8 @@ const Footer = () => {
 
           {/* Our Shop Column */}
           <div className="ml-0 md:ml-4 lg:ml-20">
-            <h3 className="text-lg font-bold mb-6 mt-6 md:mt-0">OUR SHOP</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-black mb-6 mt-6 md:mt-0">OUR SHOP</h3>
+            <ul className="space-y-3 font-bold">
               <li>
                 <Link
                   href="/category/accessories"
@@ -223,10 +258,15 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-12 pt-6 text-center md:text-left">
-          <p className="text-sm">
+        <div className="border-t border-slate-800 mt-12 pt-6 text-center">
+          <p className="text-lg">
             Copyright © 2025 Velondore. All rights reserved.
           </p>
+          <div className="flex gap-2 justify-center mt-2">
+          <p className="font-extrabold">Privacy Policy</p>
+          <div className="w-5 h-0.5 mt-2 bg-black rotate-90"></div>
+          <p className="font-extrabold">Terms and Conditions</p>
+          </div>
         </div>
       </div>
 

@@ -328,7 +328,7 @@ export default function ProductPage() {
           <div className="flex-1 lg:pl-4">
             <h1 className="text-3xl font-bold mb-4 text-black">{product.name}</h1>
             
-            {product.rating && (
+            {/* {product.rating && (
               <div className="flex items-center mb-3">
                 {[...Array(5)].map((_, i: number) => (
                   <span
@@ -344,9 +344,9 @@ export default function ProductPage() {
                   ({product.reviews || 0} customer review)
                 </span>
               </div>
-            )}
+            )} */}
             
-            <div className="text-sm text-gray-600 mb-4">SKU: {product.id}</div>
+            {/* <div className="text-sm text-gray-600 mb-4">SKU: {product.id}</div> */}
             
             <div className="text-3xl text-black font-bold mb-4">${typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price || 0).toFixed(2)}</div>
             
