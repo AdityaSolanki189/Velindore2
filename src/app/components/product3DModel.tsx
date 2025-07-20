@@ -100,7 +100,7 @@ export default function Product3DModel({ url }: { url: string }) {
           preserveDrawingBuffer: false,
           powerPreference: "high-performance",
           antialias: true,
-          alpha: false
+          alpha: true
         }}
         onCreated={({ gl }) => {
           gl.debug.checkShaderErrors = false;
